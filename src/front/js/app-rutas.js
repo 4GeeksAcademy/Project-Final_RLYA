@@ -11,6 +11,8 @@ import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Listaprofesionales } from "./pages/lista_profesionales";
+import { CalendarioEmpresa } from "./pages/cal_vista_empresa";
+import { CalendarioUsuario } from "./pages/cal_vista_usuario";
 
 //create your first component
 export const AppRutas = () => {
@@ -28,6 +30,8 @@ export const AppRutas = () => {
                     <Routes>
                         <Route element={<Home />} path="/" />
                         <Route element={<Listaprofesionales />} path="/listprof" />
+                        <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
+                        <Route element={<CalendarioUsuario />} path="/calendario_usuario" />
                     </Routes>
             </BrowserRouter>
         </div>

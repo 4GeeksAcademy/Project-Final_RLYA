@@ -8,7 +8,7 @@ export const CalendarioEmpresa = () => {
 
 	return (
 		<div className="text-center mt-5">
-			
+			otro calendario
 		</div>
 	);
 };
