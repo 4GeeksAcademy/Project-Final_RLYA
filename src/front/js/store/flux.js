@@ -21,6 +21,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
+			//Función de login
+			 login: async (email, password) => {
+			 	try {
+			 		let data = await axios.post("https://psychic-pancake-4j77gvj7q5vpfqjpj-3001.app.github.dev/login", { 
+			 			"email": email,
+			 			"password": password
+			 		})
+			 		console.log(data);     
+			 		localStorage.setItem("token", data.data.access_token);
+			 		setStore({ autenticar: true })
+			 		return true;
+			 	} catch (error) {
+			 		console.log(error);
+			 		if (error.response.status === 404) {
+			 			alert(error.response.data.msg)
+			 		}
+			 		return false;
+
+			 	}
+			},
+
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
