@@ -73,3 +73,10 @@ def loginUser():
             }
             return jsonify(response_body), 200
     return jsonify({"ok":False,"msg":"error en las credenciales"}),400
+
+
+@api.route('/validToken', methods=['GET'])
+@jwt_required()
+def ValidarToken():
+    current_user = get_jwt_identity()
+    return jsonify({"isLogged":True}),200

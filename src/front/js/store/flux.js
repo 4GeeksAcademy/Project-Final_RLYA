@@ -7,6 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			user: {},
 			statusLogin: false,
+			messageError: undefined
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -15,52 +16,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			//Función de login
-			 login: async (email, password) => {
-				console.log(password, email);
-			 	try {
-			 		let data = await axios.post("https://psychic-pancake-4j77gvj7q5vpfqjpj-3001.app.github.dev/api/login", { 
-			 			"email": email,
-			 			"password": password
-			 		})
-			 		console.log(data);     
-			 		 localStorage.setItem("token", data.data.dataUser.token);
-			 		 setStore({ statusLogin: true, user:data.data.dataUser})
-			 		return true;
-			 	} catch (error) {
-			 		console.log(error);
-			 		// if (error.response.status === 404) {
-			 		// 	alert(error.response.data.msg)
-			 		// }
-			 		return false;
+			login: async (email, password) => {
+				setStore({ ...getStore(), messageError: undefined })
+				try {
+					let data = await axios.post("https://potential-waddle-945gvq99v7f76r7-3001.app.github.dev/api/login", {
+						"email": email,
+						"password": password
+					})
+					console.log(data);
+					localStorage.setItem("token", data.data.dataUser.token);
+					setStore({ statusLogin: true, user: data.data.dataUser })
+					return true;
+				} catch (error) {
+					console.log(error);
+					console.log(error.response.data.msg)
+					if (error.response.status > 399) {
+						setStore({ ...getStore(), messageError: error.response.data.msg })
+					}
+					return false;
 
-			 	}
+				}
 			},
 
 			getMessage: async () => {
-				try{
+				try {
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
 					return data;
-				}catch(error){
+				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
+			ValidToken: async () => {
+				try {
+					const token = localStorage.getItem("token")
+					const response = await axios.get(`https://potential-waddle-945gvq99v7f76r7-3001.app.github.dev/api/validToken`, {
+						headers: { "Authorization": "Bearer " + token }
+					})
+					if (response.status == 200) {
+						setStore({ ...getStore(), statusLogin: true })
+					}
+				} catch (error) {
+					if (error.response.status > 400) {
+						console.log(error)
+						getActions().Logout()
+					}
+				}
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+			},
+			Logout: () => {
+				localStorage.removeItem("token")
+				setStore({ statusLogin: false, user: {} })
 			}
 		}
 	};
