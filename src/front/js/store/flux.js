@@ -1,19 +1,12 @@
+import axios from "axios";
+
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			user: {},
+			statusLogin: false,
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -23,20 +16,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			//Función de login
 			 login: async (email, password) => {
+				console.log(password, email);
 			 	try {
-			 		let data = await axios.post("https://psychic-pancake-4j77gvj7q5vpfqjpj-3001.app.github.dev/login", { 
+			 		let data = await axios.post("https://psychic-pancake-4j77gvj7q5vpfqjpj-3001.app.github.dev/api/login", { 
 			 			"email": email,
 			 			"password": password
 			 		})
 			 		console.log(data);     
-			 		localStorage.setItem("token", data.data.access_token);
-			 		setStore({ autenticar: true })
+			 		 localStorage.setItem("token", data.data.dataUser.token);
+			 		 setStore({ statusLogin: true, user:data.data.dataUser})
 			 		return true;
 			 	} catch (error) {
 			 		console.log(error);
-			 		if (error.response.status === 404) {
-			 			alert(error.response.data.msg)
-			 		}
+			 		// if (error.response.status === 404) {
+			 		// 	alert(error.response.data.msg)
+			 		// }
 			 		return false;
 
 			 	}

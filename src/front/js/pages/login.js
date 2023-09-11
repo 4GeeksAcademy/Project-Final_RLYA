@@ -6,7 +6,7 @@ import "../../styles/home.css";
 
 export const Login = () => {
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("") 
 	const { store, actions } = useContext(Context)
   const navigate =useNavigate();
 
