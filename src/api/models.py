@@ -107,7 +107,7 @@ class Oficio(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.email,
+            "name": self.name,
             # do not serialize the password, its a security breach
         }    
 
