@@ -73,3 +73,13 @@ def loginUser():
             }
             return jsonify(response_body), 200
     return jsonify({"ok":False,"msg":"error en las credenciales"}),400
+
+# End-point registro de usuario
+@api.route('/registro', methods=['POST'])
+def creacion_de_registro():
+
+    response_body = {
+        "message": "ok"
+    }
+
+    return jsonify(response_body), 200
