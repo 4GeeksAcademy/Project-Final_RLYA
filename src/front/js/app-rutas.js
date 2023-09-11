@@ -13,6 +13,8 @@ import { Footer } from "./component/footer";
 import { Listaprofesionales } from "./pages/lista_profesionales";
 import { CalendarioEmpresa } from "./pages/cal_vista_empresa";
 import { CalendarioUsuario } from "./pages/cal_vista_usuario";
+import { LayoutNegro } from "./component/layout";
+
 
 //create your first component
 export const AppRutas = () => {
@@ -25,7 +27,7 @@ export const AppRutas = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
-
+                    <LayoutNegro />
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
@@ -33,6 +35,7 @@ export const AppRutas = () => {
                         <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
                         <Route element={<CalendarioUsuario />} path="/calendario_usuario" />
                     </Routes>
+                    
             </BrowserRouter>
         </div>
     );
