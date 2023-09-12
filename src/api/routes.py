@@ -80,3 +80,16 @@ def loginUser():
 def ValidarToken():
     current_user = get_jwt_identity()
     return jsonify({"isLogged":True}),200
+
+
+
+@api.route('/listprof', methods=['GET'])
+def handle_list():
+#     # if (status > 400) {
+#     #     return("error en solicitud")
+#     # }
+#     # this is how you can use the Family datastructure by calling its methods
+    listp = Profesional.query.all()#trae el class y de ahi la funcion all members
+    listfinal= list(map(lambda item:item.serialize(), listp))
+    print(list)
+    return jsonify({"ok":True,"profesionales": listfinal}), 200
