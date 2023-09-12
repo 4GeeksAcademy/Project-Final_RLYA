@@ -24,16 +24,10 @@ export const LoginRutas = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
-<<<<<<< HEAD
                     <Routes>
-                    <Route element={<PaginaInicio/>} path="/*" />
+                        <Route element={<PaginaInicio/>} path="/*" />
                         <Route element={<Login />} path="/Login" />
                     </Routes>
-=======
-                <Routes>
-                    <Route element={<Login />} path="/*" />
-                </Routes>
->>>>>>> 7d29a6d089c128971f0172156d6784f7bd74776c
             </BrowserRouter>
         </div>
     );

@@ -26,7 +26,6 @@ export const AppRutas = () => {
                     <Sidebar />
                     <div className="content " style={{ width: "100%" }}>
                         <Navbar />
-
                         <Routes>
                             {/* Rutas */}
                             <Route element={<Listaprofesionales />} path="/*" />
