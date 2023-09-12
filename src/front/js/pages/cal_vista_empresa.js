@@ -7,8 +7,8 @@ export const CalendarioEmpresa = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div className="text-center mt-5">
-			otro calendario
-		</div>
+		<div>
+            lista
+        </div>
 	);
 };
