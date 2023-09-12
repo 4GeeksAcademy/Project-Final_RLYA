@@ -53,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			ValidToken: async () => {
 				try {
 					const token = localStorage.getItem("token")
-					const response = await axios.get(process.env.BACKEND_URL + "/api/validToken", {
+					const response = await axios.get(`https://potential-waddle-945gvq99v7f76r7-3001.app.github.dev/api/validToken`, {
 						headers: { "Authorization": "Bearer " + token }
 					})
 					if (response.status == 200) {
