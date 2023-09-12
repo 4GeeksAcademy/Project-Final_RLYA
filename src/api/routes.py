@@ -146,3 +146,10 @@ def creacion_de_registro_prof():
     }
 
     return jsonify(response_body), 200
+
+
+@api.route('/validToken', methods=['GET'])
+@jwt_required()
+def ValidarToken():
+    current_user = get_jwt_identity()
+    return jsonify({"isLogged":True}),200

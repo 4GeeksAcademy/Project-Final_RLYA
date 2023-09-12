@@ -7,20 +7,20 @@ export const Home = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
+		<div style={{ marginleft: "25%" }}>
+
+			<div className="w3-container w3-teal">
+				<h1>My Page</h1>
 			</div>
-			<p>
-				This boilerplate comes with lots of documentation:{" "}
-				<a href="https://start.4geeksacademy.com/starters/react-flask">
-					Read documentation
-				</a>
-			</p>
+
+			<img src="img_car.jpg" alt="Car" style={{ width: "100%" }} />
+
+			<div className="w3-container">
+				<h2>Sidebar Navigation Example</h2>
+				<p>The sidebar with is set with "style="width:25%".</p>
+				<p>The left margin of the page content is set to the same value.</p>
+			</div>
+
 		</div>
 	);
 };
