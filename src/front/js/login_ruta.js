@@ -11,6 +11,7 @@ import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/login";
+import { PaginaInicio } from "./pages/pagina_inicio";
 
 //create your first component
 export const LoginRutas = () => {
@@ -24,7 +25,8 @@ export const LoginRutas = () => {
         <div>
             <BrowserRouter basename={basename}>
                     <Routes>
-                        <Route element={<Login />} path="/*" />
+                    <Route element={<PaginaInicio/>} path="/*" />
+                        <Route element={<Login />} path="/Login" />
                     </Routes>
             </BrowserRouter>
         </div>
