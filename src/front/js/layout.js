@@ -8,7 +8,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext, { Context } from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
+import { Navbar } from "./component/Navbar";
 import { Footer } from "./component/footer";
 import appRutas from "./app-rutas";
 import { AppRutas } from "./app-rutas"
@@ -26,7 +26,7 @@ const Layout = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div>
+        <div className="" style={{ height: "100%", width: "100%" }} >
             {
                 store.statusLogin == true ? <AppRutas /> : <LoginRutas />
             }
