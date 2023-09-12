@@ -19,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			login: async (email, password) => {
 				setStore({ ...getStore(), messageError: undefined })
 				try {
-					let data = await axios.post("https://potential-waddle-945gvq99v7f76r7-3001.app.github.dev/api/login", {
+					let data = await axios.post("https://redesigned-bassoon-69ggr54rgxjj254v5-3001.app.github.dev/api/login", {
 						"email": email,
 						"password": password
 					})
@@ -53,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			ValidToken: async () => {
 				try {
 					const token = localStorage.getItem("token")
-					const response = await axios.get(`https://potential-waddle-945gvq99v7f76r7-3001.app.github.dev/api/validToken`, {
+					const response = await axios.get(`https://redesigned-bassoon-69ggr54rgxjj254v5-3001.app.github.dev/api/validToken`, {
 						headers: { "Authorization": "Bearer " + token }
 					})
 					if (response.status == 200) {
@@ -70,7 +70,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			Logout: () => {
 				localStorage.removeItem("token")
 				setStore({ statusLogin: false, user: {} })
-			}
+			},
+
+
+
+
+			},
 		}
 	};
 };

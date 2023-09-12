@@ -21,14 +21,14 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
     const user = true;
     const { store, actions } = useContext(Context)
-    
+
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
             {
-                user == true ? <AppRutas /> : <LoginRutas />
+                store.statusLogin == true ? <AppRutas /> : <LoginRutas />
             }
         </div>
     );
@@ -36,4 +36,4 @@ const Layout = () => {
 
 export default injectContext(Layout);
 
-// store.statusLogin
+
