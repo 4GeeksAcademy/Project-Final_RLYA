@@ -8,7 +8,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
+import { Navbar } from "./component/Navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/login";
 
@@ -18,14 +18,14 @@ export const LoginRutas = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
             <BrowserRouter basename={basename}>
-                    <Routes>
-                        <Route element={<Login />} path="/*" />
-                    </Routes>
+                <Routes>
+                    <Route element={<Login />} path="/*" />
+                </Routes>
             </BrowserRouter>
         </div>
     );

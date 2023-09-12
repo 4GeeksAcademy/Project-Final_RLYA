@@ -3,16 +3,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
-import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
-import { Single } from "./pages/single";
-import injectContext from "./store/appContext";
-
-import { Footer } from "./component/footer";
 import { Listaprofesionales } from "./pages/lista_profesionales";
 import { CalendarioEmpresa } from "./pages/cal_vista_empresa";
 import { CalendarioUsuario } from "./pages/cal_vista_usuario";
-import { LayoutNegro } from "./component/layout";
+import { Navbar } from "./component/Navbar";
+import { Sidebar } from "./component/Sidebar";
+
 
 
 //create your first component
@@ -24,20 +20,24 @@ export const AppRutas = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div>
+        <div className="App" style={{ height: "100%", width: "100%" }}>
             <BrowserRouter basename={basename}>
+                <div className="position-relative d-flex flex-row" style={{ height: "100%", width: "100%" }}>
+                    <Sidebar />
+                    <div className="content " style={{ width: "100%" }}>
+                        <Navbar />
 
-                {/* <Navbar /> */}
-                <LayoutNegro />
-                <Routes>
-                    {/* <Route element={<Home />} path="/" /> */}
-                    <Route element={<Listaprofesionales />} path="/listprof" />
-                    <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
-                    <Route element={<CalendarioUsuario />} path="/calendario_usuario" />
-                </Routes>
-
-            </BrowserRouter>
-        </div>
+                        <Routes>
+                            {/* Rutas */}
+                            <Route element={<Listaprofesionales />} path="/*" />
+                            <Route element={<Listaprofesionales />} path="/listprof" />
+                            <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
+                            <Route element={<CalendarioUsuario />} path="/calendario_usuario" />
+                        </Routes>
+                    </div>
+                </div>
+            </BrowserRouter >
+        </div >
     );
 };
 
