@@ -7,7 +7,6 @@ class User(db.Model):
     name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    birth_date = db.Column(db.DateTime, unique=True, nullable=False)
     registration_date = db.Column(db.DateTime, unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
@@ -25,7 +24,6 @@ class User(db.Model):
             "name": self.name,
             "last_name": self.last_name,
             "age": self.age,
-            "birth_date": self.birth_date,
             "registration_date": self.registration_date,
             "email": self.email,
             "password": self.password
@@ -38,7 +36,6 @@ class Profesional(db.Model):
     name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    birth_date = db.Column(db.DateTime, unique=True, nullable=False)
     registration_date = db.Column(db.DateTime, unique=True, nullable=False)
     photo = db.Column(db.String(200), nullable=True)
     descripcion = db.Column(db.String(500), nullable=True)
@@ -59,7 +56,6 @@ class Profesional(db.Model):
             "name": self.name,
             "last_name": self.last_name,
             "age": self.age,
-            "birth_date": self.birth_date,
             "registration_date": self.registration_date,
             "photo": self.photo,
             "descripcion": self.descripcion,
