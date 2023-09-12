@@ -9,8 +9,7 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
-import datetime
-
+from datetime import datetime,timedelta
 
 api = Blueprint('api', __name__)
 
@@ -153,3 +152,97 @@ def creacion_de_registro_prof():
 def ValidarToken():
     current_user = get_jwt_identity()
     return jsonify({"isLogged":True}),200
+
+    # Api para crear una consulta a un admin
+@api.route('/consulta', methods=['POST'])
+def crearConsulta():
+    dataConsulta = request.json
+
+    if "id_user" in dataConsulta and "id_profesional" in dataConsulta and "id_tipo_consulta" in dataConsulta and "realization_date" in dataConsulta and "consultation_date" in dataConsulta and "nota" in dataConsulta:
+        # validamos que el user, el profesional y el tipo de consulta existan
+        userExist = User.query.filter_by(id=dataConsulta["id_user"]).first()
+        profExist = Profesional.query.filter_by(
+            id=dataConsulta["id_profesional"]).first()
+        Tipo_consulta_exist = Tipo_consulta.query.filter_by(
+            id=dataConsulta["id_tipo_consulta"]).first()
+
+        if userExist == None:
+            return jsonify({"ok": False, "msg": "Error,el usuario no existe"}), 400
+        if profExist == None:
+            return jsonify({"ok": False, "msg": "Error,el Profesional no existe"}), 400
+        if Tipo_consulta_exist == None:
+            return jsonify({"ok": False, "msg": "Error,el tipo de consulta no existe"}), 400
+
+        # pasamos a crear nuestra nueva consulta
+        consulta = Consulta(**dataConsulta)
+
+        db.session.add(consulta)
+        db.session.commit()
+        return jsonify({"ok": True, "msg": "Consulta agendada correctamente"}), 200
+    return jsonify({"ok": False, "msg": "Error, debe de ingresar los datos correctamente"}), 400
+
+# Api para traer consultas de un admin
+
+
+@api.route('/consultaProf/<int:id_prof>', methods=['GET'])
+def traerConsultasAdmin(id_prof):
+    # Validamos que el prof exista
+    profExist = Profesional.query.filter_by(id=id_prof).first()
+    if profExist == None:
+        return jsonify({"ok": False, "msg": "Error,el Profesional no existe"}), 400
+    # ahora traeremos todas las consultas de ese usuario
+
+    consultas_Admin = Consulta.query.filter_by(id_profesional=id_prof).all()
+    print(consultas_Admin)
+    if len(consultas_Admin) == 0:
+        return jsonify({"ok": False, "msg": "Este usuario no tiene ninguna consulta"}), 200
+    # serializamos cada consulta que hayan en nuestro array
+    result = list(map(lambda item: item.serialize(), consultas_Admin))
+
+    # ahora por ultimo cargamos los nombres del usuario, profesional y el tipo de consulta, definiendo una funcion para llamar en el map
+    def cargarDatos(item):
+
+        user = User.query.filter_by(id=item["id_user"]).first().serialize()
+        prof = Profesional.query.filter_by(
+            id=item["id_profesional"]).first().serialize()
+        tpo_consulta = Tipo_consulta.query.filter_by(
+            id=item["id_tipo_consulta"]).first().serialize()
+        # ahora en base al tipo de consulta y duracion, retornaremos una nueva prop que tenga cuando finalizaria
+        float_a_str = str(tpo_consulta["duracion"])
+        partes_array = float_a_str.split(".")
+        print(partes_array)
+        # aqui obtengo la hora y minutos de un flotante
+        horas = partes_array[0]
+        minutos = partes_array[1] if len(partes_array) > 1 else 0
+
+        # obtengo la hora de inicio para sumarle horas(en este caso viene en formato dateTime)
+        hora_extract = item["realization_date"]
+
+        delta_time = timedelta(hours=int(horas), minutes=int(minutos))
+        print(delta_time)
+        # aqui suma la base de la hora que ya tenia mas el delta_time que creamos recien con formato solo horas y minutos
+        newTIme = hora_extract + delta_time
+
+        item["id_user"] = user["name"]
+        item["id_profesional"] = prof["name"]
+        item["id_tipo_consulta"] = tpo_consulta["nombre"]
+        item["duracion"] = tpo_consulta["duracion"]
+        item["end_date"] = newTIme
+        return item
+    resultFinal = list(map(lambda item: cargarDatos(item), result))
+    return jsonify({"ok": True, "consultas_prof": resultFinal}), 200
+
+# Api para traer info de un user en base al token
+
+
+@api.route('/infobyToken', methods=['GET'])
+@jwt_required()
+def infoByToken():
+    indentyToken = get_jwt_identity()
+    userExist = User.query.filter_by(email=indentyToken).first()
+
+    if userExist == None:
+        # AHora buscaremos el usuario pero en el modulo de profesional
+        profExist = Profesional.query.filter_by(email=indentyToken).first()
+        return jsonify({"ok": True, "info": profExist.serialize()}), 200
+    return jsonify({"ok": True, "info": userExist.serialize()}), 200
