@@ -84,8 +84,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error)
 					
 				}
-			}
+			},
 
+			// traerInfoUsuario:async () => {
+			// 	try {
+			// 		const response = await axios.get(process.env.BACKEND_URL + "/api/user")
+			// 		setStore({...getStore(),user:response.data.info})
+			// 		console.log(response.data)
+			// 	} catch (error) {
+			// 		console.log(error)
+					
+			// 	}
+			// }
 
 		}	
 		

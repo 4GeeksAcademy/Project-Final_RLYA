@@ -1,6 +1,12 @@
-import React, { Component } from "react";
+import React, { useEffect, useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { Context } from "../store/appContext.js";
 
-export const Navbar = () => (
+export const Navbar = () => {
+
+
+    
+    return (
     <nav className="navbar py-2 px-5 navbar-expand-lg bg-light sticky-top nav d-flex flex-row justify-content-between  " style={{ width: "100%" }}>
         <a className="navbar-brand text-dark fs-1 pb-3" href="#" style={{ fontFamily: "fantasy" }}> Bienvenido Luciano!</a>
         <div className="d-flex flex-row " >
@@ -19,5 +25,5 @@ export const Navbar = () => (
             </ul>
         </div>
     </nav>
-
-);
+)
+};

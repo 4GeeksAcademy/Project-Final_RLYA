@@ -12,7 +12,6 @@ from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta
 
 
-
 api = Blueprint('api', __name__)
 
 
@@ -171,17 +170,29 @@ def handle_list():
     return jsonify({"ok": True, "profesionales": listfinal}), 200
 
 
-
-
 @api.route('/profesionales', methods=['GET'])
 def get_single_photo():
     # Obtener el profesional por su ID
     info_prof = Profesional.query.all()
 
     # Si el profesional existe, devolver la foto
-    if len(info_prof)==0:
+    if len(info_prof) == 0:
         return jsonify({"error": "El profesional no se encontró"}), 404
     # Si el profesional no existe, devolver un error 404
     else:
         listfinal = list(map(lambda item: item.serialize(), info_prof))
         return jsonify({"info": listfinal}), 200
+
+
+# @api.route('/user', methods=['GET'])
+# def get_single_user():
+#     # Obtener el profesional por su ID
+#     info_user = User.query.all()
+
+#     # Si el profesional existe, devolver la foto
+#     if len(info_user) == 0:
+#         return jsonify({"error": "El usuario no se encontró"}), 404
+#     # Si el profesional no existe, devolver un error 404
+#     else:
+#         listfinal = list(map(lambda item: item.serialize(), info_user))
+#         return jsonify({"info": listfinal}), 200

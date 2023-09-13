@@ -14,7 +14,10 @@ export const PaginaInicio = () => {
                 <div className="container-fluid">
                     <h1 className="navbar-brand text-white fs-1 fst-italic">CalendApp</h1>
                     <form className="d-flex" role="search">
-                        <a className="nav-link text-white">Registrarme</a>
+                        <a href="/RegistroUsuario" className="nav-link text-white" onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/RegistroUsuario");
+                        }} >Registrarme</a>
                         <a href="/Login" className="nav-link text-white" onClick={(e) => {
                             e.preventDefault();
                             navigate("/Login");

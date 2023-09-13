@@ -40,7 +40,10 @@ export const Login = () => {
               <label htmlFor="exampleInputPassword1" className="form-label text-start fs-6"><strong>Password</strong></label>
               <input type="password" onChange={function (e) { setPassword(e.target.value) }} className="form-control" id="exampleInputPassword1" />
             </div>
-            <div id="emailHelp" className="form-text text-center">¿No tienes una cuenta?<strong className="text-success">Crear una cuenta</strong></div>
+            <div id="emailHelp" className="form-text text-center">
+              ¿No tienes una cuenta?
+              <a href="/RegistroUsuario" className="text-success text-decoration-none">Crear una cuenta</a>
+            </div>
             <div className="text-center">
               <button type="submit" className="btn btn-dark mt-3">Iniciar sesión</button>
             </div>
