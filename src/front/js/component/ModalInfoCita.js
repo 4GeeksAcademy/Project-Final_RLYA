@@ -10,7 +10,7 @@ export const ModalInfoCita = ({ CloseModal, infoSelected }) => {
     }
     console.log(infoSelected)
     return (
-        <div className={`col-3 bg-white position-absolute m-auto p-4 border-secondary shadow-lg `} style={{ top: "12%", left: "34%", zIndex: 5 }} >
+        <div className={`col-3 bg-white position-absolute m-auto p-4 border-secondary shadow-lg `} style={{ top: "12%", left: "40%", zIndex: 5 }} >
             <div className="row">
                 <div className="col d-flex flex-row justify-content-end">
                     <p role="button" onClick={() => CloseModal()} className="text-danger opacity-0.5">X</p>

@@ -18,16 +18,6 @@ export const ListaProf = () => {
     return (
         <div className=" text-dark list-style-none">
             
-            <ul className="list-unstyled ">
-                <h2>Lista de Profesionales</h2>
-                <li className="d-inline"><a type="button" className="btn position-relative rounded-circle"><i className="fa-solid fa-circle-user" style={{ fontSize: "90px" }}></i>
-                    
-                    </a></li>
-                <li className="d-inline"><a type="button" className="btn position-relative rounded-circle"><i className="fa-solid fa-circle-user" style={{ fontSize: "90px" }}></i>
-                    
-                </a></li>
-            </ul>
-            
             <div className="d-block p-2 position-relative">
             <h2>Lista de Profesionales</h2>
                 <div className="mx-5 d-flex flex-row">
@@ -37,7 +27,6 @@ export const ListaProf = () => {
                         <a type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</a>
                         </div>
                     })}
-                    
                     
                 </div>
             </div>

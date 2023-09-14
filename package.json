@@ -81,6 +81,7 @@
 		"react": "^16.8.4",
 		"react-big-calendar": "^1.8.2",
 		"react-dom": "^16.8.4",
+		"react-icons": "^4.11.0",
 		"react-polyfills": "0.0.1",
 		"react-pro-sidebar": "^1.1.0-alpha.1",
 		"react-router-dom": "^6.3.0"
