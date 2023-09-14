@@ -6,7 +6,7 @@ export const Sidebar = () => {
 		<div className="mx-0 my-0" style={{ height: "100%", width: "300px" }}>
 			<div id="sidebar-container" className="bg-dark p-3 " style={{ height: "100%", width: "100%" }}>
 				<div className="logo p-3 mx-3" style={{ padding: ".875rem, 1.25rem" }}>
-					<img src="file:///C:/Users/dell/Desktop/LUCIABLANCO%20-%20copia.png"/>
+					<img src=""/>
 				</div>
 				<div className="menu" >
 					<a className="d-block p-3 text-decoration-none text-light" href="#"><i className="fa-solid fa-calendar-days mr-2 lead text-light"></i>  Mi agenda</a>
