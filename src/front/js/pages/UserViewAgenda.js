@@ -30,20 +30,22 @@ export const UserViewAgenda = () => {
   const [stateModalViewCite, setStateModalViewCite] = useState(false)
   /*Este state es para saber cuando un usuario da click en una cita a la cual el y solo el esta registrado */
   const [citaSelected, setCitaSelected] = useState(false)
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    const style = {
-      backgroundColor: event.bgColor
-    }
 
-    return {
-      style
-    }
-  }
 
   useEffect(() => {
     actions.TraerAgendaProf(id_prof)
     actions.TraerOficioProf(id_prof)
   }, [])
+
+  const eventStyleGetter = (event, start, end, isSelected) => {
+		const style = {
+		  backgroundColor: event.bgColor
+		}
+	
+		return {
+		  style
+		}
+	}
 
   const OpenModal = (modal)=> {
     setStateModalAddCite(true)
@@ -107,7 +109,7 @@ export const UserViewAgenda = () => {
           </div>
         </div>
       </div>
-      <div className="row relative z-5">
+      <div className="row z-5">
         {
           stateModalAddCite == true && <ModalAgendarme CloseModal={CloseModal} />
         }

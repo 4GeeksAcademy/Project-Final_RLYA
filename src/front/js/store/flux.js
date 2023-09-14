@@ -24,13 +24,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			login: async (email, password) => {
 				setStore({ ...getStore(), messageError: undefined })
 				try {
-					let data = await axios.post(process.env.BACKEND_URL + "/api/login", {
+					let {data} = await axios.post(process.env.BACKEND_URL + "/api/login", {
 						"email": email,
 						"password": password
 					})
+					if(data.dataUser) {
+						localStorage.setItem("token",data.dataUser.token);
+						setStore({ statusLogin: true, user: data.dataUser })
+					} else if(data.dataProf) {
+						localStorage.setItem("token", data.dataProf.token);
+						setStore({ statusLogin: true, user: data.dataProf })
+					}
 					
-					localStorage.setItem("token", data.data.dataUser.token);
-					setStore({ statusLogin: true, user: data.data.dataUser })
 					return true;
 				} catch (error) {
 					console.log(error);
@@ -39,7 +44,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ ...getStore(), messageError: error.response.data.msg })
 					}
 					return false;
-
 				}
 			},
 
@@ -112,9 +116,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			Logout: () => {
 				localStorage.removeItem("token")
-				setStore({ statusLogin: false, user: {} })
+				setStore({ statusLogin: false, user: {},profesionales:[],eventsAdminSpesifique:[],oficio_prof:undefined,tipos_consulta:[]})
 			},
-
 			CargarTiposCosnulta:async(id_oficio_prof)=>{
 				try {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/tipo_consultas/" + id_oficio_prof)
@@ -152,7 +155,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(response.data)
 				} catch (error) {
 					console.log(error)
-					
 				}
 			},
 		}
