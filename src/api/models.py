@@ -36,13 +36,16 @@ class Profesional(db.Model):
     name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     age = db.Column(db.Integer, nullable=False)
+    birth_date = db.Column(db.DateTime, unique=True, nullable=True)
     registration_date = db.Column(db.DateTime, unique=True, nullable=False)
     photo = db.Column(db.String(200), nullable=True)
     descripcion = db.Column(db.String(500), nullable=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+
     id_oficio = db.Column(db.Integer, db.ForeignKey(
         'oficio.id'), nullable=False)
+
 
     # relacion
     consulta = db.relationship('Consulta', backref='profesional', lazy=True)

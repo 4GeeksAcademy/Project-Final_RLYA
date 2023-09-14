@@ -11,6 +11,7 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta
 
+
 api = Blueprint('api', __name__)
 
 
@@ -29,6 +30,7 @@ def loginUser():
     userInfo = request.json
 
     userExist = User.query.filter_by(email=userInfo["email"]).first()
+
 
     if userExist == None:
         # AHora buscaremos el usuario pero en el modulo de profesional
@@ -76,6 +78,7 @@ def loginUser():
         }
         return jsonify(response_body), 200
     return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
+
 
 # End-point registro de usuario
 
@@ -155,8 +158,7 @@ def ValidarToken():
     current_user = get_jwt_identity()
     return jsonify({"isLogged": True}), 200
 
-    # Api para crear una consulta a un admin
-
+ # Api para crear una consulta a un admin
 
 @api.route('/consulta', methods=['POST'])
 def crearConsulta():
@@ -254,6 +256,7 @@ def infoByToken():
     userExist = User.query.filter_by(email=indentyToken).first()
     if userExist == None:
         # AHora buscaremos el usuario pero en el modulo de profesional
+
         profesional_exist = Profesional.query.filter_by(
             email=indentyToken).first().serialize()
         oficioProf = Oficio.query.filter_by(
@@ -311,3 +314,37 @@ def Traer_oficio_prof(id_prof):
         return jsonify({"ok": False, "msg": "Este usuario no tiene ningun oficio"})
     oficio_profS = oficio_prof.serialize()
     return jsonify({"ok": True, "oficio_prof": oficio_profS})
+        profExist = Profesional.query.filter_by(email=indentyToken).first()
+        return jsonify({"ok": True, "info": profExist.serialize()}), 200
+    return jsonify({"ok": True, "info": userExist.serialize()}), 200
+
+
+
+@api.route('/listprof', methods=['GET'])
+def handle_list():
+    #     # if (status > 400) {
+    #     #     return("error en solicitud")
+    #     # }
+    #     # this is how you can use the Family datastructure by calling its methods
+    listp = Profesional.query.all()  # trae el class y de ahi la funcion all members
+    listfinal = list(map(lambda item: item.serialize(), listp))
+    print(list)
+    return jsonify({"ok": True, "profesionales": listfinal}), 200
+
+
+@api.route('/profesionales', methods=['GET'])
+def get_single_photo():
+    # Obtener el profesional por su ID
+    info_prof = Profesional.query.all()
+
+    # Si el profesional existe, devolver la foto
+    if len(info_prof) == 0:
+        return jsonify({"error": "El profesional no se encontró"}), 404
+    # Si el profesional no existe, devolver un error 404
+    else:
+        listfinal = list(map(lambda item: item.serialize(), info_prof))
+        return jsonify({"info": listfinal}), 200
+
+
+
+

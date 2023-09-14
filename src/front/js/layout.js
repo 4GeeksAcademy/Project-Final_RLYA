@@ -29,6 +29,7 @@ const Layout = () => {
         <div className="" style={{ height: "100%", width: "100%" }} >
             {
                 store.statusLogin == true ? <AppRutas /> : <LoginRutas />
+                // 
             }
         </div>
     );

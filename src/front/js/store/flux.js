@@ -1,11 +1,12 @@
 import axios from "axios";
 import moment from "moment";
 
-
+// const [photoUrl, setPhotoUrl] = useState(""); // Estado para almacenar la URL de la foto
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			profesionales:[],
 			user: {},
 			statusLogin: false,
 			eventsAdminSpesifique:[],
@@ -113,6 +114,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token")
 				setStore({ statusLogin: false, user: {} })
 			},
+
 			CargarTiposCosnulta:async(id_oficio_prof)=>{
 				try {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/tipo_consultas/" + id_oficio_prof)
@@ -145,6 +147,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 			}
 		}
 	};
+
+
+
+
+			traerInfoProf:async () => {
+				try {
+					const response = await axios.get(process.env.BACKEND_URL + "/api/profesionales")
+					setStore({...getStore(),profesionales:response.data.info})
+					console.log(response.data)
+				} catch (error) {
+					console.log(error)
+					
+				}
+			},
+
+		}	
+		
+	}
+
 };
 
 export default getState;
