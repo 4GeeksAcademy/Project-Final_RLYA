@@ -31,7 +31,6 @@ def loginUser():
 
     userExist = User.query.filter_by(email=userInfo["email"]).first()
 
-    photoperf = User.query.filter_by(photo=userInfo["photo"]).first()
 
     if userExist == None:
         # AHora buscaremos el usuario pero en el modulo de profesional
