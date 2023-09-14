@@ -8,6 +8,7 @@ import { CalendarioEmpresa } from "./pages/cal_vista_empresa";
 import { CalendarioUsuario } from "./pages/cal_vista_usuario";
 import { Navbar } from "./component/Navbar";
 import { Sidebar } from "./component/Sidebar";
+import { UserViewAgenda } from "./pages/UserViewAgenda";
 
 
 
@@ -32,6 +33,7 @@ export const AppRutas = () => {
                             <Route element={<Listaprofesionales />} path="/listprof" />
                             <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
                             <Route element={<CalendarioUsuario />} path="/calendario_usuario" />
+                            <Route element={<UserViewAgenda />} path="/agenda/:id_prof" />
                         </Routes>
                     </div>
                 </div>

@@ -9,7 +9,7 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 
 api = Blueprint('api', __name__)
 
@@ -52,7 +52,8 @@ def loginUser():
                 "description": profF["descripcion"],
                 "oficio": oficioS["name"],
                 "email": profF["email"],
-                "token": token
+                "token": token,
+                "rol": "admin"
             }}), 200
         return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
@@ -69,7 +70,8 @@ def loginUser():
                 "age": userF["age"],
                 "registration_date": userF["registration_date"],
                 "email": userF["email"],
-                "token": token
+                "token": token,
+                "rol": "user"
             }
         }
         return jsonify(response_body), 200
@@ -83,7 +85,7 @@ def creacion_de_registro():
     request_body = request.json
     print(request_body)
     email = request_body["email"]
-    
+
     # Verificar si el usuario ya existe
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
@@ -92,7 +94,7 @@ def creacion_de_registro():
             "ok": False
         }
         return jsonify(response_body), 400
-    
+
     fecha = datetime.datetime.now()
     nuevo_usuario = User(name=request_body["nombre"],
                          last_name=request_body["apellido"],
@@ -100,7 +102,7 @@ def creacion_de_registro():
                          email=request_body["email"],
                          password=request_body["contraseña"],
                          registration_date=fecha)
-    db.session.add(nuevo_usuario)    
+    db.session.add(nuevo_usuario)
     db.session.commit()
 
     response_body = {
@@ -116,7 +118,7 @@ def creacion_de_registro():
 def creacion_de_registro_prof():
     request_body = request.json
     email = request_body["email"]
-    
+
     # Verificar si el profesional ya existe
     existing_prof = Profesional.query.filter_by(email=email).first()
     if existing_prof:
@@ -125,18 +127,18 @@ def creacion_de_registro_prof():
             "ok": False
         }
         return jsonify(response_body), 400
-    
+
     fecha = datetime.datetime.now()
     nuevo_prof = Profesional(name=request_body["nombre"],
-                      last_name=request_body["apellido"],
-                      age=request_body["edad"],
-                      email=request_body["email"],
-                      password=request_body["contraseña"],
-                      registration_date=fecha,
-                      photo=request_body["foto"],
-                      descripcion=request_body["descripcion"],
-                      id_oficio=request_body["id_oficio"])
-    db.session.add(nuevo_prof)    
+                             last_name=request_body["apellido"],
+                             age=request_body["edad"],
+                             email=request_body["email"],
+                             password=request_body["contraseña"],
+                             registration_date=fecha,
+                             photo=request_body["foto"],
+                             descripcion=request_body["descripcion"],
+                             id_oficio=request_body["id_oficio"])
+    db.session.add(nuevo_prof)
     db.session.commit()
 
     response_body = {
@@ -151,9 +153,11 @@ def creacion_de_registro_prof():
 @jwt_required()
 def ValidarToken():
     current_user = get_jwt_identity()
-    return jsonify({"isLogged":True}),200
+    return jsonify({"isLogged": True}), 200
 
     # Api para crear una consulta a un admin
+
+
 @api.route('/consulta', methods=['POST'])
 def crearConsulta():
     dataConsulta = request.json
@@ -210,24 +214,30 @@ def traerConsultasAdmin(id_prof):
         # ahora en base al tipo de consulta y duracion, retornaremos una nueva prop que tenga cuando finalizaria
         float_a_str = str(tpo_consulta["duracion"])
         partes_array = float_a_str.split(".")
-        print(partes_array)
         # aqui obtengo la hora y minutos de un flotante
         horas = partes_array[0]
         minutos = partes_array[1] if len(partes_array) > 1 else 0
 
         # obtengo la hora de inicio para sumarle horas(en este caso viene en formato dateTime)
-        hora_extract = item["realization_date"]
+        hora_extract = item["consultation_date"]
+
+        # aqui lo que hacemos es pasar la hora a un string para añadirle la zona horaria
+        strhora = str(hora_extract) + " GMT-0300"
+        mi_fecha = datetime.strptime(strhora, '%Y-%m-%d %H:%M:%S %Z%z')
 
         delta_time = timedelta(hours=int(horas), minutes=int(minutos))
-        print(delta_time)
         # aqui suma la base de la hora que ya tenia mas el delta_time que creamos recien con formato solo horas y minutos
-        newTIme = hora_extract + delta_time
+        end_date = mi_fecha + delta_time
 
-        item["id_user"] = user["name"]
+        item["consultation_date"] = mi_fecha.strftime('%Y-%m-%d %H:%M:%S %Z%z')
+        item["userInfo"] = {
+            "nombre": user["name"],
+            "id": user["id"]
+        }
         item["id_profesional"] = prof["name"]
         item["id_tipo_consulta"] = tpo_consulta["nombre"]
         item["duracion"] = tpo_consulta["duracion"]
-        item["end_date"] = newTIme
+        item["end_date"] = end_date.strftime('%Y-%m-%d %H:%M:%S %Z%z')
         return item
     resultFinal = list(map(lambda item: cargarDatos(item), result))
     return jsonify({"ok": True, "consultas_prof": resultFinal}), 200
@@ -239,10 +249,65 @@ def traerConsultasAdmin(id_prof):
 @jwt_required()
 def infoByToken():
     indentyToken = get_jwt_identity()
+    print(indentyToken)
+    print("xddd")
     userExist = User.query.filter_by(email=indentyToken).first()
-
     if userExist == None:
         # AHora buscaremos el usuario pero en el modulo de profesional
-        profExist = Profesional.query.filter_by(email=indentyToken).first()
-        return jsonify({"ok": True, "info": profExist.serialize()}), 200
-    return jsonify({"ok": True, "info": userExist.serialize()}), 200
+        profesional_exist = Profesional.query.filter_by(
+            email=indentyToken).first().serialize()
+        oficioProf = Oficio.query.filter_by(
+            id=profesional_exist["id_oficio"]).first()
+        oficioS = oficioProf.serialize()
+        return jsonify({"ok": True, "info": {
+            "id": profesional_exist["id"],
+            "name": profesional_exist["name"],
+            "last_name": profesional_exist["last_name"],
+            "age": profesional_exist["age"],
+            "registration_date": profesional_exist["registration_date"],
+            "photo": profesional_exist["photo"],
+            "description": profesional_exist["descripcion"],
+            "oficio": oficioS["name"],
+            "email": profesional_exist["email"],
+            "rol": "admin"
+        }}), 200
+    userF = userExist.serialize()
+    return jsonify({"ok": True, "info": {
+        "id": userF["id"],
+        "name": userF["name"],
+        "last_name": userF["last_name"],
+        "age": userF["age"],
+        "registration_date": userF["registration_date"],
+        "email": userF["email"],
+        "rol": "user"
+    }}), 200
+
+# Api para traer los tipos de consulta
+
+
+@api.route("/tipo_consultas/<int:id_of>", methods=["GET"])
+def Cargar_Tipo_Consultas(id_of):
+
+    tipos_consulta = Tipo_consulta.query.filter_by(id_oficio=id_of).all()
+
+    if len(tipos_consulta) == 0:
+        jsonify({"ok": False, "msg": "No hay tipos de consulta"}), 400
+    tipos_consulta_serializada = list(
+        map(lambda item: item.serialize(), tipos_consulta))
+    return jsonify({"ok": True, "tipo_consultas": tipos_consulta_serializada})
+
+
+@api.route("/oficio_prof/<int:id_prof>", methods=["GET"])
+def Traer_oficio_prof(id_prof):
+
+    prof = Profesional.query.filter_by(id=id_prof).first()
+    print(prof)
+    if prof == None:
+        return jsonify({"ok": False, "msg": "Este profesional no existe"}), 400
+    profS = prof.serialize()
+    # ahora cargaremos su oficio
+    oficio_prof = Oficio.query.filter_by(id=profS["id_oficio"]).first()
+    if oficio_prof == None:
+        return jsonify({"ok": False, "msg": "Este usuario no tiene ningun oficio"})
+    oficio_profS = oficio_prof.serialize()
+    return jsonify({"ok": True, "oficio_prof": oficio_profS})
