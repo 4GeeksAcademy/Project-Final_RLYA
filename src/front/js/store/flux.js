@@ -144,13 +144,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.log(error)
 				}
-			}
-		}
-	};
-
-
-
-
+			},
 			traerInfoProf:async () => {
 				try {
 					const response = await axios.get(process.env.BACKEND_URL + "/api/profesionales")
@@ -161,11 +155,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
 				}
 			},
-
-		}	
-		
+		}
 	}
-
 };
 
 export default getState;

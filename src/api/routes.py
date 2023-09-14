@@ -314,9 +314,7 @@ def Traer_oficio_prof(id_prof):
         return jsonify({"ok": False, "msg": "Este usuario no tiene ningun oficio"})
     oficio_profS = oficio_prof.serialize()
     return jsonify({"ok": True, "oficio_prof": oficio_profS})
-        profExist = Profesional.query.filter_by(email=indentyToken).first()
-        return jsonify({"ok": True, "info": profExist.serialize()}), 200
-    return jsonify({"ok": True, "info": userExist.serialize()}), 200
+
 
 
 
