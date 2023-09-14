@@ -20,6 +20,8 @@ export const Sidebar = () => {
 							<a className="dropdown-item" href="#">Something else here</a>
 						</div>
 					</div>
+					{/*Momentaneo*/}
+					<a className="d-block p-3 text-decoration-none text-light" href={"/agenda/" + "2"}><i className="fa-solid fa-envelope mr-2 lead text-light"></i>  Ver Agenda User 1</a>
 					<a className="d-block p-3 text-decoration-none text-light" href="#"><i className="fa-solid fa-envelope mr-2 lead text-light"></i>  Mensajes</a>
 					<a className="d-block p-3 text-decoration-none text-light" href="#"><i class="fa-solid fa-clock mr-2 lead text-light"></i>  Agendas activas</a>
 					<a className="d-block p-3 text-decoration-none text-light" href="#"><i class="fa-solid fa-folder-open mr-2 lead text-light"></i>  Historial de agendas</a>
