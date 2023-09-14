@@ -28,7 +28,8 @@ const Layout = () => {
     return (
         <div className="" style={{ height: "100%", width: "100%" }} >
             {
-                store.statusLogin == true ? <AppRutas /> : <LoginRutas />
+                user == true ? <AppRutas /> : <LoginRutas />
+                // store.statusLogin
             }
         </div>
     );

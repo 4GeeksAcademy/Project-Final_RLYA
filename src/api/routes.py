@@ -9,7 +9,8 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
+
 
 api = Blueprint('api', __name__)
 
@@ -29,6 +30,8 @@ def loginUser():
     userInfo = request.json
 
     userExist = User.query.filter_by(email=userInfo["email"]).first()
+
+    photoperf = User.query.filter_by(photo=userInfo["photo"]).first()
 
     if userExist == None:
         # AHora buscaremos el usuario pero en el modulo de profesional
@@ -75,6 +78,7 @@ def loginUser():
         return jsonify(response_body), 200
     return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
+
 # End-point registro de usuario
 
 
@@ -83,7 +87,7 @@ def creacion_de_registro():
     request_body = request.json
     print(request_body)
     email = request_body["email"]
-    
+
     # Verificar si el usuario ya existe
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
@@ -92,7 +96,7 @@ def creacion_de_registro():
             "ok": False
         }
         return jsonify(response_body), 400
-    
+
     fecha = datetime.datetime.now()
     nuevo_usuario = User(name=request_body["nombre"],
                          last_name=request_body["apellido"],
@@ -100,7 +104,7 @@ def creacion_de_registro():
                          email=request_body["email"],
                          password=request_body["contraseña"],
                          registration_date=fecha)
-    db.session.add(nuevo_usuario)    
+    db.session.add(nuevo_usuario)
     db.session.commit()
 
     response_body = {
@@ -116,7 +120,7 @@ def creacion_de_registro():
 def creacion_de_registro_prof():
     request_body = request.json
     email = request_body["email"]
-    
+
     # Verificar si el profesional ya existe
     existing_prof = Profesional.query.filter_by(email=email).first()
     if existing_prof:
@@ -125,18 +129,18 @@ def creacion_de_registro_prof():
             "ok": False
         }
         return jsonify(response_body), 400
-    
+
     fecha = datetime.datetime.now()
     nuevo_prof = Profesional(name=request_body["nombre"],
-                      last_name=request_body["apellido"],
-                      age=request_body["edad"],
-                      email=request_body["email"],
-                      password=request_body["contraseña"],
-                      registration_date=fecha,
-                      photo=request_body["foto"],
-                      descripcion=request_body["descripcion"],
-                      id_oficio=request_body["id_oficio"])
-    db.session.add(nuevo_prof)    
+                             last_name=request_body["apellido"],
+                             age=request_body["edad"],
+                             email=request_body["email"],
+                             password=request_body["contraseña"],
+                             registration_date=fecha,
+                             photo=request_body["foto"],
+                             descripcion=request_body["descripcion"],
+                             id_oficio=request_body["id_oficio"])
+    db.session.add(nuevo_prof)
     db.session.commit()
 
     response_body = {
@@ -151,9 +155,8 @@ def creacion_de_registro_prof():
 @jwt_required()
 def ValidarToken():
     current_user = get_jwt_identity()
-    return jsonify({"isLogged":True}),200
-
-    # Api para crear una consulta a un admin
+    return jsonify({"isLogged": True}), 200
+ # Api para crear una consulta a un admin
 @api.route('/consulta', methods=['POST'])
 def crearConsulta():
     dataConsulta = request.json
@@ -246,3 +249,33 @@ def infoByToken():
         profExist = Profesional.query.filter_by(email=indentyToken).first()
         return jsonify({"ok": True, "info": profExist.serialize()}), 200
     return jsonify({"ok": True, "info": userExist.serialize()}), 200
+
+
+
+@api.route('/listprof', methods=['GET'])
+def handle_list():
+    #     # if (status > 400) {
+    #     #     return("error en solicitud")
+    #     # }
+    #     # this is how you can use the Family datastructure by calling its methods
+    listp = Profesional.query.all()  # trae el class y de ahi la funcion all members
+    listfinal = list(map(lambda item: item.serialize(), listp))
+    print(list)
+    return jsonify({"ok": True, "profesionales": listfinal}), 200
+
+
+@api.route('/profesionales', methods=['GET'])
+def get_single_photo():
+    # Obtener el profesional por su ID
+    info_prof = Profesional.query.all()
+
+    # Si el profesional existe, devolver la foto
+    if len(info_prof) == 0:
+        return jsonify({"error": "El profesional no se encontró"}), 404
+    # Si el profesional no existe, devolver un error 404
+    else:
+        listfinal = list(map(lambda item: item.serialize(), info_prof))
+        return jsonify({"info": listfinal}), 200
+
+
+

@@ -1,10 +1,11 @@
 import axios from "axios";
 
-
+// const [photoUrl, setPhotoUrl] = useState(""); // Estado para almacenar la URL de la foto
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			profesionales:[],
 			user: {},
 			statusLogin: false,
 			messageError: undefined
@@ -72,8 +73,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ statusLogin: false, user: {} })
 			},
 
-		}
-	};
+
+
+			traerInfoProf:async () => {
+				try {
+					const response = await axios.get(process.env.BACKEND_URL + "/api/profesionales")
+					setStore({...getStore(),profesionales:response.data.info})
+					console.log(response.data)
+				} catch (error) {
+					console.log(error)
+					
+				}
+			},
+
+		}	
+		
+	}
 };
 
 export default getState;

@@ -5,9 +5,9 @@ export const Sidebar = () => {
 	return (
 		<div className="mx-0 my-0" style={{ height: "100%", width: "300px" }}>
 			<div id="sidebar-container" className="bg-dark p-3 " style={{ height: "100%", width: "100%" }}>
-				<dic className="logo p-3 mx-3" style={{ padding: ".875rem, 1.25rem" }}>
-					<h4> @ CApp</h4>
-				</dic>
+				<div className="logo p-3 mx-3" style={{ padding: ".875rem, 1.25rem" }}>
+					<img src=""/>
+				</div>
 				<div className="menu" >
 					<a className="d-block p-3 text-decoration-none text-light" href="#"><i className="fa-solid fa-calendar-days mr-2 lead text-light"></i>  Mi agenda</a>
 					<div className="dropdown">
