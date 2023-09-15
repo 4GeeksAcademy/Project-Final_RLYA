@@ -19,6 +19,7 @@ export const PaginaInicio = () => {
                         <a className="nav-link text-white" style={{ fontFamily: 'Raleway, sans-serif' }}>Registrarme</a>
                         <p className="nav-link text-white">/</p>
                         <a href="/Login" className="nav-link text-white" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
+
                             e.preventDefault();
                             navigate("/Login");
                         }}>Login</a>

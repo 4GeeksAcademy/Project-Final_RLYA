@@ -12,6 +12,9 @@ import { Navbar } from "./component/Navbar";
 import { Footer } from "./component/footer";
 import { Login } from "./pages/login";
 import { PaginaInicio } from "./pages/pagina_inicio";
+import { RegistroUsuario } from "./pages/vista_registro_usuario";
+import { DatosEmpresa } from "./pages/ingreso_datos_empresa";
+import { TipoConsulta } from "./pages/tipo_consulta";
 
 //create your first component
 export const LoginRutas = () => {
@@ -25,8 +28,11 @@ export const LoginRutas = () => {
         <div>
             <BrowserRouter basename={basename}>
                     <Routes>
-                    <Route element={<PaginaInicio/>} path="/*" />
+                        <Route element={<PaginaInicio/>} path="/*" />
                         <Route element={<Login />} path="/Login" />
+                        <Route element={<RegistroUsuario />} path="/RegistroUsuario" />
+                        <Route element={<DatosEmpresa />} path="/DatosEmpresa" /> /
+                        <Route element={<TipoConsulta />} path="/TipoConsulta" /> /
                     </Routes>
             </BrowserRouter>
         </div>
