@@ -33,6 +33,7 @@ export const UserViewAgenda = () => {
 
 
   useEffect(() => {
+    console.log("xd")
     actions.TraerAgendaProf(id_prof)
     actions.TraerOficioProf(id_prof)
   }, [])

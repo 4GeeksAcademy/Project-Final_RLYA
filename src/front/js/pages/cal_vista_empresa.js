@@ -75,9 +75,9 @@ export const CalendarioEmpresa = () => {
 											}
 										</div>
 										<p className="m-0 p-0 ps-2">{item.title}-{fechaComparar.getHours().toString()}</p>
-									</div>
+										</div>
 									}
-								}) : <p>Cargando...</p>
+								}) : <p className="text-center mt-3">Cargando...:...</p>
 								}
 						</div>
 					</div>

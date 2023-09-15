@@ -93,7 +93,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			TraerAgendaProf:async (id_prof)=> {
 				try {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultaProf/" + id_prof )
+					console.log("data")
 					if(data.ok === true){
+						console.log(data)
 						/*Traemos el id del user activo*/
 						const userID = getStore().user.id 
 						/*Ahora lo que haremos es, por cada uno de las consultas, las pasaremos a un formato que el calendario pueda interpretar, en este caso espesificando el titulo, inicio y fin*/
@@ -132,7 +134,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const {data} = await axios.post(process.env.BACKEND_URL + "/api/consulta", form )
 					if(data.ok === true){
-						getActions().TraerAgendaProf()
+						getActions().TraerAgendaProf(form.id_profesional)							
 					}
 				} catch (error) {
 					console.log(error)
