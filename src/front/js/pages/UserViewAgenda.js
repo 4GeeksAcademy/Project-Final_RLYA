@@ -21,6 +21,7 @@ const locales = {
 
 const localizer = momentLocalizer(moment)
 
+
 export const UserViewAgenda = () => {
   const { store, actions } = useContext(Context);
   const { id_prof } = useParams();

@@ -28,6 +28,7 @@ export const CalendarioEmpresa = () => {
 		  style
 		}
 	}
+	
 	const OpenModalInfoCita = (event)=> {
 		setStateModalViewCite(true)
 		setCitaSelected(event)
