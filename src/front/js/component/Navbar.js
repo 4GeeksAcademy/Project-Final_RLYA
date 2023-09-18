@@ -15,7 +15,7 @@ export const Navbar = () => {
             <ul className="navbar-nav ">
                 <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Luciano Rodirguez
+                        {store.user.name + " " + store.user.last_name}
                     </a>
                     <ul className="dropdown-menu ">
                         <li><a className="dropdown-item" href="#">Perfil</a></li>
