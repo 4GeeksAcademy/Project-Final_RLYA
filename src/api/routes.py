@@ -280,7 +280,7 @@ def infoByToken():
             "oficio": oficioS,
             "email": profesional_exist["email"],
             "rol": "admin",
-            "tipo_consultas": tipos_consulta_serializada
+            "tipos_consulta": tipos_consulta_serializada
         }}), 200
     userF = userExist.serialize()
     return jsonify({"ok": True, "info": {

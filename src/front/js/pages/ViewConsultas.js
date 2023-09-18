@@ -19,8 +19,8 @@ export const ViewConsultas = ()=> {
                 <h1 className="text-center">Consultas</h1>
                     <div className="col p-2">
                         {
-                            store.tipos_consulta.length > 0 ? store.tipos_consulta.map((consulta)=> {
-                                return <div className="d-flex flex-row justify-content-between">
+                            store.tipos_consulta.length > 0 ? store.tipos_consulta.map((consulta,index)=> {
+                                return <div key={"soy index" + index} className="d-flex flex-row justify-content-between">
                                     <p>Consulta 1</p>
                                     <div className="d-flex flex-row">
                                         <AiFillDelete className="mx-3"/>

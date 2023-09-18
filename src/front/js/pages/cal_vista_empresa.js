@@ -67,11 +67,11 @@ export const CalendarioEmpresa = () => {
 								<h1 className="text-center mb-3">Tareas Hoy:</h1>
 								<div className="d-flex flex-column d-flex flex-row">
 									{
-										store.eventsAdminSpesifique.length > 0 ? store.eventsAdminSpesifique.map((item) => {
+										store.eventsAdminSpesifique.length > 0 ? store.eventsAdminSpesifique.map((item,index) => {
 											const fechaActual = new Date()
 											const fechaComparar = new Date(item.start)
 											if (fechaComparar.getDate() === fechaActual.getDate() && fechaComparar.getMonth() === fechaActual.getMonth() && fechaComparar.getFullYear() === fechaActual.getFullYear()) {
-												return <div className="d-flex flex-row my-2 border-bottom border-dark pb-2 opacity-60">
+												return <div key={"soy index" + index} className="d-flex flex-row my-2 border-bottom border-dark pb-2 opacity-60">
 													<div className="border border-secondary d-flex flex-row justify-content-center align-content-center" style={{ background: "transparent", padding: "2px", height: "20px", width: "20px" }}>
 														{
 															fechaActual > fechaComparar && <AiOutlineCheck color="#00C208" />

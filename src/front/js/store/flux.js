@@ -12,6 +12,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			statusLogin: false,
 			eventsAdminSpesifique:[],
 			messageError: undefined,
+			messageSuccess:undefined,
 			oficio_prof:undefined,
 			tipos_consulta: [],
 			oficios:[]
@@ -86,8 +87,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const {data} = await axios.get(process.env.BACKEND_URL + "/api/infobyToken",{
 							headers: { "Authorization": "Bearer " + token }
 						})
-						setStore({...getStore(),user:data.info})
-						console.log(data)
+						if(data.ok) {
+							setStore({...getStore(),user:data.info})
+						}
 					}
 					console.log("no hay token")
 				} catch (error) {
@@ -222,7 +224,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(formatSend)
 					const {data} = await axios.post(process.env.BACKEND_URL + "/api/tipo_consulta",formatSend)
 					if(data.ok === true){
-						console.log("Se inserto el tipo de consulta correctamente",data)
+						setStore({...getStore(),messageSuccess:data.msg})
+						/*Traigo de nuevo la peticion de las consultas*/
+						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
 					}
 					
 				} catch (error) {

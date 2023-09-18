@@ -36,6 +36,11 @@ export const TipoConsulta = ({ }) => {
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <h3 className="text-center mb-3"><strong>Añadir tipo de consulta</strong></h3>
+                            {
+                                store.messageSuccess && <div class="alert alert-success" role="alert">
+                                {store.messageSuccess}
+                              </div>
+                            }
                             <label htmlFor="exampleInputText" className="form-label text-start fs-6"><strong>Nombre Consulta</strong></label>
                             <input type="text" className="form-control" id="exampleInputText" value={statusformAdmin.nombre} onChange={(e) => setStatusFormAdmin({...statusformAdmin,nombre:(e.target.value)})} />
                         </div>
