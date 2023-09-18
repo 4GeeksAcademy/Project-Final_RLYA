@@ -9,8 +9,10 @@ export const Listaprofesionales = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div className="text-center mt-5">
-			<ListaProf /> 
+
+		<div className="text-center mt-3">
+			<ListaProf />
+
 		</div>
 	);
 };

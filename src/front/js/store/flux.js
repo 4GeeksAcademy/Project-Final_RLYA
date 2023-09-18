@@ -207,7 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			AgregarTipoConsultaAdmin:async (form)=> {
-				console.log(form)
+				console.log(getStore().user)
 				const store = getStore()
 				const numberFloatString = form.duracionHoras + "." + form.duracionMinutos
 				const finalnumber = parseFloat(numberFloatString)
