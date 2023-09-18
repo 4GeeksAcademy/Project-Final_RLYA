@@ -28,7 +28,9 @@ export const TipoConsulta = ({ }) => {
 
 
     return (
-        <div className="container py-5">
+        <>
+        {
+            store.user.name ? <div className="container py-5">
             <div className="row d-flex align-items-center justify-content-center">
                 <div className="col-4 p-5 col-4 border rounded-3 shadow">
                     <form onSubmit={handleSubmit}>
@@ -79,6 +81,8 @@ export const TipoConsulta = ({ }) => {
                     </form>
                 </div>
             </div>
-        </div>
-    );
+        </div> : <p>Cargando...</p>
+        }
+        </>
+        );
 };

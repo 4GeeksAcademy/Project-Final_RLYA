@@ -34,11 +34,10 @@ export const UserViewAgenda = () => {
 
 
   useEffect(() => {
-    console.log("xd")
     actions.TraerAgendaProf(id_prof)
     actions.TraerOficioProf(id_prof)
   }, [])
-
+  console.log(store.eventsAdminSpesifique)
   const eventStyleGetter = (event, start, end, isSelected) => {
 		const style = {
 		  backgroundColor: event.bgColor
@@ -68,7 +67,9 @@ export const UserViewAgenda = () => {
   
   
   return (
-    <div className="container-fluid position-relative z-1">
+    <>
+    {
+      store.eventsAdminSpesifique && store.user.name? <div className="container-fluid position-relative z-1">
       <div className="row z-1">
         <div className="col-8 z-1">
         <Calendar
@@ -121,7 +122,9 @@ export const UserViewAgenda = () => {
       </div>
 
 
-    </div>
+    </div> :  <p>Cargando...</p>
+    }
+    </>
 
   );
 };

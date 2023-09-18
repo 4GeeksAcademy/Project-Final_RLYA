@@ -41,8 +41,10 @@ def loginUser():
         if userInfo["email"] == profF["email"] and userInfo["password"] == profF["password"]:
             oficioProf = Oficio.query.filter_by(id=profF["id_oficio"]).first()
             oficioS = oficioProf.serialize()
+            tipos_consulta = Tipo_consulta.query.filter_by(
+                id_oficio=profF["id_oficio"], id_profesional=profF["id"]).all()
             token = create_access_token(identity=profF["email"])
-
+            tipos_consulta_serializada = list(map(lambda item: item.serialize(), tipos_consulta))
             return jsonify({"ok": True, "msg": "Login correcto", "dataProf": {
                 "id": profF["id"],
                 "name": profF["name"],
@@ -51,10 +53,11 @@ def loginUser():
                 "registration_date": profF["registration_date"],
                 "photo": profF["photo"],
                 "description": profF["descripcion"],
-                "oficio": oficioS["name"],
+                "oficio": oficioS,
                 "email": profF["email"],
                 "token": token,
-                "rol": "admin"
+                "rol": "admin",
+                "tipos_consulta": tipos_consulta_serializada
             }}), 200
         return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
@@ -261,6 +264,11 @@ def infoByToken():
         oficioProf = Oficio.query.filter_by(
             id=profesional_exist["id_oficio"]).first()
         oficioS = oficioProf.serialize()
+        # Ahora cargaremos los tipos de consulta en la info del user
+        tipos_consulta = Tipo_consulta.query.filter_by(
+            id_oficio=profesional_exist["id_oficio"], id_profesional=profesional_exist["id"]).all()
+        tipos_consulta_serializada = list(
+        map(lambda item: item.serialize(), tipos_consulta))
         return jsonify({"ok": True, "info": {
             "id": profesional_exist["id"],
             "name": profesional_exist["name"],
@@ -271,7 +279,8 @@ def infoByToken():
             "description": profesional_exist["descripcion"],
             "oficio": oficioS,
             "email": profesional_exist["email"],
-            "rol": "admin"
+            "rol": "admin",
+            "tipo_consultas": tipos_consulta_serializada
         }}), 200
     userF = userExist.serialize()
     return jsonify({"ok": True, "info": {

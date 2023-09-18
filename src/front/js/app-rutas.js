@@ -13,6 +13,7 @@ import { Context } from "./store/appContext";
 import { ValidTpConsulta } from "./component/Admin_Valid_TpConsulta";
 import { ViewConsultas } from "./pages/ViewConsultas";
 import { TipoConsulta } from "./pages/tipo_consulta";
+import { SidebarAdmin } from "./component/SidebarAdmin";
 
 
 
@@ -30,12 +31,12 @@ export const AppRutas = () => {
             {
                 store.user? <BrowserRouter basename={basename}>
                 <div className="position-relative d-flex flex-row" style={{ height: "100%", width: "100%" }}>
-                    <Sidebar />
+                    {store.user.rol === "user"? <Sidebar /> : <SidebarAdmin/>}
                     <div className="content " style={{ width: "100%" }}>
                         <Navbar />
                         <Routes>
                             {/* Rutas */}
-                            <Route element={store.user.rol === "user"? <Listaprofesionales /> : <ValidTpConsulta/> } path="/*" />
+                            <Route element={store.user.rol === "user"? <Listaprofesionales /> : <ValidTpConsulta tipo_consultas={store.user.tipo_consultas}/> } path="/*" />
                             <Route element={<Listaprofesionales />} path="/listprof" />
                             <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
                             <Route element={<UserViewAgenda />} path="/agenda/:id_prof" />
