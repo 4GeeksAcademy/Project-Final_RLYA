@@ -4,7 +4,7 @@ import { Context } from "../store/appContext.js";
 
 export const Navbar = () => {
     const {store,actions} = useContext(Context)
-    console.log(store)
+
     
     return (
     <nav className="navbar py-2 px-5 navbar-expand-lg bg-light sticky-top nav d-flex flex-row justify-content-between  " style={{ width: "100%" }}>

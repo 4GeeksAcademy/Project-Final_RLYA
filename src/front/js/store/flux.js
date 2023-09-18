@@ -36,6 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					} else if(data.dataProf) {
 						localStorage.setItem("token", data.dataProf.token);
 						setStore({ statusLogin: true, user: data.dataProf })
+						
 					}
 					
 					return true;
@@ -86,6 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							headers: { "Authorization": "Bearer " + token }
 						})
 						setStore({...getStore(),user:data.info})
+						console.log(data)
 					}
 					console.log("no hay token")
 				} catch (error) {
@@ -93,27 +95,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			TraerAgendaProf:async (id_prof)=> {
+				setStore({...getStore(),eventsAdminSpesifique:[]})
 				try {
-					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultaProf/" + id_prof )
-					console.log("data")
-					if(data.ok === true){
-						console.log(data)
-						/*Traemos el id del user activo*/
-						const userID = getStore().user.id 
-						/*Ahora lo que haremos es, por cada uno de las consultas, las pasaremos a un formato que el calendario pueda interpretar, en este caso espesificando el titulo, inicio y fin*/
-						data.consultas_prof.map((consulta)=> {
-							const formatCalendar = {
-								start:new Date(consulta.consultation_date),
-								end:new Date(consulta.end_date),
-								title: consulta.userInfo.id === userID? consulta.id_tipo_consulta : "ocupado",
-								bgColor:consulta.userInfo.id === userID? "#59CB00" : "#CECECE",
-								id_user:consulta.userInfo.id,
-								nom_prof:consulta.id_profesional,
-								notes: consulta.nota
-							}
-							return setStore({...getStore(),eventsAdminSpesifique:[...getStore().eventsAdminSpesifique,formatCalendar]})
-						})
-					}
+					setTimeout(async() => {
+						const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultaProf/" + id_prof )
+						if(data.ok === true){
+							console.log(data)
+							/*Traemos el id del user activo*/
+							const userID = getStore().user.id 
+							/*Ahora lo que haremos es, por cada uno de las consultas, las pasaremos a un formato que el calendario pueda interpretar, en este caso espesificando el titulo, inicio y fin*/
+							const consultas = data.consultas_prof.map((consulta)=> {
+								console.log(getStore().user)
+								const formatCalendar = {
+									start:new Date(consulta.consultation_date),
+									end:new Date(consulta.end_date),
+									title: consulta.userInfo.id === getStore().user.id || getStore().user.rol === "admin" ? consulta.id_tipo_consulta : "ocupado",
+									bgColor:consulta.userInfo.id === getStore().user.id || getStore().user.rol === "admin" ? "#59CB00" : "#CECECE",
+									id_user:consulta.userInfo.id,
+									nom_prof:consulta.id_profesional,
+									notes: consulta.nota
+								}
+								return formatCalendar
+							})
+							setStore({...getStore(),eventsAdminSpesifique:consultas})
+						}
+					}, 1000);
 				} catch (error) {
 					console.log(error)
 				}
@@ -123,6 +129,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ statusLogin: false, user: {},profesionales:[],eventsAdminSpesifique:[],oficio_prof:undefined,tipos_consulta:[]})
 			},
 			CargarTiposCosnulta:async(id_oficio_prof,id_prof)=>{
+				console.log(id_oficio_prof)
+				console.log(id_prof)
 				try {
 					const body = {
 						id_user: id_prof

@@ -10,7 +10,7 @@ export const Listaprofesionales = () => {
 
 	return (
 		<div className="text-center mt-5">
-			<ListaProf />
+			<ListaProf /> 
 		</div>
 	);
 };
