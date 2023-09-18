@@ -54,7 +54,7 @@ export const DatosEmpresa = ({stateForm}) => {
                                 </button>
                                 <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     {
-                                        store.oficios.length > 0 ? store.oficios.map((oficio)=> {
+                                        store.oficios.length > 0 ? store.oficios.map((oficio,index)=> {
                                             return <li key={"soy index" + index}><a onClick={()=> setEmpresaDataAdd({...empresaDataAdd,id_oficio:oficio.id})} className="dropdown-item" href="#">{oficio.name}</a></li>
                                         }) : <li><a className="dropdown-item" href="#">No hay oficios</a></li>
                                     }

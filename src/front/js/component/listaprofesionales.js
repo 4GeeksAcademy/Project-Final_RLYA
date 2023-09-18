@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext.js";
 import { set } from "date-fns";
+import { Spiner } from "./Spiner.js";
 
 
 
@@ -64,7 +65,7 @@ export const ListaProf = () => {
                         <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</p>
 
                         </div>
-                    }) : <p clas>Cargando...</p>}
+                }) : <Spiner/>}
                     
                 </div>
             </div>

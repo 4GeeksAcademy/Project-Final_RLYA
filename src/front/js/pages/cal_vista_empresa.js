@@ -9,6 +9,7 @@ import moment from 'moment-timezone'
 import { ModalInfoCita } from "../component/ModalInfoCita";
 
 import { AiOutlineCheck } from "react-icons/ai"
+import { Spiner } from "../component/Spiner";
 const localizer = momentLocalizer(moment)
 
 export const CalendarioEmpresa = () => {
@@ -92,7 +93,7 @@ export const CalendarioEmpresa = () => {
 							stateModalViewCite == true && <ModalInfoCita CloseModal={CloseModalInfoCita} infoSelected={citaSelected} />
 						}
 					</div>
-				</div> : <p className="text-center">Cargando...</p>
+				</div> : <Spiner/>
 			}
 		</>
 	);

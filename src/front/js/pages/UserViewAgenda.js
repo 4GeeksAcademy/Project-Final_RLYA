@@ -13,6 +13,7 @@ import { addHours } from "date-fns";
 import moment from 'moment-timezone'
 import { ModalAgendarme } from "../component/ModalAgendarme";
 import { ModalInfoCita } from "../component/ModalInfoCita";
+import { Spiner } from "../component/Spiner";
 
 
 const locales = {
@@ -122,7 +123,7 @@ export const UserViewAgenda = () => {
       </div>
 
 
-    </div> :  <p>Cargando...</p>
+    </div> :  <Spiner/>
     }
     </>
 

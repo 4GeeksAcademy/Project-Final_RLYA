@@ -81,6 +81,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			loadInfoUserByToken:async ()=> {
+				console.log("XDDDDDDDDDD")
 				try {
 					const token = localStorage.getItem("token")
 					if(token) {
@@ -88,6 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							headers: { "Authorization": "Bearer " + token }
 						})
 						if(data.ok) {
+							console.log(data.info)
 							setStore({...getStore(),user:data.info})
 						}
 					}

@@ -14,6 +14,7 @@ import { ValidTpConsulta } from "./component/Admin_Valid_TpConsulta";
 import { ViewConsultas } from "./pages/ViewConsultas";
 import { TipoConsulta } from "./pages/tipo_consulta";
 import { SidebarAdmin } from "./component/SidebarAdmin";
+import { Spiner } from "./component/Spiner";
 
 
 
@@ -47,7 +48,7 @@ export const AppRutas = () => {
                     </div>
                 </div>
             </BrowserRouter > : 
-            <p>Cargando...</p>
+            <Spiner/>
             }
         </div >
     );
