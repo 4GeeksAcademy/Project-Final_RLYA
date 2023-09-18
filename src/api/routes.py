@@ -326,6 +326,7 @@ def handle_list():
     #     # }
     #     # this is how you can use the Family datastructure by calling its methods
     listp = Profesional.query.all()  # trae el class y de ahi la funcion all members
+    
     listfinal = list(map(lambda item: item.serialize(), listp))
     print(list)
     return jsonify({"ok": True, "profesionales": listfinal}), 200
@@ -335,13 +336,20 @@ def handle_list():
 def get_single_photo():
     # Obtener el profesional por su ID
     info_prof = Profesional.query.all()
-
+    
     # Si el profesional existe, devolver la foto
     if len(info_prof) == 0:
         return jsonify({"error": "El profesional no se encontró"}), 404
     # Si el profesional no existe, devolver un error 404
     else:
-        listfinal = list(map(lambda item: item.serialize(), info_prof))
+        def cargarOficio (item):
+            itemfinal = item.serialize()
+            print(item)
+            oficio = Oficio.query.filter_by(id = itemfinal["id_oficio"]).first()
+            oficiofinal= oficio.serialize()
+            itemfinal["id_oficio"] = oficiofinal
+            return itemfinal
+        listfinal = list(map(lambda item: cargarOficio (item), info_prof))
         return jsonify({"info": listfinal}), 200
 
 # Api para obtener oficios
