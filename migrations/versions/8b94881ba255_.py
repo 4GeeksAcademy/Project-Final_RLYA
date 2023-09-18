@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ae40c11d4f25
+Revision ID: 8b94881ba255
 Revises: 
-Create Date: 2023-09-14 14:39:48.003498
+Create Date: 2023-09-15 19:46:19.389185
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ae40c11d4f25'
+revision = '8b94881ba255'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,6 +29,7 @@ def upgrade():
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('last_name', sa.String(length=120), nullable=False),
     sa.Column('age', sa.Integer(), nullable=False),
+    sa.Column('photo', sa.Integer(), nullable=True),
     sa.Column('registration_date', sa.DateTime(), nullable=False),
     sa.Column('email', sa.String(length=100), nullable=False),
     sa.Column('password', sa.String(length=100), nullable=False),
@@ -56,11 +57,13 @@ def upgrade():
     )
     op.create_table('tipo_consulta',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id_profesional', sa.Integer(), nullable=False),
     sa.Column('id_oficio', sa.Integer(), nullable=False),
     sa.Column('nombre', sa.String(length=120), nullable=False),
     sa.Column('descripcion', sa.String(length=500), nullable=False),
     sa.Column('duracion', sa.Float(), nullable=False),
     sa.ForeignKeyConstraint(['id_oficio'], ['oficio.id'], ),
+    sa.ForeignKeyConstraint(['id_profesional'], ['profesional.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('consulta',

@@ -17,7 +17,7 @@ export const ModalAgendarme = ({ CloseModal }) => {
         consultation_date:""
     })
     useEffect(() => {
-        actions.CargarTiposCosnulta(store.oficio_prof.id)
+        actions.CargarTiposCosnulta(store.oficio_prof.id,id_prof)
     },[])
 
     

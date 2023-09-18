@@ -8,6 +8,7 @@ class User(db.Model):
     name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     age = db.Column(db.Integer, nullable=False)
+    photo = db.Column(db.String(200), nullable=True)
     registration_date = db.Column(db.DateTime, unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
@@ -24,6 +25,7 @@ class User(db.Model):
             "name": self.name,
             "last_name": self.last_name,
             "age": self.age,
+            "photo": self.photo,
             "registration_date": self.registration_date,
             "email": self.email,
             "password": self.password
@@ -36,7 +38,6 @@ class Profesional(db.Model):
     name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    birth_date = db.Column(db.DateTime, unique=True, nullable=True)
     registration_date = db.Column(db.DateTime, unique=True, nullable=False)
     photo = db.Column(db.String(200), nullable=True)
     descripcion = db.Column(db.String(500), nullable=True)
@@ -45,7 +46,6 @@ class Profesional(db.Model):
 
     id_oficio = db.Column(db.Integer, db.ForeignKey(
         'oficio.id'), nullable=False)
-
 
     # relacion
     consulta = db.relationship('Consulta', backref='profesional', lazy=True)
@@ -71,6 +71,8 @@ class Profesional(db.Model):
 
 class Tipo_consulta(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    id_profesional = db.Column(db.Integer, db.ForeignKey(
+        'profesional.id'), nullable=False)
     id_oficio = db.Column(db.Integer, db.ForeignKey(
         'oficio.id'), nullable=False)
     nombre = db.Column(db.String(120), nullable=False)
@@ -87,6 +89,7 @@ class Tipo_consulta(db.Model):
         return {
             "id": self.id,
             "id_oficio": self.id_oficio,
+            "id_profesional": self.id_profesional,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
             "duracion": self.duracion
