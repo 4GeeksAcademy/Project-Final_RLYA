@@ -391,3 +391,41 @@ def new_tipo_consulta():
     db.session.add(tipo_consultaNew)
     db.session.commit()
     return jsonify({"ok": True, "msg": "Se creo el tipo de consulta correctamente"}), 200
+
+# Api para actualizar un tipo de consulta
+
+
+@api.route("/tipo_consulta/<int:id_tp_c>", methods=["PUT"])
+def edit_tipo_consulta(id_tp_c):
+    body = request.json
+    print(body)
+    tipo_consulta = Tipo_consulta.query.filter_by(id=id_tp_c).first()
+
+    if tipo_consulta == None:
+        return jsonify({"ok": False, "msg": "Error, no hay un tipo de consulta con este id"}, 400)
+    tipo_consulta.id_oficio = body["id_oficio"]
+    tipo_consulta.id_profesional = body["id_profesional"]
+    tipo_consulta.nombre = body["nombre"]
+    tipo_consulta.descripcion = body["descripcion"]
+    tipo_consulta.duracion = body["duracion"]
+
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se Actualizo el tipo de consulta correctamente"}), 200
+
+# Api para borrar un tipo de consulta
+
+
+@api.route("/tipo_consulta/<int:id_tp_c>", methods=["DELETE"])
+def delete_tipo_consulta(id_tp_c):
+
+    tipo_consulta = Tipo_consulta.query.filter_by(id=id_tp_c).first()
+
+    if tipo_consulta == None:
+        return jsonify({"ok": False, "msg": "Error, no hay un tipo de consulta con este id"}, 400)
+
+    consultasDelete = Consulta.query.filter_by(id_tipo_consulta=id_tp_c).all()
+    # Tambien debemos de borrar todas las consultas que tengan este tipo de consulta
+    list(map(lambda item: db.session.delete(item), consultasDelete))
+    db.session.delete(tipo_consulta)
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se elimino el tipo de consulta correctamente"}), 200
