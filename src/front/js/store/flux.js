@@ -81,6 +81,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			loadInfoUserByToken:async ()=> {
+				console.log("XDDDDDDDDDD")
 				try {
 					const token = localStorage.getItem("token")
 					if(token) {
@@ -88,6 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							headers: { "Authorization": "Bearer " + token }
 						})
 						if(data.ok) {
+							console.log(data.info)
 							setStore({...getStore(),user:data.info})
 						}
 					}
@@ -227,8 +229,50 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({...getStore(),messageSuccess:data.msg})
 						/*Traigo de nuevo la peticion de las consultas*/
 						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
+						setTimeout(() => {
+							setStore({...getStore(),messageSuccess:undefined})
+						}, 3000);
 					}
 					
+				} catch (error) {
+					console.log(error)
+				}
+			},
+			ActualizarTipoConsulta:async (form,id_tp_c)=> {
+				const store = getStore()
+				const numberFloatString = form.duracionHoras + "." + form.duracionMinutos
+				const finalnumber = parseFloat(numberFloatString)
+				const formatSend = {
+					id_oficio:store.user.oficio.id,
+					id_profesional:store.user.id,
+					nombre:form.nombre,
+					descripcion:form.descripcion,
+					duracion:finalnumber
+				}
+
+				try {
+					const {data} = await axios.put(process.env.BACKEND_URL + "/api/tipo_consulta/" + id_tp_c ,formatSend)
+					if(data.ok === true) {
+						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
+						setStore({...getStore(),messageSuccess:"Se actualizo"})
+						setTimeout(() => {
+							setStore({...getStore(),messageSuccess:undefined})
+						}, 3000);
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			},
+			BorrarTipoConsulta:async(id_tp_c)=> {
+				try {
+					const {data} = await axios.delete(process.env.BACKEND_URL + "/api/tipo_consulta/" + id_tp_c)
+					if(data.ok === true) {
+						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
+						setStore({...getStore(),messageSuccess:"Se borro el Tipo de consulta exitosamente"})
+						setTimeout(() => {
+							setStore({...getStore(),messageSuccess:undefined})
+						}, 3000);
+					}
 				} catch (error) {
 					console.log(error)
 				}

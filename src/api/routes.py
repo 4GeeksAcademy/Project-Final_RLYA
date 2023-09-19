@@ -44,7 +44,8 @@ def loginUser():
             tipos_consulta = Tipo_consulta.query.filter_by(
                 id_oficio=profF["id_oficio"], id_profesional=profF["id"]).all()
             token = create_access_token(identity=profF["email"])
-            tipos_consulta_serializada = list(map(lambda item: item.serialize(), tipos_consulta))
+            tipos_consulta_serializada = list(
+                map(lambda item: item.serialize(), tipos_consulta))
             return jsonify({"ok": True, "msg": "Login correcto", "dataProf": {
                 "id": profF["id"],
                 "name": profF["name"],
@@ -268,7 +269,8 @@ def infoByToken():
         tipos_consulta = Tipo_consulta.query.filter_by(
             id_oficio=profesional_exist["id_oficio"], id_profesional=profesional_exist["id"]).all()
         tipos_consulta_serializada = list(
-        map(lambda item: item.serialize(), tipos_consulta))
+            map(lambda item: item.serialize(), tipos_consulta))
+        print(tipos_consulta_serializada)
         return jsonify({"ok": True, "info": {
             "id": profesional_exist["id"],
             "name": profesional_exist["name"],
@@ -335,7 +337,7 @@ def handle_list():
     #     # }
     #     # this is how you can use the Family datastructure by calling its methods
     listp = Profesional.query.all()  # trae el class y de ahi la funcion all members
-    
+
     listfinal = list(map(lambda item: item.serialize(), listp))
     print(list)
     return jsonify({"ok": True, "profesionales": listfinal}), 200
@@ -345,20 +347,20 @@ def handle_list():
 def get_single_photo():
     # Obtener el profesional por su ID
     info_prof = Profesional.query.all()
-    
+
     # Si el profesional existe, devolver la foto
     if len(info_prof) == 0:
         return jsonify({"error": "El profesional no se encontró"}), 404
     # Si el profesional no existe, devolver un error 404
     else:
-        def cargarOficio (item):
+        def cargarOficio(item):
             itemfinal = item.serialize()
             print(item)
-            oficio = Oficio.query.filter_by(id = itemfinal["id_oficio"]).first()
-            oficiofinal= oficio.serialize()
+            oficio = Oficio.query.filter_by(id=itemfinal["id_oficio"]).first()
+            oficiofinal = oficio.serialize()
             itemfinal["id_oficio"] = oficiofinal
             return itemfinal
-        listfinal = list(map(lambda item: cargarOficio (item), info_prof))
+        listfinal = list(map(lambda item: cargarOficio(item), info_prof))
         return jsonify({"info": listfinal}), 200
 
 # Api para obtener oficios
@@ -389,3 +391,41 @@ def new_tipo_consulta():
     db.session.add(tipo_consultaNew)
     db.session.commit()
     return jsonify({"ok": True, "msg": "Se creo el tipo de consulta correctamente"}), 200
+
+# Api para actualizar un tipo de consulta
+
+
+@api.route("/tipo_consulta/<int:id_tp_c>", methods=["PUT"])
+def edit_tipo_consulta(id_tp_c):
+    body = request.json
+    print(body)
+    tipo_consulta = Tipo_consulta.query.filter_by(id=id_tp_c).first()
+
+    if tipo_consulta == None:
+        return jsonify({"ok": False, "msg": "Error, no hay un tipo de consulta con este id"}, 400)
+    tipo_consulta.id_oficio = body["id_oficio"]
+    tipo_consulta.id_profesional = body["id_profesional"]
+    tipo_consulta.nombre = body["nombre"]
+    tipo_consulta.descripcion = body["descripcion"]
+    tipo_consulta.duracion = body["duracion"]
+
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se Actualizo el tipo de consulta correctamente"}), 200
+
+# Api para borrar un tipo de consulta
+
+
+@api.route("/tipo_consulta/<int:id_tp_c>", methods=["DELETE"])
+def delete_tipo_consulta(id_tp_c):
+
+    tipo_consulta = Tipo_consulta.query.filter_by(id=id_tp_c).first()
+
+    if tipo_consulta == None:
+        return jsonify({"ok": False, "msg": "Error, no hay un tipo de consulta con este id"}, 400)
+
+    consultasDelete = Consulta.query.filter_by(id_tipo_consulta=id_tp_c).all()
+    # Tambien debemos de borrar todas las consultas que tengan este tipo de consulta
+    list(map(lambda item: db.session.delete(item), consultasDelete))
+    db.session.delete(tipo_consulta)
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se elimino el tipo de consulta correctamente"}), 200
