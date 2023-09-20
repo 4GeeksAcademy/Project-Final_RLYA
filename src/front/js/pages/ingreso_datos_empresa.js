@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 import { fileupload } from "../../helpers/uploadFiles";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Formik, Form, Field } from 'formik';
 
 
 export const DatosEmpresa = ({stateForm}) => {
@@ -17,6 +20,7 @@ export const DatosEmpresa = ({stateForm}) => {
     useEffect(()=> {
         actions.CargarOficios()
     },[])
+
 
 
     const handleSubmit = async (e) => {
@@ -38,6 +42,7 @@ export const DatosEmpresa = ({stateForm}) => {
         }
 
     };
+
 
 
     return (

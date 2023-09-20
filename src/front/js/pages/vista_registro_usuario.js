@@ -6,6 +6,44 @@ import "../../styles/home.css";
 import { fileupload } from "../../helpers/uploadFiles";
 import { TipoConsulta } from "./tipo_consulta";
 import { DatosEmpresa } from "./ingreso_datos_empresa";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Formik, Form, Field } from 'formik';
+
+
+
+const validate = values => {
+    const errors = {};
+    if (!values.name) {
+      errors.name = 'Required';
+    } else if (values.name.length > 15) {
+      errors.name = 'Must be 15 characters or less';
+    }
+    if (!values.last_name) {
+        errors.last_name = 'Required';
+      } else if (values.last_name.length > 15) {
+        errors.last_name = 'Must be 15 characters or less';
+      }
+    if (!values.age) {
+        errors.age = 'Required';
+      } else if (values.age.length < 3) {
+        errors.age = 'Must be 2 characters or less';
+      }
+    if (!values.email) {
+        errors.email = 'Required';
+      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+      }
+    if (!values.password) {
+      errors.password = 'Required';
+    } else if (values.password.length > 8) {
+      errors.password = 'Must be 8 characters or more';
+    }
+  
+    
+  
+    return errors;
+  };
 
 
 export const RegistroUsuario = () => {
@@ -27,6 +65,21 @@ export const RegistroUsuario = () => {
     const { store, actions } = useContext(Context)
     const navigate = useNavigate();
 
+
+
+    const formik = useFormik({
+        initialValues: {
+          name: '',
+          last_name: '',
+          age: " ",
+          email: '',
+          password: '',
+        },
+        validate,
+        onSubmit: values => {
+          alert(JSON.stringify(values, null, 2));
+        },
+      });
 
     /*Este efecto, lo que hara es que cuando seleccione una imagen, la convierto en url para mostrarla por defecto y despues  */
     useEffect(() => {
@@ -73,11 +126,42 @@ export const RegistroUsuario = () => {
         }
     }
 
+
+    const SignupSchema = Yup.object().shape({
+        name: Yup.string()
+            .min(2, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('Required'),
+        last_name: Yup.string()
+            .min(2, 'Too Short!')
+            .max(50, 'Too Long!')
+            .required('Required'),
+        age: Yup.number()
+            .max(100, 'Too Long!')
+            .integer("deben ser solo numeros")
+            .required('Required'),
+        email: Yup.string().email('Invalid email').required('Required'),
+        password:Yup.string()    
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/, "debe tener mayúsculas, minúsculas, números y caracteres especiales")
+            .required('Required'),
+        });
+
+
     return (
+        <Formik
+       initialValues= {stateForm}
+      
+       validationSchema={SignupSchema}
+       onSubmit={values => {
+         // same shape as initial values
+         console.log(values);
+       }}
+     >
+       {({ errors, touched }) => (
         <div className="container my-3">
             {statusReigster === "usuario" ? <div className="row d-flex align-items-center justify-content-center">
                 <div className="col-5 p-5 col-4 border rounded-3 shadow">
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={formik.handleSubmit}>
                         <h3 className="text-center mb-3"><strong>Registro</strong></h3>
                         <div className="registro d-flex flex-column justify-content-center align-items-center">
                             <div className="photoDiv rounded-circle" style={{ width: "100px", height: "100px" }}>
@@ -92,23 +176,36 @@ export const RegistroUsuario = () => {
                         </div>
                         <div className="mb-3">
                             <label for="exampleInputText" className="form-label text-start fs-6">Nombre</label>
-                            <input type="text" className="form-control" id="exampleInputText" value={stateForm.name} onChange={(e) => setStateForm({ ...stateForm, name: e.target.value })} />
+                            <Field name="name" className="form-control" />
+                                {errors.name && touched.name ? (
+                                <div className="alert alert-danger">{errors.name}</div>
+                                ) : null}
                         </div>
                         <div className="mb-3">
-                            <label for="exampleInputText" className="form-label text-start fs-6">Apellido</label>
-                            <input type="text" className="form-control" id="exampleInputText2" value={stateForm.last_name} onChange={(e) => setStateForm({ ...stateForm, last_name: e.target.value })} />
+                            <label for="last_name" className="form-label text-start fs-6">Apellido</label>
+                            <Field name="last_name" className="form-control" />
+                                {errors.last_name && touched.last_name? (
+                                <div className="alert alert-danger">{errors.last_name}</div>
+                                ) : null}
                         </div>
                         <div className="mb-3">
-                            <label for="exampleInputText" className="form-label text-start fs-6">Edad</label>
-                            <input type="number" className="form-control" id="exampleInputText2" value={stateForm.age} onChange={(e) => setStateForm({ ...stateForm, age: e.target.value })} />
+                            <label for="age" className="form-label text-start fs-6">Edad</label>
+                            <Field className="form-control" name="age" />
+                                {errors.age && touched.age ? (
+                                 <div className="alert alert-danger">{errors.age}</div>
+                                ) : null}
                         </div>
                         <div className="mb-3 mt-3">
-                            <label for="exampleInputEmail1" className="form-label text-start fs-6">Email</label>
-                            <input type="email" onChange={function (e) { setStateForm({ ...stateForm, email: e.target.value }) }} className="form-control" id="exampleInputEmail1" />
+                            <label for="email" className="form-label text-start fs-6">Email</label>
+                            <Field name="email" className="form-control" type="email" />
+                            {errors.email && touched.email ? <div className="alert alert-danger">{errors.email}</div> : null}
                         </div>
                         <div className="mb-3">
-                            <label for="exampleInputPassword1" className="form-label text-start fs-6">Password</label>
-                            <input type="password" onChange={function (e) { setStateForm({ ...stateForm, password: e.target.value }) }} className="form-control" id="exampleInputPassword1" />
+                            <label for="password" className="form-label text-start fs-6">Contraseña</label>
+                            <Field className="form-control" name="password" />
+                                {errors.password && touched.password ? (
+                                 <div className="alert alert-danger">{errors.password}</div>
+                                ) : null}
                         </div>
                         <div className="d-flex align-items-center justify-content-center mb-2">
                             <div className="form-check form-check-inline">
@@ -131,6 +228,7 @@ export const RegistroUsuario = () => {
                 </div>
             </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStateForm={setStateForm} setStatusRegister={setStatusRegister} /> : <TipoConsulta />}
 
-        </div>
-    );
+        </div>)} 
+        </Formik>
+        )
 };
