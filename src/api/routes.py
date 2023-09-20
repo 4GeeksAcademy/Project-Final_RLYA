@@ -31,7 +31,6 @@ def loginUser():
 
     userExist = User.query.filter_by(email=userInfo["email"]).first()
 
-
     if userExist == None:
         # AHora buscaremos el usuario pero en el modulo de profesional
         profExist = Profesional.query.filter_by(
@@ -42,8 +41,11 @@ def loginUser():
         if userInfo["email"] == profF["email"] and userInfo["password"] == profF["password"]:
             oficioProf = Oficio.query.filter_by(id=profF["id_oficio"]).first()
             oficioS = oficioProf.serialize()
+            tipos_consulta = Tipo_consulta.query.filter_by(
+                id_oficio=profF["id_oficio"], id_profesional=profF["id"]).all()
             token = create_access_token(identity=profF["email"])
-
+            tipos_consulta_serializada = list(
+                map(lambda item: item.serialize(), tipos_consulta))
             return jsonify({"ok": True, "msg": "Login correcto", "dataProf": {
                 "id": profF["id"],
                 "name": profF["name"],
@@ -52,10 +54,11 @@ def loginUser():
                 "registration_date": profF["registration_date"],
                 "photo": profF["photo"],
                 "description": profF["descripcion"],
-                "oficio": oficioS["name"],
+                "oficio": oficioS,
                 "email": profF["email"],
                 "token": token,
-                "rol": "admin"
+                "rol": "admin",
+                "tipos_consulta": tipos_consulta_serializada
             }}), 200
         return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
@@ -70,6 +73,7 @@ def loginUser():
                 "name": userF["name"],
                 "last_name": userF["last_name"],
                 "age": userF["age"],
+                "photo": userF["photo"],
                 "registration_date": userF["registration_date"],
                 "email": userF["email"],
                 "token": token,
@@ -86,9 +90,8 @@ def loginUser():
 @api.route('/registro', methods=['POST'])
 def creacion_de_registro():
     request_body = request.json
-    print(request_body)
     email = request_body["email"]
-
+    print(email)
     # Verificar si el usuario ya existe
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
@@ -98,13 +101,13 @@ def creacion_de_registro():
         }
         return jsonify(response_body), 400
 
-    fecha = datetime.datetime.now()
-    nuevo_usuario = User(name=request_body["nombre"],
-                         last_name=request_body["apellido"],
-                         age=request_body["edad"],
+    nuevo_usuario = User(name=request_body["name"],
+                         last_name=request_body["last_name"],
+                         age=request_body["age"],
                          email=request_body["email"],
-                         password=request_body["contraseña"],
-                         registration_date=fecha)
+                         photo=request_body["photo"],
+                         password=request_body["password"],
+                         registration_date=request_body["registration_date"])
     db.session.add(nuevo_usuario)
     db.session.commit()
 
@@ -131,16 +134,15 @@ def creacion_de_registro_prof():
         }
         return jsonify(response_body), 400
 
-    fecha = datetime.datetime.now()
-    nuevo_prof = Profesional(name=request_body["nombre"],
-                             last_name=request_body["apellido"],
-                             age=request_body["edad"],
+    nuevo_prof = Profesional(name=request_body["name"],
+                             last_name=request_body["last_name"],
+                             age=request_body["age"],
                              email=request_body["email"],
-                             password=request_body["contraseña"],
-                             registration_date=fecha,
-                             photo=request_body["foto"],
+                             password=request_body["password"],
+                             photo=request_body["photo"],
                              descripcion=request_body["descripcion"],
-                             id_oficio=request_body["id_oficio"])
+                             id_oficio=request_body["id_oficio"],
+                             registration_date=request_body["registration_date"])
     db.session.add(nuevo_prof)
     db.session.commit()
 
@@ -159,6 +161,7 @@ def ValidarToken():
     return jsonify({"isLogged": True}), 200
 
  # Api para crear una consulta a un admin
+
 
 @api.route('/consulta', methods=['POST'])
 def crearConsulta():
@@ -262,6 +265,12 @@ def infoByToken():
         oficioProf = Oficio.query.filter_by(
             id=profesional_exist["id_oficio"]).first()
         oficioS = oficioProf.serialize()
+        # Ahora cargaremos los tipos de consulta en la info del user
+        tipos_consulta = Tipo_consulta.query.filter_by(
+            id_oficio=profesional_exist["id_oficio"], id_profesional=profesional_exist["id"]).all()
+        tipos_consulta_serializada = list(
+            map(lambda item: item.serialize(), tipos_consulta))
+        print(tipos_consulta_serializada)
         return jsonify({"ok": True, "info": {
             "id": profesional_exist["id"],
             "name": profesional_exist["name"],
@@ -270,9 +279,10 @@ def infoByToken():
             "registration_date": profesional_exist["registration_date"],
             "photo": profesional_exist["photo"],
             "description": profesional_exist["descripcion"],
-            "oficio": oficioS["name"],
+            "oficio": oficioS,
             "email": profesional_exist["email"],
-            "rol": "admin"
+            "rol": "admin",
+            "tipos_consulta": tipos_consulta_serializada
         }}), 200
     userF = userExist.serialize()
     return jsonify({"ok": True, "info": {
@@ -280,6 +290,7 @@ def infoByToken():
         "name": userF["name"],
         "last_name": userF["last_name"],
         "age": userF["age"],
+        "photo": userF["photo"],
         "registration_date": userF["registration_date"],
         "email": userF["email"],
         "rol": "user"
@@ -288,10 +299,13 @@ def infoByToken():
 # Api para traer los tipos de consulta
 
 
-@api.route("/tipo_consultas/<int:id_of>", methods=["GET"])
+@api.route("/tipo_consultas/<int:id_of>", methods=["POST"])
 def Cargar_Tipo_Consultas(id_of):
-
-    tipos_consulta = Tipo_consulta.query.filter_by(id_oficio=id_of).all()
+    body = request.json
+    id_user = body["id_user"]
+    tipos_consulta = Tipo_consulta.query.filter_by(
+        id_oficio=id_of, id_profesional=id_user).all()
+    # Ahora tengo que filtrar las que sean del usuario que yo quiera
 
     if len(tipos_consulta) == 0:
         jsonify({"ok": False, "msg": "No hay tipos de consulta"}), 400
@@ -316,8 +330,6 @@ def Traer_oficio_prof(id_prof):
     return jsonify({"ok": True, "oficio_prof": oficio_profS})
 
 
-
-
 @api.route('/listprof', methods=['GET'])
 def handle_list():
     #     # if (status > 400) {
@@ -325,6 +337,7 @@ def handle_list():
     #     # }
     #     # this is how you can use the Family datastructure by calling its methods
     listp = Profesional.query.all()  # trae el class y de ahi la funcion all members
+
     listfinal = list(map(lambda item: item.serialize(), listp))
     print(list)
     return jsonify({"ok": True, "profesionales": listfinal}), 200
@@ -340,9 +353,79 @@ def get_single_photo():
         return jsonify({"error": "El profesional no se encontró"}), 404
     # Si el profesional no existe, devolver un error 404
     else:
-        listfinal = list(map(lambda item: item.serialize(), info_prof))
+        def cargarOficio(item):
+            itemfinal = item.serialize()
+            print(item)
+            oficio = Oficio.query.filter_by(id=itemfinal["id_oficio"]).first()
+            oficiofinal = oficio.serialize()
+            itemfinal["id_oficio"] = oficiofinal
+            return itemfinal
+        listfinal = list(map(lambda item: cargarOficio(item), info_prof))
         return jsonify({"info": listfinal}), 200
 
+# Api para obtener oficios
 
 
+@api.route("/oficios", methods=["GET"])
+def cargar_oficios():
+    oficios = Oficio.query.all()
+    if len(oficios) > 0:
+        ofFinal = list(map(lambda item: item.serialize(), oficios))
+        return jsonify({"ok": True, "oficios": ofFinal}), 200
+    return jsonify({"ok": False, "msg": "No hay oficios"}), 400
 
+
+# Api para crear un tipo de consulta en base a un oficio
+@api.route("/tipo_consulta", methods=["POST"])
+def new_tipo_consulta():
+    body = request.json
+    print(body)
+    print("XDDDDDDDDD")
+    tipo_consultaNew = Tipo_consulta(
+        id_oficio=body["id_oficio"],
+        id_profesional=body["id_profesional"],
+        nombre=body["nombre"],
+        descripcion=body["descripcion"],
+        duracion=body["duracion"]
+    )
+    db.session.add(tipo_consultaNew)
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se creo el tipo de consulta correctamente"}), 200
+
+# Api para actualizar un tipo de consulta
+
+
+@api.route("/tipo_consulta/<int:id_tp_c>", methods=["PUT"])
+def edit_tipo_consulta(id_tp_c):
+    body = request.json
+    print(body)
+    tipo_consulta = Tipo_consulta.query.filter_by(id=id_tp_c).first()
+
+    if tipo_consulta == None:
+        return jsonify({"ok": False, "msg": "Error, no hay un tipo de consulta con este id"}, 400)
+    tipo_consulta.id_oficio = body["id_oficio"]
+    tipo_consulta.id_profesional = body["id_profesional"]
+    tipo_consulta.nombre = body["nombre"]
+    tipo_consulta.descripcion = body["descripcion"]
+    tipo_consulta.duracion = body["duracion"]
+
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se Actualizo el tipo de consulta correctamente"}), 200
+
+# Api para borrar un tipo de consulta
+
+
+@api.route("/tipo_consulta/<int:id_tp_c>", methods=["DELETE"])
+def delete_tipo_consulta(id_tp_c):
+
+    tipo_consulta = Tipo_consulta.query.filter_by(id=id_tp_c).first()
+
+    if tipo_consulta == None:
+        return jsonify({"ok": False, "msg": "Error, no hay un tipo de consulta con este id"}, 400)
+
+    consultasDelete = Consulta.query.filter_by(id_tipo_consulta=id_tp_c).all()
+    # Tambien debemos de borrar todas las consultas que tengan este tipo de consulta
+    list(map(lambda item: db.session.delete(item), consultasDelete))
+    db.session.delete(tipo_consulta)
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "Se elimino el tipo de consulta correctamente"}), 200

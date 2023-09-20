@@ -1,5 +1,6 @@
 import axios from "axios";
-import moment from "moment";
+
+
 
 // const [photoUrl, setPhotoUrl] = useState(""); // Estado para almacenar la URL de la foto
 const getState = ({ getStore, getActions, setStore }) => {
@@ -11,8 +12,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			statusLogin: false,
 			eventsAdminSpesifique:[],
 			messageError: undefined,
+			messageSuccess:undefined,
 			oficio_prof:undefined,
-			tipos_consulta: []
+			tipos_consulta: [],
+			oficios:[]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -34,6 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					} else if(data.dataProf) {
 						localStorage.setItem("token", data.dataProf.token);
 						setStore({ statusLogin: true, user: data.dataProf })
+						
 					}
 					
 					return true;
@@ -77,13 +81,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			loadInfoUserByToken:async ()=> {
+				console.log("XDDDDDDDDDD")
 				try {
 					const token = localStorage.getItem("token")
 					if(token) {
 						const {data} = await axios.get(process.env.BACKEND_URL + "/api/infobyToken",{
 							headers: { "Authorization": "Bearer " + token }
 						})
-						setStore({...getStore(),user:data.info})
+						if(data.ok) {
+							console.log(data.info)
+							setStore({...getStore(),user:data.info})
+						}
 					}
 					console.log("no hay token")
 				} catch (error) {
@@ -91,25 +99,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			TraerAgendaProf:async (id_prof)=> {
+				setStore({...getStore(),eventsAdminSpesifique:[]})
 				try {
-					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultaProf/" + id_prof )
-					if(data.ok === true){
-						/*Traemos el id del user activo*/
-						const userID = getStore().user.id 
-						/*Ahora lo que haremos es, por cada uno de las consultas, las pasaremos a un formato que el calendario pueda interpretar, en este caso espesificando el titulo, inicio y fin*/
-						data.consultas_prof.map((consulta)=> {
-							const formatCalendar = {
-								start:new Date(consulta.consultation_date),
-								end:new Date(consulta.end_date),
-								title: consulta.userInfo.id === userID? consulta.id_tipo_consulta : "ocupado",
-								bgColor:consulta.userInfo.id === userID? "#59CB00" : "#CECECE",
-								id_user:consulta.userInfo.id,
-								nom_prof:consulta.id_profesional,
-								notes: consulta.nota
-							}
-							return setStore({...getStore(),eventsAdminSpesifique:[...getStore().eventsAdminSpesifique,formatCalendar]})
-						})
-					}
+					setTimeout(async() => {
+						const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultaProf/" + id_prof )
+						if(data.ok === true){
+							console.log(data)
+							/*Traemos el id del user activo*/
+							const userID = getStore().user.id 
+							/*Ahora lo que haremos es, por cada uno de las consultas, las pasaremos a un formato que el calendario pueda interpretar, en este caso espesificando el titulo, inicio y fin*/
+							const consultas = data.consultas_prof.map((consulta)=> {
+								console.log(getStore().user)
+								const formatCalendar = {
+									start:new Date(consulta.consultation_date),
+									end:new Date(consulta.end_date),
+									title: consulta.userInfo.id === getStore().user.id || getStore().user.rol === "admin" ? consulta.id_tipo_consulta : "ocupado",
+									bgColor:consulta.userInfo.id === getStore().user.id || getStore().user.rol === "admin" ? "#59CB00" : "#CECECE",
+									id_user:consulta.userInfo.id,
+									nom_prof:consulta.id_profesional,
+									notes: consulta.nota
+								}
+								return formatCalendar
+							})
+							setStore({...getStore(),eventsAdminSpesifique:consultas})
+						}
+					}, 1000);
 				} catch (error) {
 					console.log(error)
 				}
@@ -118,9 +132,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("token")
 				setStore({ statusLogin: false, user: {},profesionales:[],eventsAdminSpesifique:[],oficio_prof:undefined,tipos_consulta:[]})
 			},
-			CargarTiposCosnulta:async(id_oficio_prof)=>{
+			CargarTiposCosnulta:async(id_oficio_prof,id_prof)=>{
+				console.log(id_oficio_prof)
+				console.log(id_prof)
 				try {
-					const {data} = await axios.get(process.env.BACKEND_URL + "/api/tipo_consultas/" + id_oficio_prof)
+					const body = {
+						id_user: id_prof
+					}
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/tipo_consultas/" + id_oficio_prof,body)
 					if(data.ok == true) {
 						setStore({...getStore(),tipos_consulta:data.tipo_consultas})
 					}
@@ -132,7 +151,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const {data} = await axios.post(process.env.BACKEND_URL + "/api/consulta", form )
 					if(data.ok === true){
-						getActions().TraerAgendaProf()
+						getActions().TraerAgendaProf(form.id_profesional)							
 					}
 				} catch (error) {
 					console.log(error)
@@ -157,6 +176,107 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error)
 				}
 			},
+			CargarOficios:async ()=> {
+				try {
+					const {data} = await axios.get(process.env.BACKEND_URL + "/api/oficios") 
+					if(data.ok === true) {
+						setStore({...getStore(),oficios:data.oficios})
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			},
+			AgendarAdmin:async(from)=> {
+				try {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/registro_prof", from)
+					if(data.ok === true){
+						console.log("el admin se registro correctamente")
+						return true;
+					}
+				} catch (error) {
+					console.log(error)
+					return false;
+				}
+			},
+			AgendarUser:async(from)=> {
+				try {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/registro", from)
+					if(data.ok === true){
+						console.log("el admin se registro correctamente")
+						return true;
+					}
+				} catch (error) {
+					console.log(error)
+					return false;
+				}
+			},
+			AgregarTipoConsultaAdmin:async (form)=> {
+				console.log(getStore().user)
+				const store = getStore()
+				const numberFloatString = form.duracionHoras + "." + form.duracionMinutos
+				const finalnumber = parseFloat(numberFloatString)
+				try {
+					const formatSend = {
+						id_oficio:store.user.oficio.id,
+						id_profesional:store.user.id,
+						nombre:form.nombre,
+						descripcion:form.descripcion,
+						duracion:finalnumber
+					}
+					console.log(formatSend)
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/tipo_consulta",formatSend)
+					if(data.ok === true){
+						setStore({...getStore(),messageSuccess:data.msg})
+						/*Traigo de nuevo la peticion de las consultas*/
+						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
+						setTimeout(() => {
+							setStore({...getStore(),messageSuccess:undefined})
+						}, 3000);
+					}
+					
+				} catch (error) {
+					console.log(error)
+				}
+			},
+			ActualizarTipoConsulta:async (form,id_tp_c)=> {
+				const store = getStore()
+				const numberFloatString = form.duracionHoras + "." + form.duracionMinutos
+				const finalnumber = parseFloat(numberFloatString)
+				const formatSend = {
+					id_oficio:store.user.oficio.id,
+					id_profesional:store.user.id,
+					nombre:form.nombre,
+					descripcion:form.descripcion,
+					duracion:finalnumber
+				}
+
+				try {
+					const {data} = await axios.put(process.env.BACKEND_URL + "/api/tipo_consulta/" + id_tp_c ,formatSend)
+					if(data.ok === true) {
+						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
+						setStore({...getStore(),messageSuccess:"Se actualizo"})
+						setTimeout(() => {
+							setStore({...getStore(),messageSuccess:undefined})
+						}, 3000);
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			},
+			BorrarTipoConsulta:async(id_tp_c)=> {
+				try {
+					const {data} = await axios.delete(process.env.BACKEND_URL + "/api/tipo_consulta/" + id_tp_c)
+					if(data.ok === true) {
+						getActions().CargarTiposCosnulta(getStore().user.oficio.id,getStore().user.id)
+						setStore({...getStore(),messageSuccess:"Se borro el Tipo de consulta exitosamente"})
+						setTimeout(() => {
+							setStore({...getStore(),messageSuccess:undefined})
+						}, 3000);
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			}
 		}
 	}
 };

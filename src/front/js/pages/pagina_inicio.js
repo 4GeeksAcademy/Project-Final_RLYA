@@ -16,13 +16,14 @@ export const PaginaInicio = () => {
                     <img className="navbar-brand" src="" />
 
                     <form className="d-flex" role="search">
-                        <a className="nav-link text-white" style={{ fontFamily: 'Raleway, sans-serif' }}>Registrarme</a>
+                        <a href="/RegistroUsuario" className="nav-link text-white" style={{ fontFamily: 'Raleway, sans-serif' }}>Registrarme</a>
                         <p className="nav-link text-white">/</p>
                         <a href="/Login" className="nav-link text-white" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
-
                             e.preventDefault();
                             navigate("/Login");
+
                         }}>Ingresar</a>
+
                     </form>
 
                 </div>

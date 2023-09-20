@@ -31,8 +31,6 @@ export const LoginRutas = () => {
                         <Route element={<PaginaInicio/>} path="/*" />
                         <Route element={<Login />} path="/Login" />
                         <Route element={<RegistroUsuario />} path="/RegistroUsuario" />
-                        <Route element={<DatosEmpresa />} path="/DatosEmpresa" /> /
-                        <Route element={<TipoConsulta />} path="/TipoConsulta" /> /
                     </Routes>
             </BrowserRouter>
         </div>
