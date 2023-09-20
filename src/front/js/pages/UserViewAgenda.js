@@ -13,6 +13,7 @@ import { addHours } from "date-fns";
 import moment from 'moment-timezone'
 import { ModalAgendarme } from "../component/ModalAgendarme";
 import { ModalInfoCita } from "../component/ModalInfoCita";
+import { Spiner } from "../component/Spiner";
 
 
 const locales = {
@@ -20,6 +21,7 @@ const locales = {
 }
 
 const localizer = momentLocalizer(moment)
+
 
 export const UserViewAgenda = () => {
   const { store, actions } = useContext(Context);
@@ -33,11 +35,10 @@ export const UserViewAgenda = () => {
 
 
   useEffect(() => {
-    console.log("xd")
     actions.TraerAgendaProf(id_prof)
     actions.TraerOficioProf(id_prof)
   }, [])
-
+  console.log(store.eventsAdminSpesifique)
   const eventStyleGetter = (event, start, end, isSelected) => {
 		const style = {
 		  backgroundColor: event.bgColor
@@ -67,7 +68,9 @@ export const UserViewAgenda = () => {
   
   
   return (
-    <div className="container-fluid position-relative z-1">
+    <>
+    {
+      store.eventsAdminSpesifique && store.user.name? <div className="container-fluid position-relative z-1">
       <div className="row z-1">
         <div className="col-8 z-1">
         <Calendar
@@ -120,7 +123,9 @@ export const UserViewAgenda = () => {
       </div>
 
 
-    </div>
+    </div> :  <Spiner/>
+    }
+    </>
 
   );
 };

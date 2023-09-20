@@ -3,24 +3,40 @@ import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
+import { fileupload } from "../../helpers/uploadFiles";
 
 
-export const DatosEmpresa = () => {
-    const [imagenSeleccionada, setImagenSeleccionada] = useState("");
-    const [descripcion, setDescripcion] = useState("");
+export const DatosEmpresa = ({stateForm}) => {
+    const [empresaDataAdd, setEmpresaDataAdd] = useState({
+        descripcion: "",
+        id_oficio:0
+    });
     const { store, actions } = useContext(Context)
     const navigate = useNavigate();
 
+    useEffect(()=> {
+        actions.CargarOficios()
+    },[])
+
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const empresaData = {
-            imagen: imagenSeleccionada,
-            descripcion: descripcion,
-        };
-        // await actions.registrarEmpresa(empresaData);
+        e.preventDefault()
+        const imgCloud = await fileupload(stateForm.photo)
+        const statusLogin = await actions.AgendarAdmin({
+            name:stateForm.name,
+            last_name:stateForm.last_name,
+            photo:imgCloud,
+            age:stateForm.age,
+            registration_date:stateForm.registration_date,
+            email:stateForm.email,
+            password:stateForm.password,
+            descripcion:empresaDataAdd.descripcion,
+            id_oficio:empresaDataAdd.id_oficio
+        })
+        if(statusLogin === true){
+            navigate("/Login"); 
+        }
 
-        navigate("/TipoConsulta"); //Cambiar aquí
     };
 
 
@@ -31,40 +47,18 @@ export const DatosEmpresa = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <h3 className="text-center mb-3"><strong>Registro</strong></h3>
-                            <div className="text-center">
-                                <img
-                                    src={imagenSeleccionada || "https://img.freepik.com/foto-gratis/calendario-planificador-vista-superior-taza-cafe_23-2148693317.jpg?w=740&t=st=1694528287~exp=1694528887~hmac=01e8879a9ec5cb33f214ef7956123f84edae5e91da5c0202b45860f68cd92674"}
-                                    className="img-fluid rounded-circle"
-                                    alt="..."
-                                    style={{ width: "100px", height: "100px" }}
-                                />
-                            </div>
-                            <div className="col d-flex align-items-center justify-content-center">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="form-control"
-                                    id="fileInput"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => {
-                                        const file = e.target.files[0];
-                                        if (file) {
-                                            const imageUrl = URL.createObjectURL(file);
-                                            setImagenSeleccionada(imageUrl);
-                                        }
-                                    }}
-                                />
-                                <label htmlFor="fileInput" className="btn btn-outline-dark mt-3">
-                                    Cargar Foto
-                                </label>
-                            </div>
+                            <p className="text-center mb-3 mt-3"><strong>Eres un admin, asi que tienes que ingresar algunos datos adicionales</strong></p>
                             <div className="col d-flex align-items-center justify-content-center" role="group">
                                 <button id="btnGroupDrop1" type="button" className="btn btn-outline-dark dropdown-toggle my-3" data-bs-toggle="dropdown" aria-expanded="false">
                                     Elegir Oficio
                                 </button>
                                 <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <li><a className="dropdown-item" href="#">Escribanía</a></li>
-                                    <li><a className="dropdown-item" href="#">Odontología</a></li>
+                                    {
+                                        store.oficios.length > 0 ? store.oficios.map((oficio,index)=> {
+                                            return <li key={"soy index" + index}><a onClick={()=> setEmpresaDataAdd({...empresaDataAdd,id_oficio:oficio.id})} className="dropdown-item" href="#">{oficio.name}</a></li>
+                                        }) : <li><a className="dropdown-item" href="#">No hay oficios</a></li>
+                                    }
+
                                 </ul>
                             </div>
                             <div className="">
@@ -75,8 +69,8 @@ export const DatosEmpresa = () => {
                             name="comments"
                             rows="6"
                             placeholder="Describe tu servicio..."
-                            value={descripcion}
-                            onChange={(e) => setDescripcion(e.target.value)}
+                            value={empresaDataAdd.descripcion}
+                            onChange={(e) => setEmpresaDataAdd({...empresaDataAdd,descripcion:e.target.value})}
                         ></textarea>
                             </div>
                         </div>
@@ -84,7 +78,7 @@ export const DatosEmpresa = () => {
                             <strong>Antes de registrarte, debes añadir tus tipos de consulta para que los usuarios puedan acceder a ella.</strong>
                         </div>
                         <div className="col d-flex align-items-center justify-content-center">
-                            <button type="submit" className="btn btn-outline-dark mt-3">Agregar</button>
+                            <button type="submit" className="btn btn-outline-dark mt-3">Registrarme</button>
                         </div>
                     </form>
                 </div>

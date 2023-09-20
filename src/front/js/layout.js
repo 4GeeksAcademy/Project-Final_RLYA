@@ -21,14 +21,14 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
     const user = true;
     const { store, actions } = useContext(Context)
-
+    const token = localStorage.getItem("token")
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div className="" style={{ height: "100%", width: "100%" }} >
             {
-                store.statusLogin == true ? <AppRutas /> : <LoginRutas />
+                token ? <AppRutas /> : <LoginRutas />
                 // 
             }
         </div>
