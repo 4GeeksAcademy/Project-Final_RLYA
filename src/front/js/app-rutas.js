@@ -10,6 +10,8 @@ import { Navbar } from "./component/Navbar";
 import { Sidebar } from "./component/Sidebar";
 import { UserViewAgenda } from "./pages/UserViewAgenda";
 import { Context } from "./store/appContext";
+import { AgendasActivas } from "./pages/agendas_activas";
+
 import { ValidTpConsulta } from "./component/Admin_Valid_TpConsulta";
 import { ViewConsultas } from "./pages/ViewConsultas";
 import { TipoConsulta } from "./pages/tipo_consulta";
@@ -41,8 +43,12 @@ export const AppRutas = () => {
                             <Route element={<Listaprofesionales />} path="/listprof" />
                             <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
                             <Route element={<UserViewAgenda />} path="/agenda/:id_prof" />
+
+                            <Route element={<AgendasActivas />} path="/agendas_activas" />
+
                             <Route element={<ViewConsultas />} path="/view_consultas" />
                             <Route element={<TipoConsulta />} path="/add_consulta" />
+
 
                         </Routes>
                     </div>
