@@ -429,3 +429,19 @@ def delete_tipo_consulta(id_tp_c):
     db.session.delete(tipo_consulta)
     db.session.commit()
     return jsonify({"ok": True, "msg": "Se elimino el tipo de consulta correctamente"}), 200
+# Traer todas las consultas de un usuario
+
+
+@api.route("/consultas/user/<int:idUser>", methods=["GET"])
+def Traer_Consultas_user(idUser):
+    # Traemos las consultas de un usuario
+    consult_user = Tipo_consulta.query.filter_by(id_user=idUser).all()
+    if len(consult_user) == 0:
+        return jsonify({"ok": False, "msg": "Este usuario no tiene ninguna consulta"}), 400
+    consult_userS = list(map(lambda item: item.serialize(), consult_user))
+    # Ahora lo mapeamos de nuevo para traer la data que nos interesa
+
+    def DataFilter(item):
+        return jsonify({"ok": True})
+    dataFinal = list(map(lambda item: DataFilter(item), consult_userS))
+    return jsonify({"ok": True, "data": dataFinal}), 200

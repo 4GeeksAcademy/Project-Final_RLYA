@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
@@ -32,6 +32,7 @@ export const AgendasActivas = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
 
+    
     const [agendaData, setAgendaData] = useState({
         title: "Dra. María Rodríguez",
         location: "San José de Mayo",

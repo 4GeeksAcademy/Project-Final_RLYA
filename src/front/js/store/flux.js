@@ -276,6 +276,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.log(error)
 				}
+			},
+			TraerConsultasUser:async(id_user)=> {
+				try {
+					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultas/user/" + id_user)
+				} catch (error) {
+					console.log(error)
+				}
 			}
 		}
 	}
