@@ -11,7 +11,7 @@ class User(db.Model):
     photo = db.Column(db.String(200), nullable=True)
     registration_date = db.Column(db.DateTime, unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(1000), nullable=False)
 
     # relacion
     prof = db.relationship('Consulta', backref='user', lazy=True)

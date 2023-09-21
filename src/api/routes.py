@@ -1,7 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta
 from api.utils import generate_sitemap, APIException
 
@@ -10,7 +10,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timedelta
-
+# from ..app import bcrypt
 
 api = Blueprint('api', __name__)
 
@@ -36,16 +36,18 @@ def loginUser():
         profExist = Profesional.query.filter_by(
             email=userInfo["email"]).first()
         if profExist == None:
-            return jsonify({"msg": "No hay un usario con ese correo", "ok": False}), 400
+            return jsonify({"msg": "No hay un usuario con ese correo", "ok": False}), 400
         profF = profExist.serialize()
-        if userInfo["email"] == profF["email"] and userInfo["password"] == profF["password"]:
-            oficioProf = Oficio.query.filter_by(id=profF["id_oficio"]).first()
-            oficioS = oficioProf.serialize()
-            tipos_consulta = Tipo_consulta.query.filter_by(
-                id_oficio=profF["id_oficio"], id_profesional=profF["id"]).all()
-            token = create_access_token(identity=profF["email"])
-            tipos_consulta_serializada = list(
-                map(lambda item: item.serialize(), tipos_consulta))
+        if userInfo["email"] == profF["email"]:
+            # Verificar la contraseña para el profesional
+            if current_app.bcrypt.check_password_hash(profF["password"], userInfo["password"]):
+                oficioProf = Oficio.query.filter_by(id=profF["id_oficio"]).first()
+                oficioS = oficioProf.serialize()
+                tipos_consulta = Tipo_consulta.query.filter_by(
+                    id_oficio=profF["id_oficio"], id_profesional=profF["id"]).all()
+                token = create_access_token(identity=profF["email"])
+                tipos_consulta_serializada = list(
+                    map(lambda item: item.serialize(), tipos_consulta))
             return jsonify({"ok": True, "msg": "Login correcto", "dataProf": {
                 "id": profF["id"],
                 "name": profF["name"],
@@ -63,9 +65,11 @@ def loginUser():
         return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
     userF = userExist.serialize()
-    if userInfo["email"] == userF["email"] and userInfo["password"] == userF["password"]:
-        token = create_access_token(identity=userF["email"])
-        response_body = {
+    if userInfo["email"] == userF["email"]:
+        # Verificar la contraseña para el usuario
+        if current_app.bcrypt.check_password_hash(userInfo["password"], userF["password"]):
+            token = create_access_token(identity=userF["email"])
+            response_body = {
             "ok": True,
             "msg": "Login correcto",
             "dataUser": {
@@ -83,6 +87,12 @@ def loginUser():
         return jsonify(response_body), 200
     return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
+# Función para verificar los requisitos de contraseña segura
+
+
+def is_password_secure(password):
+    # Requerimientos
+    return len(password) >= 8 and any(c.isupper() for c in password) and any(c.islower() for c in password) and any(c.isdigit() for c in password)
 
 # End-point registro de usuario
 
@@ -101,12 +111,27 @@ def creacion_de_registro():
         }
         return jsonify(response_body), 400
 
+# Verificar que la contraseña cumple con los requisitos
+
+    # password = request_body["password"]
+    # if not is_password_secure(password):
+    #     response_body = {
+    #         "message": "La contraseña no cumple con los requisitos",
+    #         "ok": False
+    #     }
+    #     return jsonify(response_body), 400
+
+# Encripta la contraseña antes de guardarla
+
+    password = request_body["password"]
+    hashed_password = current_app.bcrypt.generate_password_hash(password)
+
     nuevo_usuario = User(name=request_body["name"],
                          last_name=request_body["last_name"],
                          age=request_body["age"],
                          email=request_body["email"],
                          photo=request_body["photo"],
-                         password=request_body["password"],
+                         password=hashed_password,
                          registration_date=request_body["registration_date"])
     db.session.add(nuevo_usuario)
     db.session.commit()
@@ -126,6 +151,7 @@ def creacion_de_registro_prof():
     email = request_body["email"]
 
     # Verificar si el profesional ya existe
+
     existing_prof = Profesional.query.filter_by(email=email).first()
     if existing_prof:
         response_body = {
@@ -134,11 +160,16 @@ def creacion_de_registro_prof():
         }
         return jsonify(response_body), 400
 
+# Encripta la contraseña antes de guardarla
+
+    password = request_body["password"]
+    hashed_password = current_app.bcrypt.generate_password_hash(password).decode('utf-8')
+
     nuevo_prof = Profesional(name=request_body["name"],
                              last_name=request_body["last_name"],
                              age=request_body["age"],
                              email=request_body["email"],
-                             password=request_body["password"],
+                             password=hashed_password,
                              photo=request_body["photo"],
                              descripcion=request_body["descripcion"],
                              id_oficio=request_body["id_oficio"],
