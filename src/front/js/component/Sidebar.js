@@ -13,23 +13,19 @@ export const Sidebar = () => {
 				</div>
 				<div className="menu" >
 					{/*Momentaneo*/}
-					{
-						store.user.rol == "user" ? <div className="d-flex flex-column">
-							<a className="d-block p-3 text-decoration-none text-light" href="/listprof"><i class="fa-solid fa-earth-americas"></i> Servicios</a>
-							<Link to="/agendas_activas" className="d-block p-3 text-decoration-none text-light">
-								<i className="far fa-calendar lead text-light"></i> Agendas activas
-							</Link>
-							<Link to="/TipoMembresia" className="d-block p-3 text-decoration-none text-light">
-								<i className="far fa-calendar lead text-light"></i> Membresía
-							</Link>
-							<a className="d-block p-3 text-decoration-none text-light" onClick={() => actions.Logout()} href="#"><i class="fa-solid fa-arrow-right-from-bracket lead text-light"></i>  Logout</a>
+					<div className="d-flex flex-column">
+						<Link to="/listprof" className="d-block p-3 text-decoration-none text-light">
+						<i class="fa-solid fa-earth-americas"></i> Servicios
+						</Link>
+						<Link to="/agendas_activas" className="d-block p-3 text-decoration-none text-light">
+							<i className="far fa-calendar lead text-light"></i> Agendas activas
+						</Link>
+						<Link to="/TipoMembresia" className="d-block p-3 text-decoration-none text-light">
+							<i className="far fa-calendar lead text-light"></i> Membresía
+						</Link>
+						<a className="d-block p-3 text-decoration-none text-light" onClick={() => actions.Logout()} href="#"><i class="fa-solid fa-arrow-right-from-bracket lead text-light"></i>  Logout</a>
+					</div>
 
-						</div> : <div className="d-flex flex-column">
-							<a className="d-block p-3 text-decoration-none text-light" href={"/calendario_empresa" + store.user.id}><i className="fa-solid fa-envelope mx-2 mx-2 lead text-light"></i> Configuración</a>
-							<a className="d-block p-3 text-decoration-none text-light" href="#"><i className="fa-solid fa-gear mx-2 mx-2 lead text-light"></i> Configuración</a>
-							<a className="d-block p-3 text-decoration-none text-light" onClick={() => actions.Logout()} href="#"><i class="fa-solid fa-arrow-right-from-bracket mx-2 lead text-light"></i>  Logout</a>
-						</div>
-					}
 				</div>
 			</div>
 		</div>

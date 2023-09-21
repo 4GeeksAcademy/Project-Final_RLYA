@@ -42,10 +42,17 @@ export const AgendasActivas = () => {
     const updateAgendaData = (newData) => {
         setAgendaData(newData);
     };
+    const altoPagina = window.innerHeight
+    const stylePadre = {
+        height:altoPagina,
+        maxHeight:"500px",
+        overflowY:"scroll"
+
+    }
 
     return (
         <div className="container">
-          <div className="row">
+          <div className="row" style={stylePadre}>
           <Card
                     title={agendaData.title}
                     location={agendaData.location}
