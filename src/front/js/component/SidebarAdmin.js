@@ -6,7 +6,7 @@ export const SidebarAdmin = () => {
 	const { store, actions } = useContext(Context)
 	const navigate = useNavigate()
 	return (
-		<div className="mx-0 my-0" style={{ height: "100%", width: "300px" }}>
+		<div className="mx-0 my-0" style={{ width: "300px" }}>
 			<div id="sidebar-container" className="bg-dark p-3 " style={{ height: "100%", width: "100%" }}>
 				<div className="logo p-3 mx-3" style={{ padding: ".875rem, 1.25rem" }}>
 					<img src=""/>

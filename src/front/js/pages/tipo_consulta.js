@@ -10,7 +10,7 @@ import { MdArrowBackIosNew } from "react-icons/md"
 export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, CloseModal }) => {
     const { store, actions } = useContext(Context)
     const ExistSelected = selectedTp_consulta && selectedTp_consulta.nombre? true : false
-    const stylePadre = { top: "150px", left: store.user.tipos_consulta && ExistSelected == true? "40%" : "30%", zIndex: 5 }
+    const stylePadre = { right: "0px", left:"0px",top:"150px", margin:"auto", zIndex: 5 }
     const duracionArr = ExistSelected === true? (selectedTp_consulta?.duracion.toString()).split(".") : null
     
     const [statusformAdmin, setStatusFormAdmin] = useState({
@@ -49,9 +49,9 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
 
     return (
         <>
-            {
-                store.user.name ? <div className="row">
-                    <div className="col-4 p-3 col-4 border rounded-3 bg-white shadow position-absolute d-flex flex-column align-items-center justify-content-center" style={stylePadre}>
+           
+                <div className="row">
+                    <div  className="col-4 p-4 col-4 border rounded-3 bg-white shadow position-absolute d-flex flex-column align-items-center justify-content-center" style={stylePadre}>
                         {ExistSelected && <div className="row " style={{ width: "100%" }}>
                             <div className="col d-flex flex-row justify-content-between align-content-center">
                                 <MdArrowBackIosNew role="button" onClick={GoBack} />
@@ -59,13 +59,16 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                             </div>
                         </div>}
                         <div className="row">
-                            <form className="col" onSubmit={handleSubmit}>
+                            <form className="col p-3" onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <h3 className="text-center mb-3"><strong>Añadir tipo de consulta</strong></h3>
                                     {
                                         store.messageSuccess && <div class="alert alert-success" role="alert">
                                             {store.messageSuccess}
                                         </div>
+                                    }
+                                    {
+                                        !ExistSelected && <p className="text-center">Eres un administrador, Por tanto neceitan insertar minimo un tipo de consulta para continuar, cuando lo hagas recarga la pagina</p>
                                     }
                                     <label htmlFor="exampleInputText" className="form-label text-start fs-6"><strong>Nombre Consulta</strong></label>
                                     <input type="text" className="form-control" id="exampleInputText" value={statusformAdmin.nombre} onChange={(e) => setStatusFormAdmin({ ...statusformAdmin, nombre: (e.target.value) })} />
@@ -82,7 +85,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                                         onChange={(e) => setStatusFormAdmin({ ...statusformAdmin, descripcion: (e.target.value) })}
                                     ></textarea>
                                 </div>
-                                <div className="mb-3 d-flex align-items-center">
+                                <div className="mb-3 d-flex flex-row justify-content-between">
                                     <div className="me-3">
                                         <label htmlFor="duracionHoras" className="form-label"><strong>Duración en horas</strong></label>
                                         <input
@@ -118,8 +121,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                             </form>
                         </div>
                     </div>
-                </div> : <p>Cargando...</p>
-            }
+                </div> 
         </>
     );
 };

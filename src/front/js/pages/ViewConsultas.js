@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 export const ViewConsultas = ({CloseModal = undefined,OpenModalAddConsultas=undefined,setSelectedTp_consulta})=> {
     const {store,actions} = useContext(Context)
     const navigate = useNavigate()
-    const stylePadre = {height:"500px", minHeight:"500px",zIndex:5,top:"100px",left:setSelectedTp_consulta?"30%" : "40%"}
+    const stylePadre = {height:"600px", maxHeight:"600px",overflowY:"scroll",zIndex:5,top:"100px",left:"0px",right: "0px", margin:"auto"}
+
     useEffect(()=> {
         setTimeout(() => {
             actions.CargarTiposCosnulta(store.user.oficio.id,store.user.id)
@@ -18,7 +19,7 @@ export const ViewConsultas = ({CloseModal = undefined,OpenModalAddConsultas=unde
 
     const modalAñadirConsulta = (consulta)=> {
         if(consulta === "navegar"){
-            navigate("/add_consulta")
+            navigate("/")
         }
         if(consulta) {
             setSelectedTp_consulta(consulta)

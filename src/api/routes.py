@@ -429,3 +429,44 @@ def delete_tipo_consulta(id_tp_c):
     db.session.delete(tipo_consulta)
     db.session.commit()
     return jsonify({"ok": True, "msg": "Se elimino el tipo de consulta correctamente"}), 200
+# Traer todas las consultas de un usuario
+
+
+@api.route("/consultas/user/<int:idUser>", methods=["GET"])
+def Traer_Consultas_user(idUser):
+    # Traemos las consultas de un usuario
+    consult_user = Consulta.query.filter_by(id_user=idUser).all()
+    if len(consult_user) == 0:
+        return jsonify({"ok": False, "msg": "Este usuario no tiene ninguna consulta"}), 400
+    consult_userS = list(map(lambda item: item.serialize(), consult_user))
+    # Ahora lo mapeamos de nuevo para traer la data que nos interesa
+
+    def DataFilter(item):
+        print(item)
+        id_prof = item["id_user"]
+        id_user = item["id_profesional"]
+        id_tipo_consulta = item["id_tipo_consulta"]
+        #user
+        user = User.query.filter_by(id=id_user).first();
+        prof = Profesional.query.filter_by(id=id_prof).first();
+        tipo_consulta = Tipo_consulta.query.filter_by(id=id_tipo_consulta).first();
+        userF = user.serialize()
+        profF = prof.serialize()
+        tipo_consultaF = tipo_consulta.serialize()
+        # Pasamos las fechas a nuestra zona horaria
+        hora_extract = item["consultation_date"]
+        strhora = str(hora_extract) + " GMT-0300"
+        mi_fecha = datetime.strptime(strhora, '%Y-%m-%d %H:%M:%S %Z%z')
+
+        return {
+            "id":item["id"],
+            "realization_date":item["realization_date"],
+            "consultation_date":mi_fecha.strftime('%Y-%m-%d %H:%M:%S %Z%z'),
+            "nota":item["nota"],
+            "profesional":profF["name"] + " " + profF["last_name"],
+            "user":userF["name"] + " " + userF["last_name"],
+            "consulta":tipo_consultaF["nombre"],
+            "photoProf": profF["photo"]
+        }
+    dataFinal = list(map(lambda item: DataFilter(item), consult_userS))
+    return jsonify({"ok": True, "data": dataFinal}), 200

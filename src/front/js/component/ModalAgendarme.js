@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../store/appContext";
 import { useParams } from "react-router-dom";
 
 
 export const ModalAgendarme = ({ CloseModal }) => {
+    const refPadre = useRef()
     const { store, actions } = useContext(Context);
     const [selectedConsulta,setSelectedConsulta] = useState("Elegir Tipo Consulta")
     const {id_prof} = useParams()
-    const fechaAyer = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
+    const fechaHoy = new Date();
     const [formAddConsult,setFormAddConsult] = useState({
         id_user:store.user.id,
         id_profesional:id_prof,
@@ -19,7 +20,6 @@ export const ModalAgendarme = ({ CloseModal }) => {
     useEffect(() => {
         actions.CargarTiposCosnulta(store.oficio_prof.id,id_prof)
     },[])
-
     
     const Agendarme = (e)=> {
         e.preventDefault()
@@ -30,10 +30,11 @@ export const ModalAgendarme = ({ CloseModal }) => {
             }, 500);
         } 
         console.log("debe de ingresar los datos correctamente")
+        console.log(refPadre.current.style.width.toString())
     }
     
     return (
-        <div className={`col-3 bg-white position-absolute m-auto p-4 border-secondary shadow-lg `} style={{ top: "29%", left: "34%", zIndex: 5 }} >
+        <div ref={refPadre} className={`col-3 bg-white position-absolute m-auto p-4 border-secondary shadow-lg `} style={{ top: "10%",left:"30%", zIndex: 5 }} >
             <div className="row">
                 <div className="col d-flex flex-row justify-content-end">
                     <p role="button" onClick={() => CloseModal()} className="text-danger opacity-0.5">X</p>
@@ -45,7 +46,7 @@ export const ModalAgendarme = ({ CloseModal }) => {
                     <form className="d-flex flex-column justify-content-center mt-2" onSubmit={Agendarme}>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlInput1" className="form-label">Elegir Fecha</label>
-                        <input type="datetime-local" onChange={(e)=> setFormAddConsult({...formAddConsult,consultation_date:e.target.value})} min={fechaAyer} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                        <input type="datetime-local" onChange={(e)=> setFormAddConsult({...formAddConsult,consultation_date:e.target.value})} min={fechaHoy} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
                     </div>
                     <div className="mb-3 ">
                         <label htmlFor="exampleFormControlInput1" className="form-label text-center">Tipo de Consulta</label>

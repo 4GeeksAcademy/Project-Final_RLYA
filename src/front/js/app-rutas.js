@@ -10,11 +10,15 @@ import { Navbar } from "./component/Navbar";
 import { Sidebar } from "./component/Sidebar";
 import { UserViewAgenda } from "./pages/UserViewAgenda";
 import { Context } from "./store/appContext";
+import { AgendasActivas } from "./pages/agendas_activas";
+
 import { ValidTpConsulta } from "./component/Admin_Valid_TpConsulta";
 import { ViewConsultas } from "./pages/ViewConsultas";
 import { TipoConsulta } from "./pages/tipo_consulta";
 import { SidebarAdmin } from "./component/SidebarAdmin";
 import { Spiner } from "./component/Spiner";
+import { TipoMembresia } from "./pages/TipoMembresia";
+import { DatosEmpresa } from "./pages/ingreso_datos_empresa";
 
 
 
@@ -28,9 +32,9 @@ export const AppRutas = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div className="App" style={{ height: "100%", width: "100%" }}>
-            {
-                store.user? <BrowserRouter basename={basename}>
+        <>
+        {store.user.name? <div className="App" style={{ height: "100%", width: "100%" }}>
+                <BrowserRouter basename={basename}>
                 <div className="position-relative d-flex flex-row" style={{ height: "100%", width: "100%" }}>
                     {store.user.rol === "user"? <Sidebar /> : <SidebarAdmin/>}
                     <div className="content " style={{ width: "100%" }}>
@@ -41,16 +45,22 @@ export const AppRutas = () => {
                             <Route element={<Listaprofesionales />} path="/listprof" />
                             <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
                             <Route element={<UserViewAgenda />} path="/agenda/:id_prof" />
+
+                            <Route element={<AgendasActivas />} path="/agendas_activas" />
+
                             <Route element={<ViewConsultas />} path="/view_consultas" />
                             <Route element={<TipoConsulta />} path="/add_consulta" />
+                            <Route element={<TipoMembresia />} path="/TipoMembresia" />
+                
+
+
 
                         </Routes>
                     </div>
                 </div>
-            </BrowserRouter > : 
-            <Spiner/>
-            }
-        </div >
+            </BrowserRouter > 
+            </div > : <Spiner/>}
+        </>
     );
 };
 

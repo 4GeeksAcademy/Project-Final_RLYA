@@ -1,0 +1,68 @@
+
+.PadreInicio {
+    background-image: url("https://1.bp.blogspot.com/-efyJUJOBuC0/VoJsNrvmtJI/AAAAAAAAE2g/LrT9-PmOg0U/s1600/fondo%2Benero%2Bminerva%2Baurora_1200.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: fixed;
+
+    
+}
+.PadreBorroso{
+    backdrop-filter: blur(5px)
+}
+.PadreInicio .navbar {
+    margin-bottom: 200px;
+}
+.footer {
+    margin-top: 300px;
+}
+
+
+.btn1 {
+    border: none;
+    background-color: white;
+    color: #647cf7;
+    border-radius: 5px;
+    padding: 10px 20px 10px 20px;
+}
+.btn2 {
+    border: none;
+    background-color: white;
+    color: #68c6c4;
+    border-radius: 5px;
+    padding: 10px 20px 10px 20px;
+}
+
+.btn3 {
+    border: none;
+    background-color: white;
+    color: #d65278;
+    border-radius: 5px;
+    padding: 10px 20px 10px 20px;
+}
+
+.linea {
+    width: 50%;
+    height: 1px;
+    background:white ;
+    opacity: 0.2;
+    align-self: center;
+    margin: 35px 0px 35px 0px;
+}
+.iconos a {
+    text-decoration: none;
+    
+}
+.iconos .tw i {
+    color: #00acee;
+}
+
+.iconos .in i {
+    color: #FD1D1D;
+}
+
+.iconos .fa i {
+    color: white;
+}
+
