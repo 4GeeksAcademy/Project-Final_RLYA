@@ -15,6 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			messageSuccess:undefined,
 			oficio_prof:undefined,
 			tipos_consulta: [],
+			HistoryAgendasUser:undefined,
 			oficios:[]
 		},
 		actions: {
@@ -278,8 +279,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			TraerConsultasUser:async(id_user)=> {
+				console.log(id_user)
 				try {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultas/user/" + id_user)
+					if(data.ok === true){
+						console.log(data)
+						setStore({...getStore(),HistoryAgendasUser:data.data})
+					}
 				} catch (error) {
 					console.log(error)
 				}

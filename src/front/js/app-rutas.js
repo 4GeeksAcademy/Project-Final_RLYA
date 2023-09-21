@@ -30,9 +30,9 @@ export const AppRutas = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div className="App" style={{ height: "100%", width: "100%" }}>
-            {
-                store.user? <BrowserRouter basename={basename}>
+        <>
+        {store.user.name? <div className="App" style={{ height: "100%", width: "100%" }}>
+                <BrowserRouter basename={basename}>
                 <div className="position-relative d-flex flex-row" style={{ height: "100%", width: "100%" }}>
                     {store.user.rol === "user"? <Sidebar /> : <SidebarAdmin/>}
                     <div className="content " style={{ width: "100%" }}>
@@ -53,10 +53,9 @@ export const AppRutas = () => {
                         </Routes>
                     </div>
                 </div>
-            </BrowserRouter > : 
-            <Spiner/>
-            }
-        </div >
+            </BrowserRouter > 
+            </div > : <Spiner/>}
+        </>
     );
 };
 
