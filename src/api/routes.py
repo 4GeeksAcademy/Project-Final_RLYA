@@ -40,7 +40,8 @@ def loginUser():
         profF = profExist.serialize()
         if userInfo["email"] == profF["email"]:
             # Verificar la contraseña para el profesional
-            if current_app.bcrypt.check_password_hash(profF["password"], userInfo["password"]):
+            check = current_app.bcrypt.check_password_hash(profF["password"],userInfo["password"])
+            if check == True:
                 oficioProf = Oficio.query.filter_by(id=profF["id_oficio"]).first()
                 oficioS = oficioProf.serialize()
                 tipos_consulta = Tipo_consulta.query.filter_by(
@@ -48,26 +49,27 @@ def loginUser():
                 token = create_access_token(identity=profF["email"])
                 tipos_consulta_serializada = list(
                     map(lambda item: item.serialize(), tipos_consulta))
-            return jsonify({"ok": True, "msg": "Login correcto", "dataProf": {
-                "id": profF["id"],
-                "name": profF["name"],
-                "last_name": profF["last_name"],
-                "age": profF["age"],
-                "registration_date": profF["registration_date"],
-                "photo": profF["photo"],
-                "description": profF["descripcion"],
-                "oficio": oficioS,
-                "email": profF["email"],
-                "token": token,
-                "rol": "admin",
-                "tipos_consulta": tipos_consulta_serializada
-            }}), 200
-        return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
+                return jsonify({"ok": True, "msg": "Login correcto", "dataProf": {
+                    "id": profF["id"],
+                    "name": profF["name"],
+                    "last_name": profF["last_name"],
+                    "age": profF["age"],
+                    "registration_date": profF["registration_date"],
+                    "photo": profF["photo"],
+                    "description": profF["descripcion"],
+                    "oficio": oficioS,
+                    "email": profF["email"],
+                    "token": token,
+                    "rol": "admin",
+                    "tipos_consulta": tipos_consulta_serializada
+                }}), 200
+            return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
 
     userF = userExist.serialize()
     if userInfo["email"] == userF["email"]:
         # Verificar la contraseña para el usuario
-        if current_app.bcrypt.check_password_hash(userInfo["password"], userF["password"]):
+        chek = current_app.bcrypt.check_password_hash(userF["password"],userInfo["password"])
+        if chek == True:
             token = create_access_token(identity=userF["email"])
             response_body = {
             "ok": True,
@@ -82,10 +84,11 @@ def loginUser():
                 "email": userF["email"],
                 "token": token,
                 "rol": "user"
+                }
             }
-        }
-        return jsonify(response_body), 200
-    return jsonify({"ok": False, "msg": "error en las credenciales"}), 400
+            return jsonify(response_body), 200  
+        return jsonify({"ok":False, "msg": "error en las credenciales"}),400
+    return jsonify({"ok": False, "msg": "No hay usuario con ese correo"}), 400
 
 # Función para verificar los requisitos de contraseña segura
 
@@ -124,7 +127,7 @@ def creacion_de_registro():
 # Encripta la contraseña antes de guardarla
 
     password = request_body["password"]
-    hashed_password = current_app.bcrypt.generate_password_hash(password)
+    hashed_password = current_app.bcrypt.generate_password_hash(password).decode('utf-8')
 
     nuevo_usuario = User(name=request_body["name"],
                          last_name=request_body["last_name"],
