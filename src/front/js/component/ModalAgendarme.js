@@ -8,7 +8,7 @@ export const ModalAgendarme = ({ CloseModal }) => {
     const { store, actions } = useContext(Context);
     const [selectedConsulta,setSelectedConsulta] = useState("Elegir Tipo Consulta")
     const {id_prof} = useParams()
-    const fechaHoy = new Date();
+    const fechaHoy = new Date().toISOString().slice(0, 16);
     const [formAddConsult,setFormAddConsult] = useState({
         id_user:store.user.id,
         id_profesional:id_prof,
