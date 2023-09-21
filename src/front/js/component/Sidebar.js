@@ -13,13 +13,15 @@ export const Sidebar = () => {
 				</div>
 				<div className="menu" >
 					{/*Momentaneo*/}
-
 					<div className="d-flex flex-column">
 						<Link to="/listprof" className="d-block p-3 text-decoration-none text-light">
 						<i class="fa-solid fa-earth-americas"></i> Servicios
 						</Link>
 						<Link to="/agendas_activas" className="d-block p-3 text-decoration-none text-light">
 							<i className="far fa-calendar lead text-light"></i> Agendas activas
+						</Link>
+						<Link to="/TipoMembresia" className="d-block p-3 text-decoration-none text-light">
+							<i className="far fa-calendar lead text-light"></i> Membresía
 						</Link>
 						<a className="d-block p-3 text-decoration-none text-light" onClick={() => actions.Logout()} href="#"><i class="fa-solid fa-arrow-right-from-bracket lead text-light"></i>  Logout</a>
 					</div>
