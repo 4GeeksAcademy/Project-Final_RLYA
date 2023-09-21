@@ -27,10 +27,21 @@ export const PaginaInicio = () => {
 
                 </div>
             </nav>
-            <div className="bg-white m-auto w-50 align-self-center shadow-lg d-flex flex-row justify-content-between" style={{height:"500px",borderRadius:"50px",padding:"50px" }}>
+            <div className="bg-white m-auto w-50 align-self-center shadow-lg d-flex flex-row justify-content-between" style={{height:"500px",borderRadius:"25px",padding:"50px",marginBottom:"100px"}}>
                 <div className="p-3 w-50">
-                    <h3 className="my-3">¿Qué ofrecemos?</h3>
-                    <p className="opacity-70 text-secondary">Te proporcionamos una mayor comidad a la hora de gestionar tus consultas y les brindamos a todo público el acceso a tu agenda. También contamos con distintos planes para hacer de tu experiencia algo mucho mejor. </p>
+                    <h3 className="my-3">¿Quienes somos?</h3>
+                    <p className="opacity-70 text-secondary">En CApp, somos un equipo dedicado a simplificar la vida tanto de profesionales como de clientes. Nos enorgullece facilitar conexiones significativas y eficientes entre ambos grupos. Entendemos las necesidades y desafíos que enfrentan en su día a día. Nuestra plataforma de gestión de agenda digital está diseñada para optimizar su productividad y ayudarles a alcanzar sus metas profesionales de manera eficaz, junto a una búsqueda y contratación de profesionales cualificados, permitiéndoles acceder a los servicios que necesitan de manera eficiente y conveniente.
+ </p>
+                </div>
+                <div className="p-3 w-50 d-flex flex-row justify-content-center align-content-center">
+                    <img src="https://previews.123rf.com/images/kraphix/kraphix1310/kraphix131000004/22733031-dibujos-animados-de-la-gente-de-negocios-d%C3%A1ndose-la-mano-presentar-idea-para-hacer-dinero.jpg" className="rounded-circle" style={{width:"250px",height:"250px"}}/>
+                </div>
+            </div>
+
+            <div className="bg-white m-auto w-50 mt-5 align-self-center shadow-lg d-flex flex-row justify-content-between" style={{height:"500px",borderRadius:"25px",padding:"50px" }}>
+                <div className="p-3 w-50">
+                    <h3 className="my-3">¿Por qué Elegirnos?</h3>
+                    <p className="opacity-70 text-secondary">Nuestra plataforma se destaca por su facilidad de uso, permitiéndote comenzar de inmediato sin complicaciones. Fomentamos la colaboración efectiva al facilitar la interacción con profesionales y clientes, simplificando la programación de citas y compartiendo calendarios. Tu privacidad y la seguridad de tus datos son fundamentales para nosotros, y garantizamos su protección en todo momento </p>
                 </div>
                 <div className="p-3 w-50 d-flex flex-row justify-content-center align-content-center">
                     <img src="https://acumbamail.com/blog/wp-content/uploads/2021/05/calendario-contenido.jpeg" className="rounded-circle" style={{width:"250px",height:"250px"}}/>
@@ -95,10 +106,15 @@ export const PaginaInicio = () => {
                     <h5 className="" >Esta es tu página de confianza.</h5>
                     <p className="opacity-25 mx-3">@CalendApp</p>
                 </div>
-                <div className="translate-middle-x d-flex flex-row justify-content-between"> 
-                    <i className="fa-brands fa-facebook d-inline p-2 fs-5 text"></i>
-                    <i className="fa-brands fa-twitter d-inline p-2 fs-5 text"></i>
-                    <i className="fa-brands fa-instagram d-inline p-2 fs-5 text"></i>
+                <div className="w-50 d-flex flex-column align-items-center"> 
+                    <p className="text-center">¿Tienes alguna pregunta o comentario? Estamos aquí para ayudarte. No dudes en ponerte en contactocon nuestro equipo de soporte</p>
+                    <div className="linea"></div>
+                    <div className="iconos d-flex flex-row justify-content-between w-50">
+                        <a className="fa" href="#"><i className="fa-brands fa-facebook d-inline p-2 fs-5 text"></i></a>
+                        <a className="tw" href="#"><i className="fa-brands fa-twitter d-inline p-2 fs-5 text"></i></a>
+                        <a className="in" href="#"><i className="fa-brands fa-instagram d-inline p-2 fs-5 text"></i></a>
+                    </div>
+
                 </div>
             </footer>
             </div>

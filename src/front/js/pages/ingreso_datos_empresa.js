@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 
 
-export const DatosEmpresa = ({stateForm}) => {
+export const DatosEmpresa = ({stateForm,setStatusFormAdmin,setStatusRegister}) => {
     const [empresaDataAdd, setEmpresaDataAdd] = useState({
         descripcion: "",
         id_oficio:0
@@ -20,25 +20,11 @@ export const DatosEmpresa = ({stateForm}) => {
         actions.CargarOficios()
     },[])
 
-
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const imgCloud = await fileupload(stateForm.photo)
-        const statusLogin = await actions.AgendarAdmin({
-            name:stateForm.name,
-            last_name:stateForm.last_name,
-            photo:imgCloud,
-            age:stateForm.age,
-            registration_date:stateForm.registration_date,
-            email:stateForm.email,
-            password:stateForm.password,
-            descripcion:empresaDataAdd.descripcion,
-            id_oficio:empresaDataAdd.id_oficio
-        })
-        if(statusLogin === true){
-            navigate("/Login"); 
-        }
-
+        setStatusFormAdmin({...stateForm,...empresaDataAdd})
+        setStatusRegister("tipo_membresia")
+        
     };
 
 
@@ -76,13 +62,9 @@ export const DatosEmpresa = ({stateForm}) => {
                         ></textarea>
                             </div>
                         </div>
-                        <div id="emailHelp" className="form-text text-center">
-                            <strong>Antes de registrarte, debes añadir tus tipos de consulta para que los usuarios puedan acceder a ella.</strong>
-                        </div>
+
                         <div className="col d-flex align-items-center justify-content-center">
-                        <Link to="/tipo_membresia">
                             <button type="submit" className="btn btn-outline-dark mt-3">Registrarme</button>
-                            </Link>
                         </div>
                     </form>
                 </div>

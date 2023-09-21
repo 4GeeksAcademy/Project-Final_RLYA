@@ -55,7 +55,7 @@ export const AgendasActivas = () => {
     const stylePadre = {
         height:altoPagina,
         maxHeight:"500px",
-        overflowY:"scroll"
+        overflow:"auto"
 
     }
 
@@ -65,7 +65,7 @@ export const AgendasActivas = () => {
                 {
                     store.HistoryAgendasUser !== undefined? store.HistoryAgendasUser.map((agenda,index)=> {
                         return <Card key={index + "Soy index"} agenda={agenda} />
-                    }) :<p>Hay agendas</p>  
+                    }) :<p className="text-center">No hay agendas</p>  
                 }
             </div>
         </div>

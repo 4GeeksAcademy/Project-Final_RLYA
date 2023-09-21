@@ -10,11 +10,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-export const TipoMembresia = () => {
+export const TipoMembresia = ({statusFormAdmin}) => {
 
     const { store, actions } = useContext(Context)
     const navigate = useNavigate();
-
+    console.log(statusFormAdmin)
 
     const [selectedDate, setSelectedDate] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState(""); // Estado para almacenar el método de pago seleccionado
@@ -52,7 +52,7 @@ export const TipoMembresia = () => {
 
 
     // Función para manejar el envío del formulario
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         // Validar que se haya seleccionado un método de pago
         if (!paymentMethod) {
@@ -79,13 +79,27 @@ export const TipoMembresia = () => {
             selectedDate,
         };
 
+        const imgCloud = await fileupload(statusFormAdmin.photo)
+        const statusLogin = await actions.AgendarAdmin({
+            name:statusFormAdmin.name,
+            last_name:statusFormAdmin.last_name,
+            photo:imgCloud,
+            age:statusFormAdmin.age,
+            registration_date:statusFormAdmin.registration_date,
+            email:statusFormAdmin.email,
+            password:statusFormAdmin.password,
+            descripcion:statusFormAdmin.descripcion,
+            id_oficio:statusFormAdmin.id_oficio
+        })
+        if(statusLogin === true){
+            navigate("/Login"); 
+        }
+
         // Puedes realizar una llamada a un servicio de pago aquí
 
         // Mostrar un mensaje de éxito
-        alert("Pago exitoso");
 
         // Redirigir al usuario a una página de confirmación u otras acciones según tus necesidades
-        navigate('/listprof');
     };
 
     const handleMembershipSelection = (membershipType) => {

@@ -50,4 +50,19 @@
     align-self: center;
     margin: 35px 0px 35px 0px;
 }
+.iconos a {
+    text-decoration: none;
+    
+}
+.iconos .tw i {
+    color: #00acee;
+}
+
+.iconos .in i {
+    color: #FD1D1D;
+}
+
+.iconos .fa i {
+    color: white;
+}
 
