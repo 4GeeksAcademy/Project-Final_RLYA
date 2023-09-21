@@ -11,10 +11,10 @@ const Card = ({agenda}) => {
     const isActive = ()=> {
         const fechaActual = new Date() 
         const fechaComparar = new Date(agenda.consultation_date)
-        console.log(fechaActual.getDate())
-        console.log(fechaComparar.getDate()) 
-        if (fechaComparar.getHours() > fechaActual.getHours() && fechaComparar.getDate() >= fechaActual.getDate() && fechaComparar.getMonth() >= fechaActual.getMonth() && fechaComparar.getFullYear() >= fechaActual.getFullYear()) {
-            return "border-success"
+        console.log(fechaActual.getMinutes())
+        console.log(fechaComparar.getMinutes()) 
+        if (fechaActual < fechaComparar) {
+        return "border-success"
         } else {
             return "border-danger"
         }
