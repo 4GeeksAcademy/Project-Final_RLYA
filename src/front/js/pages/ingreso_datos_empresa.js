@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 import { fileupload } from "../../helpers/uploadFiles";
+import { Link } from 'react-router-dom';
+
 
 
 export const DatosEmpresa = ({stateForm}) => {
@@ -78,7 +80,9 @@ export const DatosEmpresa = ({stateForm}) => {
                             <strong>Antes de registrarte, debes añadir tus tipos de consulta para que los usuarios puedan acceder a ella.</strong>
                         </div>
                         <div className="col d-flex align-items-center justify-content-center">
+                        <Link to="/tipo_membresia">
                             <button type="submit" className="btn btn-outline-dark mt-3">Registrarme</button>
+                            </Link>
                         </div>
                     </form>
                 </div>
