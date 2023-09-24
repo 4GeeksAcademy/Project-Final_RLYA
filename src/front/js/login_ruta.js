@@ -15,6 +15,10 @@ import { PaginaInicio } from "./pages/pagina_inicio";
 import { RegistroUsuario } from "./pages/vista_registro_usuario";
 import { DatosEmpresa } from "./pages/ingreso_datos_empresa";
 import { TipoConsulta } from "./pages/tipo_consulta";
+import { PayFailure } from "./pages/Failure";
+import { PaySuccess } from "./pages/Success";
+import { PayPending } from "./pages/Pending";
+import { TipoMembresia } from "./pages/TipoMembresia";
 
 //create your first component
 export const LoginRutas = () => {
@@ -31,6 +35,10 @@ export const LoginRutas = () => {
                         <Route element={<PaginaInicio/>} path="/*" />
                         <Route element={<Login />} path="/Login" />
                         <Route element={<RegistroUsuario />} path="/RegistroUsuario" />
+                        <Route element={<PayPending />} path="/pay_pending" />
+                        <Route element={<PaySuccess />} path="/pay_success" />
+                        <Route element={<PayFailure />} path="/pay_failure" />
+                        <Route element={<TipoMembresia />} path="/pagos" />
                     </Routes>
             </BrowserRouter>
         </div>

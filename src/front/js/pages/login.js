@@ -16,8 +16,11 @@ export const Login = () => {
   async function handleSubmit(e) {
     e.preventDefault()
     let logged = await actions.login(email, password)
+    console.log(logged)
     if (logged === true) {
       navigate("/")
+    } else if(logged === "pagos") {
+      navigate("/pagos")
     }
   }
 
