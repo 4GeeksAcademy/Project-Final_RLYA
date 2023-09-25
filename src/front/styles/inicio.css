@@ -6,7 +6,6 @@ body .margen-superior2 {
     margin-top: 100px; 
 }
 
-
 .PadreInicio {
     background-image: url("https://1.bp.blogspot.com/-efyJUJOBuC0/VoJsNrvmtJI/AAAAAAAAE2g/LrT9-PmOg0U/s1600/fondo%2Benero%2Bminerva%2Baurora_1200.jpg");
     background-repeat: no-repeat;
@@ -20,7 +19,7 @@ body .margen-superior2 {
     backdrop-filter: blur(5px)
 }
 .PadreInicio .navbar {
-    margin-bottom: 200px;
+    margin-bottom: 100px;
 }
 .footer {
     margin-top: 300px;
