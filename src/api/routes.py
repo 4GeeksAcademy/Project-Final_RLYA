@@ -395,16 +395,34 @@ def get_single_photo():
     # Si el profesional existe, devolver la foto
     if len(info_prof) == 0:
         return jsonify({"error": "El profesional no se encontró"}), 404
-    # Si el profesional no existe, devolver un error 404
     else:
-        def cargarOficio(item):
+        def cargarOficioYconsultas(item):
             itemfinal = item.serialize()
             print(item)
             oficio = Oficio.query.filter_by(id=itemfinal["id_oficio"]).first()
             oficiofinal = oficio.serialize()
             itemfinal["id_oficio"] = oficiofinal
+            # Ahora cargaremos las consultas
+            id_prof = itemfinal["id"]
+            tp_c = Tipo_consulta.query.filter_by(id_profesional=id_prof).all()
+            if len(tp_c) == 0:
+                itemfinal["tipos_consulta"] = []
+            else:
+                lsF = list(map(lambda item: item.serialize(), tp_c))
+                itemfinal["tipos_consulta"] = lsF
+            # Ahora cargaremos el plan que tiene en base al pago que realizo
+            pago = Pagos.query.filter_by(id_profesional=id_prof).first()
+            if pago == None:
+                itemfinal["plan"] = ""
+            else:
+                pagoF = pago.serialize()
+                # Traemos el plan
+                plan = Plan.query.filter_by(id=pagoF["id_plan"]).first()
+                planF = plan.serialize()
+                itemfinal["plan"] = planF["name"]
             return itemfinal
-        listfinal = list(map(lambda item: cargarOficio(item), info_prof))
+        listfinal = list(
+            map(lambda item: cargarOficioYconsultas(item), info_prof))
         return jsonify({"info": listfinal}), 200
 
 # Api para obtener oficios
@@ -478,6 +496,7 @@ def delete_tipo_consulta(id_tp_c):
 
 @api.route("/consultas/user/<int:idUser>", methods=["GET"])
 def Traer_Consultas_user(idUser):
+
     # Traemos las consultas de un usuario
     consult_user = Consulta.query.filter_by(id_user=idUser).all()
     if len(consult_user) == 0:
@@ -486,9 +505,9 @@ def Traer_Consultas_user(idUser):
     # Ahora lo mapeamos de nuevo para traer la data que nos interesa
 
     def DataFilter(item):
-        print(item)
-        id_prof = item["id_user"]
-        id_user = item["id_profesional"]
+
+        id_user = item["id_user"]
+        id_prof = item["id_profesional"]
         id_tipo_consulta = item["id_tipo_consulta"]
         # user
         user = User.query.filter_by(id=id_user).first()
@@ -594,11 +613,12 @@ def ValidSuscription(id_prof):
 def idByEmail():
 
     body = request.json
-
+    print(body)
     user = Profesional.query.filter_by(email=body["email"]).first()
     if user == None:
         return jsonify({"ok": False, "msg": "No hay usuario"}), 400
     userF = user.serialize()
+    print("Xddddddddd")
     return jsonify({"ok": True, "id_user": userF["id"]})
 
 

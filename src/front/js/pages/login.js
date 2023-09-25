@@ -19,8 +19,8 @@ export const Login = () => {
     console.log(logged)
     if (logged === true) {
       navigate("/")
-    } else if(logged === "pagos") {
-      navigate("/pagos")
+    } else if(logged === "validSuscription") {
+      navigate("/validSuscription")
     }
   }
 

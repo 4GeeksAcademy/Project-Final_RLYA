@@ -19,12 +19,16 @@ export const TipoMembresia = ({}) => {
 
     };
     const email = sessionStorage.getItem("emailLastRegister")
-    console.log(email)
 
 
     const pagar = async () => {
         console.log("xd")
         if(selectedPlan) {
+            const dataCreateNewPagoBackend = {
+                id_plan:selectedPlan.id,
+                id_profesional:store.id_user_lastRegister
+            }
+            sessionStorage.setItem("NewPago",JSON.stringify(dataCreateNewPagoBackend))
             let total = selectedPlan.price;  //aca creamos la  variable total que guarda la suma a pagar por el cliente 
             await actions.pagoMercadoPago(total,email); 
             let direccion = await store.mercadoPago.init_point;  //  direccion guarda la url que trae init_point 

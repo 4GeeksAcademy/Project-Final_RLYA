@@ -10,7 +10,7 @@ export const PaginaInicio = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="PadreInicio h-100 d-flex flex-column" >
+        <div className="PadreInicio d-flex flex-column" >
             <div className="PadreBorroso">
             <nav className="navbar px-3 bg-dark">
                 <div className="container-fluid d-flex justify-content-between px-5 ">
@@ -30,8 +30,7 @@ export const PaginaInicio = () => {
             <div className="bg-white m-auto w-50 align-self-center shadow-lg d-flex flex-row justify-content-between" style={{height:"500px",borderRadius:"25px",padding:"50px",marginBottom:"100px"}}>
                 <div className="p-3 w-50">
                     <h3 className="my-3">¿Quienes somos?</h3>
-                    <p className="opacity-70 text-secondary">En CApp, somos un equipo dedicado a simplificar la vida tanto de profesionales como de clientes. Nos enorgullece facilitar conexiones significativas y eficientes entre ambos grupos. Entendemos las necesidades y desafíos que enfrentan en su día a día. Nuestra plataforma de gestión de agenda digital está diseñada para optimizar su productividad y ayudarles a alcanzar sus metas profesionales de manera eficaz, junto a una búsqueda y contratación de profesionales cualificados, permitiéndoles acceder a los servicios que necesitan de manera eficiente y conveniente.
- </p>
+                    <p className="opacity-70 text-secondary">En CApp, somos un equipo dedicado a simplificar la vida tanto de profesionales como de clientes. Nos enorgullece facilitar conexiones significativas y eficientes entre ambos grupos. Entendemos las necesidades y desafíos que enfrentan en su día a día. Nuestra plataforma de gestión de agenda digital está diseñada para optimizar su productividad y ayudarles a alcanzar sus metas profesionales de manera eficaz, junto a una búsqueda y contratación de profesionales cualificados, permitiéndoles acceder a los servicios que necesitan de manera eficiente y conveniente.</p>
                 </div>
                 <div className="p-3 w-50 d-flex flex-row justify-content-center align-content-center">
                     <img src="https://previews.123rf.com/images/kraphix/kraphix1310/kraphix131000004/22733031-dibujos-animados-de-la-gente-de-negocios-d%C3%A1ndose-la-mano-presentar-idea-para-hacer-dinero.jpg" className="rounded-circle" style={{width:"250px",height:"250px"}}/>
@@ -46,7 +45,7 @@ export const PaginaInicio = () => {
                 <div className="p-3 w-50 d-flex flex-row justify-content-center align-content-center">
                     <img src="https://acumbamail.com/blog/wp-content/uploads/2021/05/calendario-contenido.jpeg" className="rounded-circle" style={{width:"250px",height:"250px"}}/>
                 </div>
-            </div>
+            </div> 
 
 
             <div className="bg-dark w-100 align-self-center shadow-lg d-flex flex-column" style={{padding:"50px", marginTop:"200px" }}>

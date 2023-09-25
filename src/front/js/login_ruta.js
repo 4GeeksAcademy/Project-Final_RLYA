@@ -19,6 +19,7 @@ import { PayFailure } from "./pages/Failure";
 import { PaySuccess } from "./pages/Success";
 import { PayPending } from "./pages/Pending";
 import { TipoMembresia } from "./pages/TipoMembresia";
+import { ValidPago } from "./pages/ValidPago";
 
 //create your first component
 export const LoginRutas = () => {
@@ -29,7 +30,7 @@ export const LoginRutas = () => {
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
-        <div>
+        <div className=" w-100 h-100" >
             <BrowserRouter basename={basename}>
                     <Routes>
                         <Route element={<PaginaInicio/>} path="/*" />
@@ -39,6 +40,7 @@ export const LoginRutas = () => {
                         <Route element={<PaySuccess />} path="/pay_success" />
                         <Route element={<PayFailure />} path="/pay_failure" />
                         <Route element={<TipoMembresia />} path="/pagos" />
+                        <Route element={<ValidPago />} path="/validSuscription" />
                     </Routes>
             </BrowserRouter>
         </div>

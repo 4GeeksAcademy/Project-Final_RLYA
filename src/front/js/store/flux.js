@@ -39,32 +39,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 						const userData = data.dataUser
 						localStorage.setItem("token",userData.token);
 						setStore({ statusLogin: true, user: userData })
+						return true
 					} else if(data.dataProf) {
 						const profData = data.dataProf
-						console.log(data.dataProf)
+						setStore({...getStore(),user:profData})
 						/*Aqui validaremos el estado de la suscripcion*/
-						const {dataValid} = await axios.get(process.env.BACKEND_URL + "/api/validSuscripcion/" + profData.id)
-						console.log(dataValid)
-						if(dataValid.ok === true) {
-							localStorage.setItem("token", profData.token);
-							localStorage.removeItem("emailLastRegister")
-							setStore({ statusLogin: true, user: profData })
-						}
+						return "validSuscription"
+						
 					}
 					
-					return true;
 				} catch (error) {
 					console.log(error)
-					if(error.response.status === 401) {
-						sessionStorage.setItem("emailLastRegister",error.response.data.emailAccess)
-						return "pagos"
-					} else if (error.response.status > 399) {
+					if (error.response.status > 399) {
 						setStore({ ...getStore(), messageError: error.response.data.msg })
 						return false;
 					} 
 				}
 			},
-
+			Validpago:async(profData)=> {
+				try {
+					const {data} = await axios.get(process.env.BACKEND_URL + "/api/validSuscripcion/" + profData.id)
+					if(data.ok === true ) {
+						localStorage.setItem("token", profData.token);
+						return true
+					}
+					
+				} catch (error) {
+					console.log(error)
+					if (error.response.status === 401) {
+						return false;
+					} 
+				}
+			},
+			
 			getMessage: async () => {
 				try {
 					// fetching data from the backend
@@ -95,7 +102,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			loadInfoUserByToken:async ()=> {
-				console.log("XDDDDDDDDDD")
 				try {
 					const token = localStorage.getItem("token")
 					if(token) {
@@ -103,11 +109,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							headers: { "Authorization": "Bearer " + token }
 						})
 						if(data.ok) {
-							console.log(data.info)
 							setStore({...getStore(),user:data.info})
 						}
 					}
-					console.log("no hay token")
 				} catch (error) {
 					
 				}
@@ -290,11 +294,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			TraerConsultasUser:async(id_user)=> {
-				console.log(id_user)
 				try {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultas/user/" + id_user)
 					if(data.ok === true){
-						console.log(data)
 						setStore({...getStore(),HistoryAgendasUser:data.data})
 					}
 				} catch (error) {
@@ -302,9 +304,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			IdByEmail:async(email)=> {
+				console.log("aqui estamos en la funcion");
+				console.log(email)
 				try {
-					const {data} = await axios.get(process.env.BACKEND_URL + "/api/idByEmail",email)
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/idByEmail",{email})
+					console.log(data)
 					if(data.ok === true) {
+						console.log(data)
 						setStore({...getStore(),id_user_lastRegister:data.id_user})
 					}
 				} catch (error) {
@@ -334,8 +340,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) { 
 				console.log(error); 
 				} 
-			} 
-				
+			},
+			CrearNuevoPagoBackend:async(dataSend)=> {
+				try {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/pagos",dataSend)
+					if(data.ok === true) {
+						sessionStorage.removeItem("emailLastRegister")
+						sessionStorage.removeItem("NewPago")
+						console.log("pago creado correctamente");
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			}
+			
 		}
 	}
 };
