@@ -68,7 +68,7 @@ export const PaginaInicio = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+            </nav>
                 <div className="container margen-superior2">
                     <div className="row">
                         <div className="col-md-6">
@@ -173,6 +173,7 @@ export const PaginaInicio = () => {
                         <i className="fa-brands fa-instagram d-inline p-2 fs-5 text"></i>
                     </div>
                 </footer>
+
             </div>
         </div>
 

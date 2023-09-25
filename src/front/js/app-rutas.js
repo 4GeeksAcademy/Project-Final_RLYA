@@ -17,6 +17,8 @@ import { ViewConsultas } from "./pages/ViewConsultas";
 import { TipoConsulta } from "./pages/tipo_consulta";
 import { SidebarAdmin } from "./component/SidebarAdmin";
 import { Spiner } from "./component/Spiner";
+import { TipoMembresia } from "./pages/TipoMembresia";
+import { DatosEmpresa } from "./pages/ingreso_datos_empresa";
 
 
 
@@ -48,6 +50,9 @@ export const AppRutas = () => {
 
                             <Route element={<ViewConsultas />} path="/view_consultas" />
                             <Route element={<TipoConsulta />} path="/add_consulta" />
+                            <Route element={<TipoMembresia />} path="/TipoMembresia" />
+                
+
 
 
                         </Routes>

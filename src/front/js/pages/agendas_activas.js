@@ -11,10 +11,10 @@ const Card = ({agenda}) => {
     const isActive = ()=> {
         const fechaActual = new Date() 
         const fechaComparar = new Date(agenda.consultation_date)
-        console.log(fechaActual.getDate())
-        console.log(fechaComparar.getDate()) 
-        if (fechaComparar.getHours() > fechaActual.getHours() && fechaComparar.getDate() >= fechaActual.getDate() && fechaComparar.getMonth() >= fechaActual.getMonth() && fechaComparar.getFullYear() >= fechaActual.getFullYear()) {
-            return "border-success"
+        console.log(fechaActual.getMinutes())
+        console.log(fechaComparar.getMinutes()) 
+        if (fechaActual < fechaComparar) {
+        return "border-success"
         } else {
             return "border-danger"
         }
@@ -48,14 +48,13 @@ export const AgendasActivas = () => {
 
     useEffect(()=> {
         actions.TraerConsultasUser(store.user.id)
-
     },[])
 
     const altoPagina = window.innerHeight
     const stylePadre = {
         height:altoPagina,
         maxHeight:"500px",
-        overflowY:"scroll"
+        overflow:"auto"
 
     }
 
@@ -65,7 +64,7 @@ export const AgendasActivas = () => {
                 {
                     store.HistoryAgendasUser !== undefined? store.HistoryAgendasUser.map((agenda,index)=> {
                         return <Card key={index + "Soy index"} agenda={agenda} />
-                    }) :<p>Hay agendas</p>  
+                    }) :<p className="text-center">No hay agendas</p>  
                 }
             </div>
         </div>

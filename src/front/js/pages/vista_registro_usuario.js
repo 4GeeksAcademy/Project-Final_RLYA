@@ -6,10 +6,12 @@ import "../../styles/home.css";
 import { fileupload } from "../../helpers/uploadFiles";
 import { TipoConsulta } from "./tipo_consulta";
 import { DatosEmpresa } from "./ingreso_datos_empresa";
+import { TipoMembresia } from "./TipoMembresia";
 
 
 export const RegistroUsuario = () => {
     const [statusReigster, setStatusRegister] = useState("usuario")
+    const [statusFormAdmin,setStatusFormAdmin] = useState({})
     const [stateForm, setStateForm] = useState({
         name: "",
         last_name: "",
@@ -129,7 +131,7 @@ export const RegistroUsuario = () => {
                         </div>
                     </form>
                 </div>
-            </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStateForm={setStateForm} setStatusRegister={setStatusRegister} /> : <TipoConsulta />}
+            </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStatusFormAdmin={setStatusFormAdmin} setStatusRegister={setStatusRegister} /> : <TipoMembresia statusFormAdmin={statusFormAdmin} />}
 
         </div>
     );

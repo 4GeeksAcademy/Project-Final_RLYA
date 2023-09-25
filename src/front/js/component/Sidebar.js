@@ -13,7 +13,6 @@ export const Sidebar = () => {
 				</div>
 				<div className="menu" >
 					{/*Momentaneo*/}
-
 					<div className="d-flex flex-column">
 						<Link to="/listprof" className="d-block p-3 text-decoration-none text-light">
 						<i class="fa-solid fa-earth-americas"></i> Servicios
