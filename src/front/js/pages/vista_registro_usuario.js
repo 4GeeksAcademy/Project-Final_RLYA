@@ -11,7 +11,6 @@ import { TipoMembresia } from "./TipoMembresia";
 
 export const RegistroUsuario = () => {
     const [statusReigster, setStatusRegister] = useState("usuario")
-    const [statusFormAdmin,setStatusFormAdmin] = useState({})
     const [stateForm, setStateForm] = useState({
         name: "",
         last_name: "",
@@ -131,7 +130,7 @@ export const RegistroUsuario = () => {
                         </div>
                     </form>
                 </div>
-            </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStatusFormAdmin={setStatusFormAdmin} setStatusRegister={setStatusRegister} /> : <TipoMembresia statusFormAdmin={statusFormAdmin} />}
+            </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm}  setStatusRegister={setStatusRegister} /> : <TipoMembresia />}
 
         </div>
     );

@@ -10,6 +10,7 @@ export const PaginaInicio = () => {
     const navigate = useNavigate();
 
     return (
+
         <div className="PadreInicio h-100 d-flex flex-column" >
             <div className="PadreBorroso" style={{ backgroundImage: 'none' }}>
                 <nav className="navbar px-3 bg-dark">
@@ -20,6 +21,7 @@ export const PaginaInicio = () => {
                             <a href="/Login" className="nav-link text-white" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
                                 e.preventDefault();
                                 navigate("/Login");
+
 
                             }}>Ingresar</a>
 
@@ -108,6 +110,8 @@ export const PaginaInicio = () => {
                         </div>
                     </div>
                 </div>
+            </div> 
+
 
 
                 <div className="bg-light w-100 align-self-center shadow-lg d-flex flex-column" style={{ padding: "50px", marginTop: "200px" }}>
