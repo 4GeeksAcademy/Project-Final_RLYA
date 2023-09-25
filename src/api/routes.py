@@ -640,9 +640,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://vigilant-garbanzo-555r9pxq9r7cxg5-3000.app.github.dev/pay_success",
-            "failure": "https://vigilant-garbanzo-555r9pxq9r7cxg5-3000.app.github.dev/pay_failure",
-            "pending": "https://vigilant-garbanzo-555r9pxq9r7cxg5-3000.app.github.dev/pay_pending"
+            "success": "https://bookish-yodel-wxx54jg74gwcpjq-3000.app.github.dev/pay_success",
+            "failure": "https://bookish-yodel-wxx54jg74gwcpjq-3000.app.github.dev/pay_failure",
+            "pending": "https://bookish-yodel-wxx54jg74gwcpjq-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }
