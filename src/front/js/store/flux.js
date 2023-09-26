@@ -18,6 +18,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			HistoryAgendasUser:undefined,
 			oficios:[],
 			planes:[],
+			recomendados:[],
 			id_user_lastRegister:undefined,
 			mercadoPago:{}
 		},
@@ -186,9 +187,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			traerInfoProf:async () => {
+				setStore({...getStore(),recomendados:[],profesionales:[]})
 				try {
 					const response = await axios.get(process.env.BACKEND_URL + "/api/profesionales")
-					setStore({...getStore(),profesionales:response.data.info})
+					/*Filtramos separando los profesionales, los que tienen el plan economico de los que tienen el normal o pro*/
+					const dat = response.data.info
+					dat.map((prof)=> {
+						if(prof.plan !== "") {
+							if(prof.plan !== "Plan Normal") {
+								return setStore({...getStore(),recomendados:[...getStore().recomendados,prof]})
+							}
+							return setStore({...getStore(),profesionales:[...getStore().profesionales,prof]})
+						}
+					})
+
+					
 					console.log(response.data)
 				} catch (error) {
 					console.log(error)
