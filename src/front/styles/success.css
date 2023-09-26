@@ -1,0 +1,12 @@
+.Padre {
+    height: 100%;
+    background-image: url("https://cdn2.shopify.com/s/files/1/0025/0340/9739/files/Banner_800_x_600_-_Pago_Exitoso_600x600.png?v=1563210428");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: fixed;
+    
+}
+.PadreB {
+    backdrop-filter: blur(5px)
+}

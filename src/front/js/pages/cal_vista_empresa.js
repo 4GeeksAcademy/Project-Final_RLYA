@@ -92,7 +92,7 @@ export const CalendarioEmpresa = () => {
 										</div>
 									</div>
 									<div className="bg-white rounded d-flex flex-column" style={{ width: "100%", height: "100%", maxHeight: "100%" }}>
-									<h1 className="text-center mb-3">Tareas Hoy:</h1>
+									<h1 className="text-center my-3">Tareas Hoy:</h1>
 										<div className="d-flex flex-column d-flex flex-row">
 											{
 												store.eventsAdminSpesifique.length > 0 ? store.eventsAdminSpesifique.map((item,index) => {
@@ -108,7 +108,7 @@ export const CalendarioEmpresa = () => {
 															<p className="m-0 p-0 ps-2">{item.title}-{fechaComparar.getHours().toString()}</p>
 															</div>
 											}
-										}) : <p className="text-center mt-3">Cargando...</p>
+										}) : <p className="text-center mt-4">No hay Consultas...</p>
 											}
 										</div>
 									</div>

@@ -15,6 +15,7 @@ import { contrast } from "@cloudinary/url-gen/actions/adjust";
 
 
 
+
 const SignupSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Too Short!')
@@ -33,6 +34,8 @@ const SignupSchema = Yup.object().shape({
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/, "debe tener mayúsculas, minúsculas, números y caracteres especiales")
         .required('Required'),
     // image: Yup.mixed().required(),
+
+
 
     });
 
@@ -214,8 +217,9 @@ export const RegistroUsuario = () => {
                         </div>
                     </Form>
                 </div>
-             </div> : null}
-           : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={datosAdicionales} setStatusRegister={setStatusRegister} /> : <TipoConsulta />
+
+            </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={datosAdicionales}  setStatusRegister={setStatusRegister} /> : <TipoMembresia />}
+
 
         </div>)} 
         </Formik>

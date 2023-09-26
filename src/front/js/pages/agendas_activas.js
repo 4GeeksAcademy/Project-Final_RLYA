@@ -48,7 +48,6 @@ export const AgendasActivas = () => {
 
     useEffect(()=> {
         actions.TraerConsultasUser(store.user.id)
-
     },[])
 
     const altoPagina = window.innerHeight
