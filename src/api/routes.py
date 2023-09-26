@@ -2,15 +2,22 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta, Favoritoss
+
+from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta, Favoritoss,Plan, Pagos
+
 from api.utils import generate_sitemap, APIException
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
+
 from datetime import datetime, timedelta
 # from ..app import bcrypt
+import pytz
+import mercadopago
+sdk = mercadopago.SDK(
+    "TEST-4422592801019195-092415-a39725f0a1f9404df90fd178847704b5-304755483")
 
 api = Blueprint('api', __name__)
 
@@ -431,16 +438,34 @@ def get_single_photo():
     # Si el profesional existe, devolver la foto
     if len(info_prof) == 0:
         return jsonify({"error": "El profesional no se encontró"}), 404
-    # Si el profesional no existe, devolver un error 404
     else:
-        def cargarOficio(item):
+        def cargarOficioYconsultas(item):
             itemfinal = item.serialize()
             print(item)
             oficio = Oficio.query.filter_by(id=itemfinal["id_oficio"]).first()
             oficiofinal = oficio.serialize()
             itemfinal["id_oficio"] = oficiofinal
+            # Ahora cargaremos las consultas
+            id_prof = itemfinal["id"]
+            tp_c = Tipo_consulta.query.filter_by(id_profesional=id_prof).all()
+            if len(tp_c) == 0:
+                itemfinal["tipos_consulta"] = []
+            else:
+                lsF = list(map(lambda item: item.serialize(), tp_c))
+                itemfinal["tipos_consulta"] = lsF
+            # Ahora cargaremos el plan que tiene en base al pago que realizo
+            pago = Pagos.query.filter_by(id_profesional=id_prof).first()
+            if pago == None:
+                itemfinal["plan"] = ""
+            else:
+                pagoF = pago.serialize()
+                # Traemos el plan
+                plan = Plan.query.filter_by(id=pagoF["id_plan"]).first()
+                planF = plan.serialize()
+                itemfinal["plan"] = planF["name"]
             return itemfinal
-        listfinal = list(map(lambda item: cargarOficio(item), info_prof))
+        listfinal = list(
+            map(lambda item: cargarOficioYconsultas(item), info_prof))
         return jsonify({"info": listfinal}), 200
 
 # Api para obtener oficios
@@ -514,6 +539,7 @@ def delete_tipo_consulta(id_tp_c):
 
 @api.route("/consultas/user/<int:idUser>", methods=["GET"])
 def Traer_Consultas_user(idUser):
+
     # Traemos las consultas de un usuario
     consult_user = Consulta.query.filter_by(id_user=idUser).all()
     if len(consult_user) == 0:
@@ -522,9 +548,9 @@ def Traer_Consultas_user(idUser):
     # Ahora lo mapeamos de nuevo para traer la data que nos interesa
 
     def DataFilter(item):
-        print(item)
-        id_prof = item["id_user"]
-        id_user = item["id_profesional"]
+
+        id_user = item["id_user"]
+        id_prof = item["id_profesional"]
         id_tipo_consulta = item["id_tipo_consulta"]
         # user
         user = User.query.filter_by(id=id_user).first()
@@ -551,7 +577,6 @@ def Traer_Consultas_user(idUser):
         }
     dataFinal = list(map(lambda item: DataFilter(item), consult_userS))
     return jsonify({"ok": True, "data": dataFinal}), 200
-
 
 # #
 # @api.route("/favoritos/<int:user_id>'", methods=["PUT"])
@@ -636,3 +661,118 @@ def borrar_favorito_prof():
     # (porpiedad de la tabla = request body que es lo que agregue en el body)
     if len(fav == 0):
         return jsonify({"msg": "no hay favoritos"}), 404
+
+      
+@api.route("/pagos", methods=["POST"])
+def CrearPago():
+    request_body = request.json
+
+    # Fijarme que el usaurio no tenga ningun otro pago
+    pagoExist = Pagos.query.filter_by(
+        id_profesional=request_body["id_profesional"]).first()
+
+    if pagoExist != None:
+        return jsonify({"ok": False, "msg": "Error, ya tienes un pago"}), 200
+
+    if "id_profesional" in request_body and "id_plan" in request_body:
+        # Traemos la info del plan que ingreso para saver la duracion
+        infoPlan = Plan.query.filter_by(id=request_body["id_plan"]).first()
+        if infoPlan == None:
+            return jsonify({"ok": False, "msg": "No existe este plan"}), 400
+        infoPlanS = infoPlan.serialize()
+
+        zonahoraria = pytz.timezone('Etc/GMT+3')
+        fechaRealizacion = datetime.now(zonahoraria)
+
+        duracion = infoPlanS["duration_in_months"]
+        duracionFinal = fechaRealizacion + timedelta(days=30)
+
+        fecha_realizacion_str = fechaRealizacion.strftime(
+            '%Y-%m-%d %H:%M:%S %Z%z').replace('-03-0300', '-03:00')
+        duracion_final_str = duracionFinal.strftime(
+            '%Y-%m-%d %H:%M:%S %Z%z').replace('-03-0300', '-03:00')
+
+        newPago = Pagos(id_profesional=request_body["id_profesional"], realization_date=fecha_realizacion_str,
+                        end_date=duracion_final_str, id_plan=request_body["id_plan"])
+        db.session.add(newPago)
+        db.session.commit()
+        return jsonify({"ok": True, "msg": "Pago creado correctamente"}), 200
+    return jsonify({"ok": False, "msg": "Faltan datos"}), 400
+
+# Api para obtener todos los planes
+
+
+@api.route("/planes", methods=["GET"])
+def Obtener_Planes():
+    planes = Plan.query.all()
+    if len(planes) == 0:
+        return jsonify({"ok": False, "msg": "No hay planes"}), 400
+    planesF = list(map(lambda item: item.serialize(), planes))
+    return jsonify({"ok": True, "planes": planesF}), 200
+
+# API para validar si se vencio o no la suscripcion de un profesional
+
+
+@api.route("/validSuscripcion/<int:id_prof>", methods=["GET"])
+def ValidSuscription(id_prof):
+
+    # Traemos su pago
+    prof = Profesional.query.filter_by(id=id_prof).first()
+    Pago = Pagos.query.filter_by(id_profesional=id_prof).first()
+    profF = prof.serialize()
+    if Pago == None:
+        return jsonify({"ok": False, "msg": "Este usuario no tiene ningun pago", "emailAccess": profF["email"]}), 401
+    PagoF = Pago.serialize()
+    # Ahora validamos que la fecha de hoy este
+    fecha_hoy = datetime.now()
+    realizacion = PagoF["realization_date"]
+    finalizacion = PagoF["end_date"]
+    if fecha_hoy < finalizacion and fecha_hoy > realizacion:
+        return jsonify({"ok": True, "statusValid": "valid"}), 200
+    db.session.delete(Pago)
+    db.session.commit()
+    return jsonify({"ok": False, "statusValid": "expired", "emailAccess": profF["email"]}), 401
+
+# Api para cargar el id del usuario en base al email
+
+
+@api.route("/idByEmail", methods=["POST"])
+def idByEmail():
+
+    body = request.json
+    print(body)
+    user = Profesional.query.filter_by(email=body["email"]).first()
+    if user == None:
+        return jsonify({"ok": False, "msg": "No hay usuario"}), 400
+    userF = user.serialize()
+    print("Xddddddddd")
+    return jsonify({"ok": True, "id_user": userF["id"]})
+
+
+@api.route("/preference", methods=["POST"])
+def preference():
+    body = request.json  # aca trae la info
+
+    total = body["total"]
+    email = body["email"]
+    # acá vamos a poner más líneas de código
+    # Crea un ítem en la preferencia
+    preference_data = {
+        "items": [{
+            "title": "CalendApp",
+            "quantity": 1,
+            "unit_price": total,
+        }],
+        "payer": {
+            "email": email
+        },
+        "back_urls": {
+            "success": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_success",
+            "failure": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_failure",
+            "pending": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_pending"
+        },
+        "auto_return": "approved"
+    }
+    preference_response = sdk.preference().create(preference_data)
+    preference = preference_response["response"]
+    return preference, 200

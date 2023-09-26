@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 
 
-export const DatosEmpresa = ({stateForm,setStatusFormAdmin,setStatusRegister}) => {
+export const DatosEmpresa = ({stateForm,setStatusRegister}) => {
     const [empresaDataAdd, setEmpresaDataAdd] = useState({
         descripcion: "",
         id_oficio:0
@@ -22,10 +22,24 @@ export const DatosEmpresa = ({stateForm,setStatusFormAdmin,setStatusRegister}) =
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setStatusFormAdmin({...stateForm,...empresaDataAdd})
-        setStatusRegister("tipo_membresia")
-        
+        sessionStorage.setItem("emailLastRegister",stateForm.email)
+        const imgCloud = await fileupload(stateForm.photo)
+        const statusLogin = await actions.AgendarAdmin({
+            name:stateForm.name,
+            last_name:stateForm.last_name,
+            photo:imgCloud,
+            age:stateForm.age,
+            registration_date:stateForm.registration_date,
+            email:stateForm.email,
+            password:stateForm.password,
+            descripcion:empresaDataAdd.descripcion,
+            id_oficio:empresaDataAdd.id_oficio
+        })
+        if(statusLogin === true){
+            setStatusRegister("tipo_membresia"); 
+        }
     };
+
 
 
     return (

@@ -6,6 +6,7 @@ import "../../styles/home.css";
 import { MdArrowBackIosNew } from "react-icons/md"
 
 
+
 export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, CloseModal }) => {
     const { store, actions } = useContext(Context)
     const ExistSelected = selectedTp_consulta && selectedTp_consulta.nombre? true : false

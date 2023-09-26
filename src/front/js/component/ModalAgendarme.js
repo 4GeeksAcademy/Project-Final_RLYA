@@ -8,7 +8,11 @@ export const ModalAgendarme = ({ CloseModal }) => {
     const { store, actions } = useContext(Context);
     const [selectedConsulta,setSelectedConsulta] = useState("Elegir Tipo Consulta")
     const {id_prof} = useParams()
-    const fechaHoy = new Date().toISOString().slice(0, 16);
+    /*Aqui formateamos la fecha  */
+    const fechaHoy = new Date();
+    fechaHoy.setMinutes(fechaHoy.getMinutes() - fechaHoy.getTimezoneOffset());
+    const fechaFormateada = fechaHoy.toISOString().slice(0, 16);
+
     const [formAddConsult,setFormAddConsult] = useState({
         id_user:store.user.id,
         id_profesional:id_prof,
@@ -46,7 +50,7 @@ export const ModalAgendarme = ({ CloseModal }) => {
                     <form className="d-flex flex-column justify-content-center mt-2" onSubmit={Agendarme}>
                     <div className="mb-3">
                         <label htmlFor="exampleFormControlInput1" className="form-label">Elegir Fecha</label>
-                        <input type="datetime-local" onChange={(e)=> setFormAddConsult({...formAddConsult,consultation_date:e.target.value})} min={fechaHoy} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                        <input type="datetime-local" onChange={(e)=> setFormAddConsult({...formAddConsult,consultation_date:e.target.value})} min={fechaFormateada} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
                     </div>
                     <div className="mb-3 ">
                         <label htmlFor="exampleFormControlInput1" className="form-label text-center">Tipo de Consulta</label>

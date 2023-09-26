@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 import { MessageError } from "../component/messageError";
+ import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export const Login = () => {
   const [email, setEmail] = useState("")
@@ -16,8 +17,11 @@ export const Login = () => {
   async function handleSubmit(e) {
     e.preventDefault()
     let logged = await actions.login(email, password)
+    console.log(logged)
     if (logged === true) {
       navigate("/")
+    } else if(logged === "validSuscription") {
+      navigate("/validSuscription")
     }
   }
 

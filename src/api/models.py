@@ -51,6 +51,9 @@ class Profesional(db.Model):
     # relacion
     consulta = db.relationship('Consulta', backref='profesional', lazy=True)
     favoritos = db.relationship('Favoritoss', backref='profesional', lazy=True)
+    pago = db.relationship('Pagos', backref='plan', lazy=True)
+
+
 
     def __repr__(self):
         return f'<Profesional {self.id}>'
@@ -146,6 +149,7 @@ class Consulta(db.Model):
         }
 
 
+
 class Favoritoss(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -157,11 +161,44 @@ class Favoritoss(db.Model):
     def __repr__(self):
         return f'<Favoritoss {self.id}>'
 
+class Plan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(1000), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    duration_in_months = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<Plan {self.id}>'
+
+
     def serialize(self):
         return {
             "id": self.id,
-            "id_user": self.id_user,
-            "id_prof": self.id_prof,
+            "name": self.name,
+            "price": self.price,
+            "duration_in_months": self.duration_in_months,
+            # do not serialize the password, its a security breach
+        }
 
 
+class Pagos(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_profesional = db.Column(db.Integer, db.ForeignKey(
+        'profesional.id'), nullable=False)
+    realization_date = db.Column(db.DateTime, nullable=False)
+    end_date = db.Column(db.DateTime, nullable=False)
+    id_plan = db.Column(db.Integer, db.ForeignKey(
+        'plan.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Pagos {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "id_profesional": self.id_profesional,
+            "realization_date": self.realization_date,
+            "end_date": self.end_date,
+            "id_plan": self.id_plan
+            # do not serialize the password, its a security breach
         }

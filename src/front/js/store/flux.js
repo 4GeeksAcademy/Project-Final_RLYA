@@ -17,7 +17,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			tipos_consulta: [],
 			HistoryAgendasUser:undefined,
 			oficios:[],
-			favoritos: [],
+			planes:[],
+      favoritos: [],
+			recomendados:[],
+			id_user_lastRegister:undefined,
+			mercadoPago:{}
+
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -29,30 +34,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 			login: async (email, password) => {
 				setStore({ ...getStore(), messageError: undefined })
 				try {
-					let {data} = await axios.post(process.env.BACKEND_URL + "/api/login", {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/login", {
 						"email": email,
 						"password": password
 					})
 					if(data.dataUser) {
-						localStorage.setItem("token",data.dataUser.token);
-						setStore({ statusLogin: true, user: data.dataUser })
+						const userData = data.dataUser
+						localStorage.setItem("token",userData.token);
+						setStore({ statusLogin: true, user: userData })
+						return true
 					} else if(data.dataProf) {
-						localStorage.setItem("token", data.dataProf.token);
-						setStore({ statusLogin: true, user: data.dataProf })
+						const profData = data.dataProf
+						setStore({...getStore(),user:profData})
+						/*Aqui validaremos el estado de la suscripcion*/
+						return "validSuscription"
 						
 					}
 					
-					return true;
 				} catch (error) {
-					console.log(error);
-					console.log(error.response.data.msg)
+					console.log(error)
 					if (error.response.status > 399) {
 						setStore({ ...getStore(), messageError: error.response.data.msg })
-					}
-					return false;
+						return false;
+					} 
 				}
 			},
-
+			Validpago:async(profData)=> {
+				try {
+					const {data} = await axios.get(process.env.BACKEND_URL + "/api/validSuscripcion/" + profData.id)
+					if(data.ok === true ) {
+						localStorage.setItem("token", profData.token);
+						return true
+					}
+					
+				} catch (error) {
+					console.log(error)
+					if (error.response.status === 401) {
+						return false;
+					} 
+				}
+			},
+			
 			getMessage: async () => {
 				try {
 					// fetching data from the backend
@@ -83,7 +105,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			loadInfoUserByToken:async ()=> {
-				console.log("XDDDDDDDDDD")
 				try {
 					const token = localStorage.getItem("token")
 					if(token) {
@@ -91,11 +112,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							headers: { "Authorization": "Bearer " + token }
 						})
 						if(data.ok) {
-							console.log(data.info)
 							setStore({...getStore(),user:data.info})
 						}
 					}
-					console.log("no hay token")
 				} catch (error) {
 					
 				}
@@ -170,9 +189,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			traerInfoProf:async () => {
+				setStore({...getStore(),recomendados:[],profesionales:[]})
 				try {
 					const response = await axios.get(process.env.BACKEND_URL + "/api/profesionales")
-					setStore({...getStore(),profesionales:response.data.info})
+					/*Filtramos separando los profesionales, los que tienen el plan economico de los que tienen el normal o pro*/
+					const dat = response.data.info
+					dat.map((prof)=> {
+						if(prof.plan !== "") {
+							if(prof.plan !== "Plan Normal") {
+								return setStore({...getStore(),recomendados:[...getStore().recomendados,prof]})
+							}
+							return setStore({...getStore(),profesionales:[...getStore().profesionales,prof]})
+						}
+					})
+
+					
 					console.log(response.data)
 				} catch (error) {
 					console.log(error)
@@ -192,7 +223,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const {data} = await axios.post(process.env.BACKEND_URL + "/api/registro_prof", from)
 					if(data.ok === true){
-						console.log("el admin se registro correctamente")
 						return true;
 					}
 				} catch (error) {
@@ -204,7 +234,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const {data} = await axios.post(process.env.BACKEND_URL + "/api/registro", from)
 					if(data.ok === true){
-						console.log("el admin se registro correctamente")
 						return true;
 					}
 				} catch (error) {
@@ -280,19 +309,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			TraerConsultasUser:async(id_user)=> {
-				console.log(id_user)
 				try {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultas/user/" + id_user)
 					if(data.ok === true){
-						console.log(data)
 						setStore({...getStore(),HistoryAgendasUser:data.data})
 					}
 				} catch (error) {
 					console.log(error)
 				}
 			},
-
-
 			ActualizarPerfil:async (user)=> {
 				const store = getStore()
 				print(user)
@@ -345,14 +370,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 						await getActions().obtenerFavoritos(id_user)
 						
 					}
-					
+			IdByEmail:async(email)=> {
+				console.log("aqui estamos en la funcion");
+				console.log(email)
+				try {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/idByEmail",{email})
+					console.log(data)
+					if(data.ok === true) {
+						console.log(data)
+						setStore({...getStore(),id_user_lastRegister:data.id_user})
+					}
 				} catch (error) {
 					console.log(error)
 				}
 			},
+			CargarPlanes:async()=> {
+				try {
+					const {data} = await axios.get(process.env.BACKEND_URL + "/api/planes")
+					if(data.ok === true) {
+						setStore({...getStore(),planes:data.planes})
+					}
 
-
-
+				} catch (error) {
+					console.log(error)
+				}
 			},
 			eliminarFavorito: async (id_user, id_prof) => {
 				// da la lista de favoritos 
@@ -378,10 +419,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				}
 			},
-
+			ValidPago:async()=> {
+				
+			},
+			pagoMercadoPago: async (total,email) => { 
+				try { 
+				const response = await axios.post(process.env.BACKEND_URL + "/api/preference", { 
+				total: total,email: email  //acá está de nuevo la variable  donde se guarda el total a pagar por el cliente 
+				}); 
+				console.log(response)
+				setStore({ mercadoPago: response.data });  //guardamos  la info en el objeto que creamos en store 
+				} catch (error) { 
+				console.log(error); 
+				} 
+			},
+			CrearNuevoPagoBackend:async(dataSend)=> {
+				try {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/pagos",dataSend)
+					if(data.ok === true) {
+						sessionStorage.removeItem("emailLastRegister")
+						sessionStorage.removeItem("NewPago")
+						console.log("pago creado correctamente");
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			}
 			
-		
-		
+		}
+
 	}
 };
 
