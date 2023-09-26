@@ -116,6 +116,12 @@ export const RegistroUsuario = () => {
 
 
     return (
+        <div className="PadreInicio" >
+        <div className="PadreBorroso" style={{
+            backgroundImage: 'none', backgroundSize: "cover",
+            backgroundPosition: "center",
+            minHeight: "100vh",
+        }}>
         <Formik
        initialValues= {{
         name: "",
@@ -138,9 +144,9 @@ export const RegistroUsuario = () => {
 
      >
        {({ errors, touched,values }) => (
-        <div className="container my-3">
+        <div className="">
             {statusReigster === "usuario" ? <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-5 p-5 col-4 border rounded-3 shadow">
+                <div className="col-5 p-5 col-4 border rounded-3 shadow my-3" style={{ backgroundColor: 'white' }}>
                     <Form>
                         <h3 className="text-center mb-3"><strong>Registro</strong></h3>
                         <div className="form-group">
@@ -224,6 +230,8 @@ export const RegistroUsuario = () => {
 
         </div>)} 
         </Formik>
+        </div>
+        </div>
         )
 };
 

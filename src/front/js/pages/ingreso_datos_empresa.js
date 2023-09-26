@@ -43,9 +43,9 @@ export const DatosEmpresa = ({stateForm,setStatusRegister}) => {
 
 
     return (
-        <div className="container my-3">
+        <div className="container">
             <div className="row d-flex align-items-center justify-content-center">
-                <div className="col-4 p-5 col-4 border rounded-3 shadow">
+                <div className="col-4 p-5 col-4 border rounded-3 shadow my-5" style={{ backgroundColor: 'white' }}>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <h3 className="text-center mb-3"><strong>Registro</strong></h3>

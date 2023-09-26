@@ -27,21 +27,25 @@ export const Login = () => {
 
 
   return (
+    <div className="PadreInicio  d-flex flex-column" >
+    <div className="PadreBorroso"  style={{ backgroundImage: 'none',   backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh", }}>
     <div className="container">
       <div className="row d-flex align-items-center justify-content-center" style={{ paddingTop: mitad }} >
-        <div className="col-4 p-5 col-4 border rounded-3 shadow">
+        <div className="col-4 p-5 col-4 border border-2 rounded-3 shadow" style={{ backgroundColor: 'white' }}>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <h3 className="text-center mb-5"><strong>Iniciar Sesión</strong></h3>
               {
                 store.messageError && <MessageError error={store.messageError} />
               }
-              <label htmlFor="exampleInputEmail1" className="form-label text-start fs-6"><strong>Email</strong></label>
+              <label htmlFor="exampleInputEmail1" className="form-label text-start fs-6  font-weight-light">Correo</label>
               <input type="email" onChange={function (e) { setEmail(e.target.value) }} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
               <div id="emailHelp" className="form-text"></div>
             </div>
             <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label text-start fs-6"><strong>Password</strong></label>
+              <label htmlFor="exampleInputPassword1" className="form-label text-start fs-6  font-weight-light">Contraseña</label>
               <input type="password" onChange={function (e) { setPassword(e.target.value) }} className="form-control" id="exampleInputPassword1" />
             </div>
             <div id="emailHelp" className="form-text text-center">
@@ -54,6 +58,8 @@ export const Login = () => {
           </form>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
