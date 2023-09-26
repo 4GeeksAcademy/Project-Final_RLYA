@@ -29,15 +29,22 @@ export const ListaProf = () => {
             setFiltrar(e.target.value)
         }
     const filtrooficio = store.profesionales.filter((oficio) => oficio.id_oficio.name.toLowerCase().includes(filtrar.toLocaleLowerCase()))
+    const filterRecomendados = store.recomendados.filter((oficio) => oficio.id_oficio.name.toLowerCase().includes(filtrar.toLocaleLowerCase()))
 
     const results = !search & !filtrar ? store.profesionales : search ? store.profesionales.filter((dato) => dato.name.toLowerCase().includes(search.toLocaleLowerCase())) : filtrooficio
-
+    const resultsRecomendados = !search && !filtrar ? store.recomendados : search ? store.recomendados.filter((dato) => dato.name.toLowerCase().includes(search.toLocaleLowerCase())) : filterRecomendados
     const stylePadre = {
         width:"95%",
         height:"600px",
         maxHeight:"100%",
         overflow:"auto"
 
+    }
+    const styleRecomend = {
+        width:"95%",
+        height:"250px",
+        maxHeight:"100%",
+        overflow:"auto"
     }
 
 
@@ -61,6 +68,20 @@ export const ListaProf = () => {
                 <input className="form-control me-2 mx-2" type="search" placeholder="Search" aria-label="Search" value={search} onChange={searcher}/>
                 <button className="btn btn-outline-secondary" type="submit">Search</button>
             </form>
+            {resultsRecomendados[0] && <div className="d-block p-2 position-relative w-100" >
+            <h2>Recomendados</h2>
+                <div className="mx-5 d-flex flex-row flex-wrap" style={styleRecomend} >
+                    { resultsRecomendados? resultsRecomendados.map((item, index) => {
+                        if(item.plan !== "" && item.tipos_consulta[0])
+                        return <div key={"soy index" + index} className="d-flex flex-column m-3">
+                        <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
+                        <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</p>
+
+                        </div>
+                }) : <Spiner/>}
+                    
+                </div>
+            </div> }
             <div className="d-block p-2 position-relative w-100" >
             <h2>Lista de Profesionales</h2>
                 <div className="mx-5 d-flex flex-row flex-wrap" style={stylePadre} >

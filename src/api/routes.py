@@ -640,9 +640,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://bookish-yodel-wxx54jg74gwcpjq-3000.app.github.dev/pay_success",
-            "failure": "https://bookish-yodel-wxx54jg74gwcpjq-3000.app.github.dev/pay_failure",
-            "pending": "https://bookish-yodel-wxx54jg74gwcpjq-3000.app.github.dev/pay_pending"
+            "success": "https://curly-space-invention-j997gwq57v53qp4w-3000.app.github.dev/pay_success",
+            "failure": "https://curly-space-invention-j997gwq57v53qp4w-3000.app.github.dev/pay_failure",
+            "pending": "https://curly-space-invention-j997gwq57v53qp4w-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }
