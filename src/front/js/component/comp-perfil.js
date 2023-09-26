@@ -62,14 +62,7 @@ export const Perfil = () => {
 
   const ActualizarPerfil = async (e) => {
     const photofianl = await fileupload(formData.photo)
-    const datafinal = {
-      name: formData.name,
-      last_name: formData.last_name,
-      age: formData.age,
-      photo: formData.photo? photofianl : store.user.photo,
-    }
 
-    actions.ActualizarPerfil(datafinal)
   }
   const handleEditClick = () => {
     setEditMode(true);

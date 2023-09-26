@@ -160,6 +160,14 @@ class Favoritoss(db.Model):
 
     def __repr__(self):
         return f'<Favoritoss {self.id}>'
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "id_user": self.id_user,
+            "id_prof": self.id_prof,
+            # do not serialize the password, its a security breach
+        }
 
 class Plan(db.Model):
     id = db.Column(db.Integer, primary_key=True)

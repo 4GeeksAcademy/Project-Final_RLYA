@@ -340,30 +340,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			obtenerFavoritos: async (id_user) => {
-
-				console.log("funciona")
 				try {
-					let data = await axios.get(process.env.BACKEND_URL + "/api/user/favoritos/" + id_user)
-					
-					if(data.data.ok === true){
-						console.log(data)
-						setStore({ favoritos: data.data.data });
+					const {data} = await axios.get(process.env.BACKEND_URL + "/api/user/favoritos/" + id_user)
+					console.log(data)
+					if(data.ok === true){
+						setStore({ favoritos: data.data });
 					}
 				}
 				catch (error) {
+
 					if (error.response.status == 400){
 						setStore({ favoritos: [] });
 					}
-					console.log(error)
 
 				}
 			},
-			agregarFavorito: async (id_user) => {
+			CargarFavoritos: async (id_user,id_prof) => {
 				
 				const store = getStore()
 				try {
-					const {data} = await axios.post(process.env.BACKEND_URL + "/user/favoritos/" + id_user)
-					if(data.data.ok === true){
+					const {data} = await axios.post(process.env.BACKEND_URL + "/api/favoritos/prof",{
+						"id_user":id_user,
+						"id_prof":id_prof
+					})
+					if(data.ok === true){
 						setStore({...getStore(),messageSuccess:data.msg})
 						/*Traigo de nuevo la peticion de las consultas*/
 						await getActions().obtenerFavoritos(id_user)	

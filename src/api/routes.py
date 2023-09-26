@@ -629,17 +629,18 @@ def Traer_favoritos(idUser):
     fav_user = Favoritoss.query.filter_by(id_user=idUser).all()
     if len(fav_user) == 0:
         return jsonify({"ok": False, "msg": "no hay favoritos"}), 400
+    fav_userF = list(map(lambda item:item.serialize(), fav_user))
+    print(fav_userF)
+    def cargardatos(itemfinal):
 
-    def cargardatos(item):
-        itemfinal = item.serialize()
         new_prof_fav = Profesional.query.filter_by(
             id=itemfinal["id_prof"]).first()
         prof_final = new_prof_fav.serialize()
         return prof_final
-    fav_userS = list(map(lambda item: cargardatos(item), fav_user))
+    result = list(map(lambda item: cargardatos(item), fav_userF))
     # Ahora lo mapeamos de nuevo para traer la data que nos interesa
 
-    return jsonify({"ok": True, "data": fav_userS}), 200
+    return jsonify({"ok": True, "data": result}), 200
 
 
 # borrar prof como favorito

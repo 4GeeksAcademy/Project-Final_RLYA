@@ -77,8 +77,7 @@ export const ListaProf = () => {
                         <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
                         <div className="d-flex flex-row justify-content-around align-items-center">
                             <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative m-0 p-0">{item.name}</p>
-                            <button  className="border-0 text-danger bg-transparent"onClick={() => actions.agregarfavorito(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
-
+                            <button  className="border-0 text-danger bg-transparent"onClick={() => actions.CargarFavoritos(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
                         </div>
                         </div>
                 }) : <Spiner/>}
