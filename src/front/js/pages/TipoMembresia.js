@@ -56,7 +56,7 @@ export const TipoMembresia = ({}) => {
                         <div className="row d-flex flex-row justify-content-around">
                             {
                             store.planes? store.planes.map((plan,index)=> {
-                                        return <div role="button" onClick={()=>setSelectedPlan(plan)} key={index + "index"} className="col-3 d-flex flex-column align-items-center justify-content-center border border p-3 rounded ">
+                                        return <div role="button" onClick={()=>setSelectedPlan(plan)} key={index + "index"} className={"col-3 d-flex flex-column align-items-center justify-content-center p-3 rounded border border-" + selectedPlan.id === plan.id? "success" : "secondary" }>
                                             <p className="text-center mb-3">{plan.name}</p>
                                             <h4 className="text-center mb-3"><strong>$ {plan.price}</strong></h4>
                                             <p className="text-center mb-3">por Mes</p>

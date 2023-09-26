@@ -75,8 +75,11 @@ export const ListaProf = () => {
                         if(item.plan !== "" && item.tipos_consulta[0])
                         return <div key={"soy index" + index} className="d-flex flex-column m-3">
                         <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
-                        <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</p>
-                        <button type="button" className="border-0 bg-transparent"onClick={() => actions.agregarfavorito(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
+                        <div className="d-flex flex-row justify-content-around align-items-center">
+                            <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative m-0 p-0">{item.name}</p>
+                            <button  className="border-0 text-danger bg-transparent"onClick={() => actions.agregarfavorito(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
+
+                        </div>
                         </div>
                 }) : <Spiner/>}
                     

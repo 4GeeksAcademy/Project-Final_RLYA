@@ -361,15 +361,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			agregarFavorito: async (id_user) => {
 				
 				const store = getStore()
-				
 				try {
 					const {data} = await axios.post(process.env.BACKEND_URL + "/user/favoritos/" + id_user)
 					if(data.data.ok === true){
 						setStore({...getStore(),messageSuccess:data.msg})
 						/*Traigo de nuevo la peticion de las consultas*/
-						await getActions().obtenerFavoritos(id_user)
-						
-					}
+						await getActions().obtenerFavoritos(id_user)	
+						}
+				} catch (error) {
+					console.log(error)
+				}
+			},
 			IdByEmail:async(email)=> {
 				console.log("aqui estamos en la funcion");
 				console.log(email)

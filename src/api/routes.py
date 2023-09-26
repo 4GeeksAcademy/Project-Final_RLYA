@@ -767,9 +767,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_success",
-            "failure": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_failure",
-            "pending": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_pending"
+            "success": "https://solid-garbanzo-q664xgpqxww25px-3000.app.github.dev/pay_success",
+            "failure": "https://solid-garbanzo-q664xgpqxww25px-3000.app.github.dev/pay_failure",
+            "pending": "https://solid-garbanzo-q664xgpqxww25px-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }
