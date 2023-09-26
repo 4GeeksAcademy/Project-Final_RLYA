@@ -2,7 +2,9 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta, Plan, Pagos
+
+from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta, Favoritoss,Plan, Pagos
+
 from api.utils import generate_sitemap, APIException
 
 from flask_jwt_extended import create_access_token
@@ -152,6 +154,47 @@ def creacion_de_registro():
         "message": "Usuario correctamente registrado",
         "ok": True
     }
+
+    return jsonify(response_body), 200
+
+    # End-point registro de profesional
+
+
+@api.route('/editarperfil/<int:user_id>', methods=['PUT'])
+def editar_perfil(user_id):
+    user = User.query.get(user_id)
+    request_body = request.json
+    # email = request_body["email"]
+    # print(email)
+    # Verificar si el usuario ya existe
+    print(request_body)
+    if not user:
+        response_body = {
+            "message": "Usuario no encontrado",
+            "ok": False
+        }
+        return jsonify(response_body), 404
+
+
+
+    if "name" in request_body:
+        user.name = request_body["name"],
+    if "last_name" in request_body:
+        user.last_name = request_body["last_name"],
+    if "age" in request_body:
+        user.age = request_body["age"],
+    if "photo" in request_body:
+        user.photo = request_body["photo"],
+
+    db.session.add(user)
+    db.session.commit()
+
+    response_body = {
+        "infouser": user.serialize(),
+        "message": "Perfil de usuario modificado correctamente",
+        "ok": True
+    }
+    print(user)
     return jsonify(response_body), 200
 
     # End-point registro de profesional
@@ -535,7 +578,91 @@ def Traer_Consultas_user(idUser):
     dataFinal = list(map(lambda item: DataFilter(item), consult_userS))
     return jsonify({"ok": True, "data": dataFinal}), 200
 
+# #
+# @api.route("/favoritos/<int:user_id>'", methods=["PUT"])
+# def ag_fav(user_id):
+#     body = request.json
+#     print(body)
+#     fav = Favoritoss.query.filter_by(id=user_id).first()
+#     prof = Profesional.query.filter_by(id=fav[""]).first()
 
+#     if fav == None:
+#         return jsonify({"ok": False, "msg": "no hay favoritos"}, 400,
+
+
+#    db.session.commit()
+#     return jsonify({"ok": True, "msg": "Se Actualizo el tipo de consulta correctamente"}), 200
+
+
+@api.route("/favoritos/prof", methods=["POST"])
+def ag_fav():
+    # obtiene el body que mando desde posman
+    request_body = request.get_json(force=True)
+
+    # filtra por el id especificado para ver si el id ya existe
+    user_query = User.query.filter_by(id=request_body["id_user"]).first()
+    if user_query is None:  # si el id no aparece el usuario no esta rigistrado
+        return jsonify({"msg": "no esta registrado"}), 404
+
+    # preguntar para que es esa parte
+
+        # user_id de la tabla #request body lo que viene del body de posman
+    # filtra, no deja pasar los que no coinciden, trae los que coinciden los velores de user_id de la tabla favoritos con lo que pongo en el body
+    fav = Favoritoss.query.filter_by(id_user=request_body["id_user"]).filter_by(
+        id_prof=request_body["id_prof"]).first()
+    # busca un usuario con esa id si hay, chequear si tiene ese id del prof
+    # el fav recorre todos los favoritos del user_id
+    if fav:
+        # retorna q ya se habia agregado
+        return jsonify({"msg": "ya esta agregado este favorito"}), 404
+
+    new_prof_fav = Favoritoss(
+        id_user=request_body["id_user"], id_prof=request_body["id_prof"])
+    db.session.add(new_prof_fav)
+    db.session.commit()
+    return jsonify({"ok": True, "msg": "favorito agregado"}), 200
+
+
+@api.route("/user/favoritos/<int:idUser>", methods=["GET"])
+def Traer_favoritos(idUser):
+    # Traemos
+    fav_user = Favoritoss.query.filter_by(id_user=idUser).all()
+    if len(fav_user) == 0:
+        return jsonify({"ok": False, "msg": "no hay favoritos"}), 400
+
+    def cargardatos(item):
+        itemfinal = item.serialize()
+        new_prof_fav = Profesional.query.filter_by(
+            id=itemfinal["id_prof"]).first()
+        prof_final = new_prof_fav.serialize()
+        return prof_final
+    fav_userS = list(map(lambda item: cargardatos(item), fav_user))
+    # Ahora lo mapeamos de nuevo para traer la data que nos interesa
+
+    return jsonify({"ok": True, "data": fav_userS}), 200
+
+
+# borrar prof como favorito
+@api.route("/user/favoritos", methods=['DELETE'])
+# se ejecuta una funcion con el parametro que es el id de planeta
+def borrar_favorito_prof():
+    request_body = request.get_json(force=True)
+    fav = Favoritoss.query.filter_by(id_user=request_body["id_user"], id_prof=request_body["id_prof"]).first()
+    # obtiene el body que mando desde posman
+    if fav is not None:
+        db.session.delete(fav)
+        db.session.commit()
+
+        request_body = {
+            "msg": "se borro",
+        }
+        return jsonify(request_body), 200,
+
+    # (porpiedad de la tabla = request body que es lo que agregue en el body)
+    if len(fav == 0):
+        return jsonify({"msg": "no hay favoritos"}), 404
+
+      
 @api.route("/pagos", methods=["POST"])
 def CrearPago():
     request_body = request.json

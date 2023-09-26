@@ -15,6 +15,7 @@ class User(db.Model):
 
     # relacion
     prof = db.relationship('Consulta', backref='user', lazy=True)
+    favoritos = db.relationship('Favoritoss', backref='user', lazy=True)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -49,7 +50,10 @@ class Profesional(db.Model):
 
     # relacion
     consulta = db.relationship('Consulta', backref='profesional', lazy=True)
+    favoritos = db.relationship('Favoritoss', backref='profesional', lazy=True)
     pago = db.relationship('Pagos', backref='plan', lazy=True)
+
+
 
     def __repr__(self):
         return f'<Profesional {self.id}>'
@@ -145,6 +149,18 @@ class Consulta(db.Model):
         }
 
 
+
+class Favoritoss(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    id_user = db.Column(db.Integer, db.ForeignKey(
+        'user.id'), nullable=False)
+    id_prof = db.Column(db.Integer, db.ForeignKey(
+        'profesional.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Favoritoss {self.id}>'
+
 class Plan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(1000), nullable=False)
@@ -153,6 +169,7 @@ class Plan(db.Model):
 
     def __repr__(self):
         return f'<Plan {self.id}>'
+
 
     def serialize(self):
         return {

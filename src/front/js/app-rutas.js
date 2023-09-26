@@ -19,6 +19,10 @@ import { SidebarAdmin } from "./component/SidebarAdmin";
 import { Spiner } from "./component/Spiner";
 import { TipoMembresia } from "./pages/TipoMembresia";
 import { DatosEmpresa } from "./pages/ingreso_datos_empresa";
+import { EditarPerfil, Perfil } from "./pages/perfil";
+import { PageFav } from "./pages/fav";
+
+
 
 
 
@@ -43,6 +47,8 @@ export const AppRutas = () => {
                             {/* Rutas */}
                             <Route element={store.user.rol === "user"? <Listaprofesionales /> : <ValidTpConsulta tipo_consultas={store.user.tipo_consultas}/> } path="/*" />
                             <Route element={<Listaprofesionales />} path="/listprof" />
+                            <Route element={<EditarPerfil />} path="/editarperfil" /> 
+                            <Route element={<PageFav />} path="/user/favoritos" /> 
                             <Route element={<CalendarioEmpresa />} path="/calendario_empresa" />
                             <Route element={<UserViewAgenda />} path="/agenda/:id_prof" />
 
