@@ -35,7 +35,7 @@ export const ListaProf = () => {
     const resultsRecomendados = !search && !filtrar ? store.recomendados : search ? store.recomendados.filter((dato) => dato.name.toLowerCase().includes(search.toLocaleLowerCase())) : filterRecomendados
     const stylePadre = {
         width:"95%",
-        height:"600px",
+        height:"300px",
         maxHeight:"100%",
         overflow:"auto"
 
@@ -68,10 +68,10 @@ export const ListaProf = () => {
                 <input className="form-control me-2 mx-2" type="search" placeholder="Search" aria-label="Search" value={search} onChange={searcher}/>
                 <button className="btn btn-outline-secondary" type="submit">Search</button>
             </form>
-            {resultsRecomendados[0] && <div className="d-block p-2 position-relative w-100" >
+            {store.recomendados[0] && <div className="d-block p-2 position-relative w-100" >
             <h2>Recomendados</h2>
                 <div className="mx-5 d-flex flex-row flex-wrap" style={styleRecomend} >
-                    { resultsRecomendados? resultsRecomendados.map((item, index) => {
+                    { resultsRecomendados[0]? resultsRecomendados.map((item, index) => {
                         if(item.plan !== "" && item.tipos_consulta[0])
                         return <div key={"soy index" + index} className="d-flex flex-column m-3">
                         <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
@@ -85,14 +85,14 @@ export const ListaProf = () => {
             <div className="d-block p-2 position-relative w-100" >
             <h2>Lista de Profesionales</h2>
                 <div className="mx-5 d-flex flex-row flex-wrap" style={stylePadre} >
-                    {results? results.map((item, index) => {
+                    {results[0]? results.map((item, index) => {
                         if(item.plan !== "" && item.tipos_consulta[0])
                         return <div key={"soy index" + index} className="d-flex flex-column m-3">
                         <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
                         <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</p>
 
                         </div>
-                }) : <Spiner/>}
+                }) : <div className="d-block text-center mt-3 align-self-center">No hay Profesionales...</div>}
                     
                 </div>
             </div>

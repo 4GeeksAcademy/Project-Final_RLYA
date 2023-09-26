@@ -12,6 +12,7 @@ import { Formik, Form, Field } from 'formik';
 import ReactDOM from 'react-dom';
 // import { FileInput, ImageInput } from "formik-file-and-image-input/lib";
 import { contrast } from "@cloudinary/url-gen/actions/adjust";
+import { TipoMembresia } from "./TipoMembresia";
 
 
 

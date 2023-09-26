@@ -640,9 +640,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://curly-space-invention-j997gwq57v53qp4w-3000.app.github.dev/pay_success",
-            "failure": "https://curly-space-invention-j997gwq57v53qp4w-3000.app.github.dev/pay_failure",
-            "pending": "https://curly-space-invention-j997gwq57v53qp4w-3000.app.github.dev/pay_pending"
+            "success": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_success",
+            "failure": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_failure",
+            "pending": "https://crispy-space-eureka-466vr9w7v9xhq57g-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }
