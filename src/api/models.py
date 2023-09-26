@@ -15,6 +15,7 @@ class User(db.Model):
 
     # relacion
     prof = db.relationship('Consulta', backref='user', lazy=True)
+    favoritos = db.relationship('Favoritoss', backref='user', lazy=True)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -49,6 +50,7 @@ class Profesional(db.Model):
 
     # relacion
     consulta = db.relationship('Consulta', backref='profesional', lazy=True)
+    favoritos = db.relationship('Favoritoss', backref='profesional', lazy=True)
 
     def __repr__(self):
         return f'<Profesional {self.id}>'
@@ -141,4 +143,25 @@ class Consulta(db.Model):
             "consultation_date": self.consultation_date,
             "nota": self.nota
             # do not serialize the password, its a security breach
+        }
+
+
+class Favoritoss(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    id_user = db.Column(db.Integer, db.ForeignKey(
+        'user.id'), nullable=False)
+    id_prof = db.Column(db.Integer, db.ForeignKey(
+        'profesional.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Favoritoss {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "id_user": self.id_user,
+            "id_prof": self.id_prof,
+
+
         }

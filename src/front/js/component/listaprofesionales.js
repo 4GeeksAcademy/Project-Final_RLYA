@@ -48,13 +48,13 @@ export const ListaProf = () => {
                     </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="#">Ciudad</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Oficio</a></li>
                             <input type="search" placeholder="Search" aria-label="Search" value={filtrar} onChange={flitro}/>
     
                         </ul>
                 </div>
                 <input className="form-control me-2 mx-2" type="search" placeholder="Search" aria-label="Search" value={search} onChange={searcher}/>
-                <button className="btn btn-outline-secondary" type="submit">Search</button>
+                <button className="btn btn-outline-secondary" type="submit">Buscar</button>
             </form>
             <div className="d-block p-2 position-relative">
             <h2>Lista de Profesionales</h2>
@@ -63,7 +63,7 @@ export const ListaProf = () => {
                         return <div key={"soy index" + index} className="d-flex flex-column m-3">
                         <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
                         <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</p>
-
+                        <button type="button" className="border-0 bg-transparent"onClick={() => actions.agregarfavorito(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
                         </div>
                 }) : <Spiner/>}
                     

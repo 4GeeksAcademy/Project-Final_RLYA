@@ -16,7 +16,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			oficio_prof:undefined,
 			tipos_consulta: [],
 			HistoryAgendasUser:undefined,
-			oficios:[]
+			oficios:[],
+			favoritos: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -289,8 +290,83 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.log(error)
 				}
-			}
-		}
+			},
+
+
+			ActualizarPerfil:async (user)=> {
+				const store = getStore()
+				const datos = {
+					name:user.name,
+					last_name:user.last_name,
+					age:user.age,
+				}
+
+				try {
+					const {data} = await axios.put(process.env.BACKEND_URL + "/api/editarperfil/" + getStore().user.id ,datos)
+					if(data.ok === true) {
+						setStore({...getStore(),user:data.infouser})
+					}
+				}catch (error) {
+					console.log(error)
+				}
+			
+			},
+
+			obtenerFavoritos: async (id_user) => {
+
+				console.log("funciona")
+				try {
+					let data = await axios.get(process.env.BACKEND_URL + "/api/user/favoritos/" + id_user)
+					
+					if(data.data.ok === true){
+						console.log(data)
+						setStore({ favoritos: data.data.data });
+					}
+				}
+				catch (error) {
+					if (error.response.status == 400){
+						setStore({ favoritos: [] });
+					}
+					console.log(error)
+
+				}
+			},
+			agregarFavorito: (id_prof) => {
+
+
+				setStore({ favoritos: [...getStore().favoritos, id_prof] });
+
+
+
+			},
+			eliminarFavorito: async (id_user, id_prof) => {
+				// da la lista de favoritos 
+				try {
+					let data = await axios.delete(process.env.BACKEND_URL + "/api/user/favoritos",{
+						data:{
+							"id_user": id_user,
+							"id_prof": id_prof
+						}
+							
+						
+					} )
+					//let data = await axios.delete("https://zany-capybara-4j77gvwg7rxvh5gwj-3001.app.github.dev/api/user/favoritos/1/4")
+					console.log(data)
+					if(data.status === 200){
+						console.log("ok")
+						await getActions().obtenerFavoritos(id_user)
+						// setStore({ favoritos: data.data.data });
+					}
+				}
+				catch (error) {
+					console.log(error)
+
+				}
+			},
+
+			},
+
+		
 	}
 };
 

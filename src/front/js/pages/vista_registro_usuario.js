@@ -131,7 +131,8 @@ export const RegistroUsuario = () => {
                         </div>
                     </form>
                 </div>
-            </div> : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStatusFormAdmin={setStatusFormAdmin} setStatusRegister={setStatusRegister} /> : <TipoMembresia statusFormAdmin={statusFormAdmin} />}
+            </div> 
+            : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStatusFormAdmin={setStatusFormAdmin} setStatusRegister={setStatusRegister} /> : <TipoMembresia statusFormAdmin={statusFormAdmin} />}
 
         </div>
     );
