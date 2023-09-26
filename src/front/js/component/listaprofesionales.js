@@ -80,7 +80,7 @@ export const ListaProf = () => {
                             <button  className="border-0 text-danger bg-transparent"onClick={() => actions.CargarFavoritos(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
                         </div>
                         </div>
-                }) : <Spiner/>}
+                }) : <div className="d-block text-center mt-3 align-self-center">No hay Recomendados...</div>}
                     
                 </div>
             </div> }
