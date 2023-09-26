@@ -55,6 +55,7 @@ export const RegistroUsuario = () => {
     const [imageSelectedFILE, setimageSelectedFILE] = useState(undefined);
     const [previewImage, setPreviewImage] = useState(undefined);
     const [tipoUsuario, setTipoUsuario] = useState("");
+    const [datosAdicionales, setDatosAdicionales] = useState(undefined);
     const { store, actions } = useContext(Context)
     const navigate = useNavigate();
     // const imageFormats = ["image/png", "image/svg", "image/jpeg"];
@@ -102,6 +103,7 @@ export const RegistroUsuario = () => {
                 navigate("/Login")
             }
         } else if (data.picked === "empresa") {
+            setDatosAdicionales(data)
             setStatusRegister("Datos_Adicionales")
         }
     }
@@ -184,7 +186,7 @@ export const RegistroUsuario = () => {
                         </div>
                         <div className="mb-3">
                             <label for="password" className="form-label text-start fs-6">Contraseña</label>
-                            <Field className="form-control" name="password" />
+                            <Field className="form-control" name="password" type="password" />
                                 {errors.password && touched.password ? (
                                  <div className="alert alert-danger">{errors.password}</div>
                                 ) : null}
@@ -213,7 +215,7 @@ export const RegistroUsuario = () => {
                     </Form>
                 </div>
              </div> : null}
-          {/* : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={stateForm} setStateForm={setStateForm} setStatusRegister={setStatusRegister} /> : <TipoConsulta />} */} 
+           : statusReigster === "Datos_Adicionales" ? <DatosEmpresa stateForm={datosAdicionales} setStatusRegister={setStatusRegister} /> : <TipoConsulta />
 
         </div>)} 
         </Formik>
