@@ -41,6 +41,7 @@ export const DatosEmpresa = ({stateForm,setStatusRegister}) => {
     };
 
 
+
     return (
         <div className="container my-3">
             <div className="row d-flex align-items-center justify-content-center">
