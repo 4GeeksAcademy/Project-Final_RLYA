@@ -295,10 +295,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			ActualizarPerfil:async (user)=> {
 				const store = getStore()
+				print(user)
 				const datos = {
 					name:user.name,
 					last_name:user.last_name,
 					age:user.age,
+					photo:user.photo,
 				}
 
 				try {
@@ -331,10 +333,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				}
 			},
-			agregarFavorito: (id_prof) => {
-
-
-				setStore({ favoritos: [...getStore().favoritos, id_prof] });
+			agregarFavorito: async (id_user) => {
+				
+				const store = getStore()
+				
+				try {
+					const {data} = await axios.post(process.env.BACKEND_URL + "/user/favoritos/" + id_user)
+					if(data.data.ok === true){
+						setStore({...getStore(),messageSuccess:data.msg})
+						/*Traigo de nuevo la peticion de las consultas*/
+						await getActions().obtenerFavoritos(id_user)
+						
+					}
+					
+				} catch (error) {
+					console.log(error)
+				}
+			},
 
 
 
@@ -364,8 +379,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			},
-
+			
+		
 		
 	}
 };

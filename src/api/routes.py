@@ -160,7 +160,7 @@ def editar_perfil(user_id):
     # email = request_body["email"]
     # print(email)
     # Verificar si el usuario ya existe
-
+    print(request_body)
     if not user:
         response_body = {
             "message": "Usuario no encontrado",
@@ -168,20 +168,7 @@ def editar_perfil(user_id):
         }
         return jsonify(response_body), 404
 
-# Verificar que la contraseña cumple con los requisitos
 
-    # password = request_body["password"]
-    # if not is_password_secure(password):
-    #     response_body = {
-    #         "message": "La contraseña no cumple con los requisitos",
-    #         "ok": False
-    #     }
-    #     return jsonify(response_body), 400
-
-# Encripta la contraseña antes de guardarla
-
-    # password = request_body["password"]
-    # hashed_password = current_app.bcrypt.generate_password_hash(password).decode('utf-8')
 
     if "name" in request_body:
         user.name = request_body["name"],

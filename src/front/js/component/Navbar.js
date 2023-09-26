@@ -23,12 +23,12 @@ export const Navbar = () => {
                         {store.user.name + " " + store.user.last_name}
                     </a>
                     <ul className="dropdown-menu ">
-                    <Link to="/editarperfil" className="nav-link" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
+                    <Link to="/editarperfil" className="nav-link text-black" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
                             e.preventDefault();
                             navigate("/editarperfil");
 
                         }}>Perfil</Link>
-                    <Link to="/user/favoritos/:idUser" className="nav-link" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
+                    <Link to="/user/favoritos/:idUser" className="nav-link text-black" style={{ fontFamily: 'Raleway, sans-serif' }} onClick={(e) => {
                             e.preventDefault();
                             navigate("/user/favoritos");
 
