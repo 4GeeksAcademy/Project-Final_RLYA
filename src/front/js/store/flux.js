@@ -112,6 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							headers: { "Authorization": "Bearer " + token }
 						})
 						if(data.ok) {
+							console.log(data)
 							setStore({...getStore(),user:data.info})
 						}
 					}
@@ -130,7 +131,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							const userID = getStore().user.id 
 							/*Ahora lo que haremos es, por cada uno de las consultas, las pasaremos a un formato que el calendario pueda interpretar, en este caso espesificando el titulo, inicio y fin*/
 							const consultas = data.consultas_prof.map((consulta)=> {
-								console.log(getStore().user)
+								console.log(consulta)
 								const formatCalendar = {
 									start:new Date(consulta.consultation_date),
 									end:new Date(consulta.end_date),
@@ -138,7 +139,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 									bgColor:consulta.userInfo.id === getStore().user.id || getStore().user.rol === "admin" ? "#59CB00" : "#CECECE",
 									id_user:consulta.userInfo.id,
 									nom_prof:consulta.id_profesional,
-									notes: consulta.nota
+									nom_user:consulta.userInfo.nombre,
+									notes: consulta.nota,
+									rol: getStore().user.rol
 								}
 								return formatCalendar
 							})
@@ -313,6 +316,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const {data} = await axios.get(process.env.BACKEND_URL + "/api/consultas/user/" + id_user)
 					if(data.ok === true){
 						setStore({...getStore(),HistoryAgendasUser:data.data})
+						console.log(data)
 					}
 				} catch (error) {
 					console.log(error)

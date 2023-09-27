@@ -41,7 +41,7 @@ export const AppRutas = () => {
                 <BrowserRouter basename={basename}>
                 <div className="position-relative d-flex flex-row" style={{ height: "100%", width: "100%" }}>
                     {store.user.rol === "user"? <Sidebar /> : <SidebarAdmin/>}
-                    <div className="content " style={{ width: "100%" }}>
+                    <div className="content " style={{ width: "100%", height:"500px" }}>
                         <Navbar />
                         <Routes>
                             {/* Rutas */}

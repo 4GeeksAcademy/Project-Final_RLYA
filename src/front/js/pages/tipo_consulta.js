@@ -10,7 +10,7 @@ import { MdArrowBackIosNew } from "react-icons/md"
 export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, CloseModal }) => {
     const { store, actions } = useContext(Context)
     const ExistSelected = selectedTp_consulta && selectedTp_consulta.nombre? true : false
-    const stylePadre = { right: "0px", left:"0px",top:"150px", margin:"auto", zIndex: 5 }
+    const stylePadre = { right: "0px", left:"0px",top:"10px", margin:"auto", zIndex: 5 }
     const duracionArr = ExistSelected === true? (selectedTp_consulta?.duracion.toString()).split(".") : null
     
     const [statusformAdmin, setStatusFormAdmin] = useState({
@@ -39,6 +39,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                 return;
             }
             actions.AgregarTipoConsultaAdmin(statusformAdmin);
+            CloseModal()
         }
         
     }
@@ -51,13 +52,16 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
         <>
            
                 <div className="row">
-                    <div  className="col-4 p-4 col-4 border rounded-3 bg-white shadow position-absolute d-flex flex-column align-items-center justify-content-center" style={stylePadre}>
-                        {ExistSelected && <div className="row " style={{ width: "100%" }}>
+                    <div  className="col-4 p-2 col-4 border rounded-3 bg-white shadow position-absolute d-flex flex-column align-items-center justify-content-center" style={stylePadre}>
+                        {ExistSelected ? <div className="row " style={{ width: "100%" }}>
                             <div className="col d-flex flex-row justify-content-between align-content-center">
                                 <MdArrowBackIosNew role="button" onClick={GoBack} />
                                 <div className="col-2 text-center"><p role="button" onClick={() => CloseModal()} className="text-danger opacity-50">X</p></div>
                             </div>
-                        </div>}
+                        </div>: <div className="col-12 d-flex flex-row justify-content-end align-content-center">
+                            
+                                <div className="row d-flex text-center justify-content-end"><p role="button" onClick={() => CloseModal()} className="text-danger opacity-50">X</p></div>
+                            </div>}
                         <div className="row">
                             <form className="col p-3" onSubmit={handleSubmit}>
                                 <div className="mb-3">

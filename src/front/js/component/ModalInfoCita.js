@@ -9,6 +9,7 @@ export const ModalInfoCita = ({ CloseModal, infoSelected }) => {
         e.preventDefault()
     }
     console.log(infoSelected)
+
     return (
         <div className={`col-3 bg-white position-absolute m-auto p-4 border-secondary shadow-lg `} style={{ top: "12%", left: "40%", zIndex: 5 }} >
             <div className="row">
@@ -33,8 +34,8 @@ export const ModalInfoCita = ({ CloseModal, infoSelected }) => {
                             <input type="text" class="form-control" value={infoSelected.title} disabled id="Tipo_Consulta" />
                         </div>
                         <div class="mb-3">
-                            <label for="Profesional" class="form-label">Profesional</label>
-                            <input type="text" class="form-control" id="Profesional" disabled value={infoSelected.nom_prof} />
+                            <label for="Profesional" class="form-label">{infoSelected.rol === "admin" ? "Cliente" : "Profesional"}</label>
+                            <input type="text" class="form-control" id="Profesional" disabled value={infoSelected.rol === "admin" ? infoSelected.nom_user : infoSelected.nom_prof} />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="notes" className="form-label">Nota</label>

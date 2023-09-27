@@ -30,9 +30,9 @@ const Card = ({agenda}) => {
                     </div>
                     <div className="col-md-8">
                         <div className="card-body">
-                            <h6 className="card-title border-rounded">{agenda.consulta}</h6>
+                            <h6 className="card-title border-rounded">{agenda.oficio}</h6>
                             <p className="card-text border-rounded"><i className="fa-solid fa-user-tie me-2"></i> {agenda.profesional}</p>
-                            <p className="card-text border-rounded"><i className="fa-solid fa-user me-2"></i> {agenda.user}</p>
+                            <p className="card-text border-rounded"><i className="fa-solid fa-clipboard-check me-2"></i>{agenda.consulta}</p>
                             <p className="card-text"><i className="fa-regular fa-clock me-2"></i>: {agenda.consultation_date}</p>
                         </div>  
                     </div>

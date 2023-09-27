@@ -35,14 +35,14 @@ export const ListaProf = () => {
     const resultsRecomendados = !search && !filtrar ? store.recomendados : search ? store.recomendados.filter((dato) => dato.name.toLowerCase().includes(search.toLocaleLowerCase())) : filterRecomendados
     const stylePadre = {
         width:"95%",
-        height:"300px",
+        height:"200px",
         maxHeight:"100%",
         overflow:"auto"
 
     }
     const styleRecomend = {
         width:"95%",
-        height:"250px",
+        height:"200px",
         maxHeight:"100%",
         overflow:"auto"
     }
