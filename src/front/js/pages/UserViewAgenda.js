@@ -108,7 +108,7 @@ export const UserViewAgenda = () => {
           </div>
           <div className="row mt-4">
             <div className="col-4 m-auto">
-            <button onClick={OpenModal} className="btn btn-light">Agregar Agenda</button>
+            <button onClick={OpenModal} className="btn btn-dark text-white">Agregar Agenda</button>
             </div>
           </div>
         </div>

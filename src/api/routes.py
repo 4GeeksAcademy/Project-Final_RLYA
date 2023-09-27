@@ -3,7 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 
-from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta, Favoritoss,Plan, Pagos
+from api.models import db, User, Profesional, Consulta, Oficio, Tipo_consulta, Favoritoss, Plan, Pagos
 
 from api.utils import generate_sitemap, APIException
 
@@ -174,8 +174,6 @@ def editar_perfil(user_id):
             "ok": False
         }
         return jsonify(response_body), 404
-
-
 
     if "name" in request_body:
         user.name = request_body["name"],
@@ -553,6 +551,7 @@ def Traer_Consultas_user(idUser):
         id_prof = item["id_profesional"]
         id_tipo_consulta = item["id_tipo_consulta"]
         # user
+
         user = User.query.filter_by(id=id_user).first()
         prof = Profesional.query.filter_by(id=id_prof).first()
         tipo_consulta = Tipo_consulta.query.filter_by(
@@ -560,6 +559,10 @@ def Traer_Consultas_user(idUser):
         userF = user.serialize()
         profF = prof.serialize()
         tipo_consultaF = tipo_consulta.serialize()
+        print(tipo_consultaF)
+        oficio = Oficio.query.filter_by(id=tipo_consultaF["id_oficio"]).first()
+
+        oficioF = oficio.serialize()
         # Pasamos las fechas a nuestra zona horaria
         hora_extract = item["consultation_date"]
         strhora = str(hora_extract) + " GMT-0300"
@@ -571,7 +574,7 @@ def Traer_Consultas_user(idUser):
             "consultation_date": mi_fecha.strftime('%Y-%m-%d %H:%M:%S %Z%z'),
             "nota": item["nota"],
             "profesional": profF["name"] + " " + profF["last_name"],
-            "user": userF["name"] + " " + userF["last_name"],
+            "oficio": oficioF["name"],
             "consulta": tipo_consultaF["nombre"],
             "photoProf": profF["photo"]
         }
@@ -629,8 +632,9 @@ def Traer_favoritos(idUser):
     fav_user = Favoritoss.query.filter_by(id_user=idUser).all()
     if len(fav_user) == 0:
         return jsonify({"ok": False, "msg": "no hay favoritos"}), 400
-    fav_userF = list(map(lambda item:item.serialize(), fav_user))
+    fav_userF = list(map(lambda item: item.serialize(), fav_user))
     print(fav_userF)
+
     def cargardatos(itemfinal):
 
         new_prof_fav = Profesional.query.filter_by(
@@ -648,7 +652,8 @@ def Traer_favoritos(idUser):
 # se ejecuta una funcion con el parametro que es el id de planeta
 def borrar_favorito_prof():
     request_body = request.get_json(force=True)
-    fav = Favoritoss.query.filter_by(id_user=request_body["id_user"], id_prof=request_body["id_prof"]).first()
+    fav = Favoritoss.query.filter_by(
+        id_user=request_body["id_user"], id_prof=request_body["id_prof"]).first()
     # obtiene el body que mando desde posman
     if fav is not None:
         db.session.delete(fav)
@@ -663,7 +668,7 @@ def borrar_favorito_prof():
     if len(fav == 0):
         return jsonify({"msg": "no hay favoritos"}), 404
 
-      
+
 @api.route("/pagos", methods=["POST"])
 def CrearPago():
     request_body = request.json
@@ -768,9 +773,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://upgraded-halibut-7v99r5pr94q6fx9p-3000.app.github.dev/pay_success",
-            "failure": "https://upgraded-halibut-7v99r5pr94q6fx9p-3000.app.github.dev/pay_failure",
-            "pending": "https://upgraded-halibut-7v99r5pr94q6fx9p-3000.app.github.dev/pay_pending"
+            "success": "https://musical-trout-x59jwxjwwgg36wg5-3000.app.github.dev/pay_success",
+            "failure": "https://musical-trout-x59jwxjwwgg36wg5-3000.app.github.dev/pay_failure",
+            "pending": "https://musical-trout-x59jwxjwwgg36wg5-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }
