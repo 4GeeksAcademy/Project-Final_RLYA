@@ -88,12 +88,16 @@ export const ListaProf = () => {
             <h2>Lista de Profesionales</h2>
                 <div className="mx-5 d-flex flex-row flex-wrap" style={stylePadre} >
                     {results[0]? results.map((item, index) => {
-                        if(item.plan !== "" && item.tipos_consulta[0])
+                        if(item.plan !== "" && item.tipos_consulta[0]){
+                        console.log(item)
                         return <div key={"soy index" + index} className="d-flex flex-column m-3">
                         <img className="rounded-circle" style={{ width: "140px", height: "140px" }} src={item.photo}  />
-                        <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative rounded-circle">{item.name}</p>
-
+                        <div className="d-flex flex-row justify-content-around align-items-center">
+                            <p type="button" onClick={()=> navigate("/agenda/" + item.id)} className="btn position-relative m-0 p-0">{item.name}</p>
+                            <button  className="border-0 text-danger bg-transparent"onClick={() => actions.CargarFavoritos(store.user.id, item.id)}><i class="fa-solid fa-heart"></i></button>
                         </div>
+
+                        </div>}
                 }) : <div className="d-block text-center mt-3 align-self-center">No hay Profesionales...</div>}
                     
                 </div>

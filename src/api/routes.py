@@ -768,9 +768,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://solid-garbanzo-q664xgpqxww25px-3000.app.github.dev/pay_success",
-            "failure": "https://solid-garbanzo-q664xgpqxww25px-3000.app.github.dev/pay_failure",
-            "pending": "https://solid-garbanzo-q664xgpqxww25px-3000.app.github.dev/pay_pending"
+            "success": "https://upgraded-halibut-7v99r5pr94q6fx9p-3000.app.github.dev/pay_success",
+            "failure": "https://upgraded-halibut-7v99r5pr94q6fx9p-3000.app.github.dev/pay_failure",
+            "pending": "https://upgraded-halibut-7v99r5pr94q6fx9p-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }

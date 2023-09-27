@@ -41,7 +41,7 @@ export const Login = () => {
               <div id="emailHelp" className="form-text"></div>
             </div>
             <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label text-start fs-6"><strong>Password</strong></label>
+              <label htmlFor="exampleInputPassword1" className="form-label text-start fs-6"><strong>Contraseña</strong></label>
               <input type="password" onChange={function (e) { setPassword(e.target.value) }} className="form-control" id="exampleInputPassword1" />
             </div>
             <div id="emailHelp" className="form-text text-center">
