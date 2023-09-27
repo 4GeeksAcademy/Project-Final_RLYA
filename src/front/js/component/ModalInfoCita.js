@@ -11,7 +11,7 @@ export const ModalInfoCita = ({ CloseModal, infoSelected }) => {
     console.log(infoSelected)
 
     return (
-        <div className={`col-3 bg-white position-absolute m-auto p-4 border-secondary shadow-lg `} style={{ top: "12%", left: "40%", zIndex: 5 }} >
+        <div className={`col-3 bg-white position-absolute m-auto p-2 border-secondary shadow-lg `} style={{ top: "10px", left: "0%", right: "0px", margin:"auto", zIndex: 5 }} >
             <div className="row">
                 <div className="col d-flex flex-row justify-content-end">
                     <p role="button" onClick={() => CloseModal()} className="text-danger opacity-0.5">X</p>
@@ -19,7 +19,7 @@ export const ModalInfoCita = ({ CloseModal, infoSelected }) => {
             </div>
             <div className="row">
                 <div className="col d-flex flex-column ">
-                    <h1 className="text-center">Informacion Cita</h1>
+                    <h3 className="text-center">Informacion Cita</h3>
                     <form onChange={EditForm} className="">
                         <div class="mb-3 mt-2">
                             <label for="exampleFormControlInput1" class="form-label">Fecha</label>

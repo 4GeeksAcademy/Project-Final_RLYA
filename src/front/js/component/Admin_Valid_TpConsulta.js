@@ -10,7 +10,7 @@ export const ValidTpConsulta = ({})=> {
     console.log(store.user)
     
     return (
-        <div className="container-fluid">
+        <div className="row position-relative">
             {
             store.user.tipos_consulta ? (store.user.tipos_consulta.length === 0 ? <TipoConsulta/> : <CalendarioEmpresa />) : <Spiner/>
             }

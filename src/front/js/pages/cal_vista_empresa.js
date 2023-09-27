@@ -99,13 +99,14 @@ export const CalendarioEmpresa = () => {
 													const fechaActual = new Date()
 													const fechaComparar = new Date(item.start)
 													if (fechaComparar.getDate() === fechaActual.getDate() && fechaComparar.getMonth() === fechaActual.getMonth() && fechaComparar.getFullYear() === fechaActual.getFullYear()) {
-														return <div key={"soy index" + index} className="d-flex flex-row my-2 border-bottom border-dark pb-2 opacity-60">
+														const formatdate = moment(fechaComparar).format("HH:mm")
+														return <div key={"soy index" + index} className="d-flex flex-row my-2 border-bottom border-dark mx-3 py-2  opacity-75">
 															<div className="border border-secondary d-flex flex-row justify-content-center align-content-center" style={{ background: "transparent", padding: "2px", height: "20px", width: "20px" }}>
 																{
 																	fechaActual > fechaComparar && <AiOutlineCheck color="#00C208" />
 																}
 															</div>
-															<p className="m-0 p-0 ps-2">{item.title}-{fechaComparar.getHours().toString()}</p>
+															<p className="m-0 p-0 ps-2">{item.title} - {formatdate.toString()}</p>
 															</div>
 											}
 										}) : <p className="text-center mt-4">No hay Consultas...</p>

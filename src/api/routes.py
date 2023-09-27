@@ -773,9 +773,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://musical-trout-x59jwxjwwgg36wg5-3000.app.github.dev/pay_success",
-            "failure": "https://musical-trout-x59jwxjwwgg36wg5-3000.app.github.dev/pay_failure",
-            "pending": "https://musical-trout-x59jwxjwwgg36wg5-3000.app.github.dev/pay_pending"
+            "success": "https://automatic-funicular-7vrg9wg99jphx4x7-3000.app.github.dev/pay_success",
+            "failure": "https://automatic-funicular-7vrg9wg99jphx4x7-3000.app.github.dev/pay_failure",
+            "pending": "https://automatic-funicular-7vrg9wg99jphx4x7-3000.app.github.dev/pay_pending"
         },
         "auto_return": "approved"
     }

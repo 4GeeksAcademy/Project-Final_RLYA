@@ -52,7 +52,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
         <>
            
                 <div className="row">
-                    <div  className="col-4 p-2 col-4 border rounded-3 bg-white shadow position-absolute d-flex flex-column align-items-center justify-content-center" style={stylePadre}>
+                    <div  className=" p-2 col-4 border rounded-3 bg-white shadow position-absolute d-flex flex-column align-items-center justify-content-center" style={stylePadre}>
                         {ExistSelected ? <div className="row " style={{ width: "100%" }}>
                             <div className="col d-flex flex-row justify-content-between align-content-center">
                                 <MdArrowBackIosNew role="button" onClick={GoBack} />
@@ -72,7 +72,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                                         </div>
                                     }
                                     {
-                                        !ExistSelected && <p className="text-center">Eres un administrador, Por tanto neceitan insertar minimo un tipo de consulta para continuar, cuando lo hagas recarga la pagina</p>
+                                        !ExistSelected && <p className="text-center" style={{fontSize:"12px"}}>Eres un administrador, Por tanto neceitan insertar minimo un tipo de consulta para continuar, cuando lo hagas recarga la pagina</p>
                                     }
                                     <label htmlFor="exampleInputText" className="form-label text-start fs-6"><strong>Nombre Consulta</strong></label>
                                     <input type="text" className="form-control" id="exampleInputText" value={statusformAdmin.nombre} onChange={(e) => setStatusFormAdmin({ ...statusformAdmin, nombre: (e.target.value) })} />
@@ -83,7 +83,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                                         className="form-control"
                                         id="exampleTextarea"
                                         name="comments"
-                                        rows="6"
+                                        rows="3"
                                         placeholder="Describe tu servicio..."
                                         value={statusformAdmin.descripcion}
                                         onChange={(e) => setStatusFormAdmin({ ...statusformAdmin, descripcion: (e.target.value) })}
