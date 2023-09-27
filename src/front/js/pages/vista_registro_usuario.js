@@ -91,8 +91,6 @@ export const RegistroUsuario = () => {
         //    /*con esta url que generamos, lo que haremos en convertirla a una url de clouddinary*/
             const imgCloud = await fileupload(photo)
             
-            // setPhoto(imgCloud)
-            
             const statusRegister = await actions.AgendarUser({
                 name:data.name,
                 last_name:data.last_name,
@@ -107,12 +105,21 @@ export const RegistroUsuario = () => {
                 navigate("/Login")
             }
         } else if (data.picked === "empresa") {
-            setDatosAdicionales(data)
+            const imgCloud = await fileupload(photo)
+            setDatosAdicionales({
+                name:data.name,
+                last_name:data.last_name,
+                photo:imgCloud,
+                age:data.age,
+                registration_date: new Date(),
+                email:data.email,
+                password:data.password,
+            })
             setStatusRegister("Datos_Adicionales")
         }
     }
 
-
+    console.log(photo);
 
 
     return (

@@ -318,9 +318,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error)
 				}
 			},
-			ActualizarPerfil:async (user)=> {
+			UpdateProfile:async (user)=> {
 				const store = getStore()
-				print(user)
 				const datos = {
 					name:user.name,
 					last_name:user.last_name,
@@ -331,7 +330,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const {data} = await axios.put(process.env.BACKEND_URL + "/api/editarperfil/" + getStore().user.id ,datos)
 					if(data.ok === true) {
-						setStore({...getStore(),user:data.infouser})
+						getActions().loadInfoUserByToken()
 					}
 				}catch (error) {
 					console.log(error)

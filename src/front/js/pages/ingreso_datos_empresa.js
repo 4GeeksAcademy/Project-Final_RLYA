@@ -23,11 +23,10 @@ export const DatosEmpresa = ({stateForm,setStatusRegister}) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         sessionStorage.setItem("emailLastRegister",stateForm.email)
-        const imgCloud = await fileupload(stateForm.photo)
         const statusLogin = await actions.AgendarAdmin({
             name:stateForm.name,
             last_name:stateForm.last_name,
-            photo:imgCloud,
+            photo:stateForm.photo,
             age:stateForm.age,
             registration_date:stateForm.registration_date,
             email:stateForm.email,

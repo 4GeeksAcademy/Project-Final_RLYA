@@ -62,6 +62,13 @@ export const Perfil = () => {
 
   const ActualizarPerfil = async (e) => {
     const photofianl = await fileupload(formData.photo)
+    const dataSend = {
+      name:formData.name,
+      last_name:formData.last_name,
+      age:formData.age,
+      photo:formData.photo? photofianl : store.user.photo,
+    }
+    actions.UpdateProfile(dataSend)
 
   }
   const handleEditClick = () => {
@@ -98,7 +105,7 @@ export const Perfil = () => {
             className="form-control"
             disabled={!editMode}
             id="inputLastname"
-            name="lastName"
+            name="last_name"
             value={formData.last_name}
             onChange={handleInputChange}
             placeholder="Apellido" />
