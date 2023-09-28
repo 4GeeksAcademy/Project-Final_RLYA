@@ -773,9 +773,9 @@ def preference():
             "email": email
         },
         "back_urls": {
-            "success": "https://automatic-funicular-7vrg9wg99jphx4x7-3000.app.github.dev/pay_success",
-            "failure": "https://automatic-funicular-7vrg9wg99jphx4x7-3000.app.github.dev/pay_failure",
-            "pending": "https://automatic-funicular-7vrg9wg99jphx4x7-3000.app.github.dev/pay_pending"
+            "success": "https://sample-service-name-wf0j.onrender.com/pay_success",
+            "failure": "https://sample-service-name-wf0j.onrender.com/pay_failure",
+            "pending": "https://sample-service-name-wf0j.onrender.com/pay_pending"
         },
         "auto_return": "approved"
     }
