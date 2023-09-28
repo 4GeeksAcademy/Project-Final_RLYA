@@ -13,12 +13,15 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
     const stylePadre = { right: "0px", left:"0px",top:"10px", margin:"auto", zIndex: 5 }
     const duracionArr = ExistSelected === true? (selectedTp_consulta?.duracion.toString()).split(".") : null
     
-    const [statusformAdmin, setStatusFormAdmin] = useState({
+
+    initialState = {
         nombre: ExistSelected === true? selectedTp_consulta.nombre : "",
         descripcion: ExistSelected === true? selectedTp_consulta.descripcion : "",
         duracionHoras:  ExistSelected === true? parseInt(duracionArr[0]) : 0,
         duracionMinutos: ExistSelected === true? parseInt(duracionArr[1]) : 0,
-    });
+    }
+
+    const [statusformAdmin, setStatusFormAdmin] = useState(initialState);
     const [canUpdate,setCanUpdate] = useState(false)
 
     /*Ahora cada vez que cambiemos algo podremos actualizar nuestro tipo de consulta */ 
@@ -33,12 +36,14 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
         e.preventDefault();
         if(ExistSelected === true) {
             actions.ActualizarTipoConsulta(statusformAdmin,selectedTp_consulta.id)
+            setStatusFormAdmin(initialState)
         } else {
             if (!statusformAdmin.nombre) {
                 alert("Por favor, ingresa un nombre de consulta.");
                 return;
             }
             actions.AgregarTipoConsultaAdmin(statusformAdmin);
+
             CloseModal()
         }
         
@@ -47,7 +52,10 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
         CloseModal()
         openModalViewConsultas()
     }
-
+    VerAgenda(()=> {
+        location.reload()
+    })
+    
     return (
         <>
            
@@ -112,6 +120,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
                                     </div>
                                 </div>
                                 {ExistSelected === false && <p onClick={()=> navigate("/view_consultas")} role="button" className="text-center">Ver mis consultas</p>}
+                                {ExistSelected === false && <p onClick={VerAgenda} role="button" className="text-center my-2">Ver mi Agenda</p>}
                                 {
                                     ExistSelected === true? (canUpdate === true? <div className="col d-flex align-items-center justify-content-center">
                                     <button type="submit" className="btn btn-outline-dark mt-3">Actualizar</button>

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export const ViewConsultas = ({CloseModal = undefined,OpenModalAddConsultas=undefined,setSelectedTp_consulta})=> {
     const {store,actions} = useContext(Context)
     const navigate = useNavigate()
-    const stylePadre = {height:"500px", maxHeight:"600px",overflowY:"scroll",zIndex:5,top:"0px",left:"0px",right: "0px", margin:"auto"}
+    const stylePadre = {height:"500px", maxHeight:"600px",overflowY:"scroll",zIndex:5,top:"75px",left:"0px",right: "0px", margin:"auto"}
 
     useEffect(()=> {
         setTimeout(() => {
