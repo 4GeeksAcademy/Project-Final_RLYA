@@ -14,7 +14,7 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
     const duracionArr = ExistSelected === true? (selectedTp_consulta?.duracion.toString()).split(".") : null
     
 
-    initialState = {
+    const initialState = {
         nombre: ExistSelected === true? selectedTp_consulta.nombre : "",
         descripcion: ExistSelected === true? selectedTp_consulta.descripcion : "",
         duracionHoras:  ExistSelected === true? parseInt(duracionArr[0]) : 0,
