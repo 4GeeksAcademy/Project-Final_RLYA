@@ -52,9 +52,9 @@ export const TipoConsulta = ({ selectedTp_consulta, openModalViewConsultas, Clos
         CloseModal()
         openModalViewConsultas()
     }
-    VerAgenda(()=> {
+    const VerAgenda = ()=> {
         location.reload()
-    })
+    }
     
     return (
         <>
